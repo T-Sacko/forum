@@ -2,10 +2,10 @@ package main
 
 import (
 	//"fmt"
-	"fmt"
 	"html/template"
 	"log"
 	"net/http"
+	"time"
 	//"os/exec"
 )
 
@@ -28,10 +28,19 @@ const LoggedIn = `
    <form action="/Forum" method= "POST">
     <p><textarea name="Post" cols="50" rows="20" placeholder="Write something here..."></textarea></p>
     <button type="submit" class = "register">Post!</button>
+
 `
+
+type Date struct {
+	Year  int
+	Month time.Month
+	Day   int
+}
 
 type LogIn struct {
 	Name string
+	Post string
+	Time Date
 }
 
 var b LogIn
@@ -44,18 +53,21 @@ func (rg register) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		tpl = template.Must(template.ParseFiles("register.html"))
 		tpl.Execute(w, nil)
 	case "/Forum":
-	
 		if req.FormValue("Username") == "" || req.FormValue("Password") == "" && req.FormValue("Email") == "" {
-			fmt.Println(req.FormValue("Username"))
-			fmt.Println(req.FormValue("Password"))
-			fmt.Println("yo")
+			/*if req.FormValue("Post") != "" {
+				b.Name = req.FormValue("Username")
+				b.Post = req.FormValue("Post")
+				b.Time.Year, b.Time.Month, b.Time.Day = time.Now().Date()
+				tpl = template.Must(template.New("UrPosts").Parse(UrPosts))
+				tpl.Execute(w, b)
+				return
+			}*/
 			tpl = template.Must(template.ParseFiles("Index.html"))
 			tpl.Execute(w, nil)
 		} else {
-			b.Name = req.FormValue("Username")
-			fmt.Println("here")
-			tpl = template.Must(template.New("homePage").Parse(LoggedIn))
-			tpl.Execute(w, b)
+				b.Name = req.FormValue("Username")
+				tpl = template.Must(template.New("homePage").Parse(LoggedIn))
+				tpl.Execute(w, b)
 		}
 	}
 }
