@@ -1,0 +1,26 @@
+- main.go
+- config
+    - config.go
+- controllers
+    - auth.go
+    - post.go
+- models
+    - user.go
+    - post.go
+    - comment.go
+    - category.go
+    - like.go
+- routes
+    - routes.go
+- templates
+    - base.html
+    - home.html
+    - login.html
+    - register.html
+    - create_post.html
+    - create_comment.html
+- static
+    - css
+        - style.css
+    - js
+        - script.js
