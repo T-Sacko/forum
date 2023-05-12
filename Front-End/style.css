@@ -1,0 +1,107 @@
+/* global */
+
+*{
+    box-sizing: border-box;
+}
+
+html{
+    font-size: 14px;
+    font-family: 'Inconsolata', sans-serif;
+    background-color: azure;
+    color: black;
+}
+
+a{
+    color: blueviolet;
+    font-weight: bolder;
+    text-decoration: none;
+}
+
+h1{
+    font-size:16px;
+    font-weight: bolder;
+}
+
+/* home.html */
+
+.container{
+    margin: 20px;
+    padding: 20px;
+}
+
+.subforum{
+    margin-top: 20px;
+}
+
+.subforum-title{
+    background-color: rgb(149, 84, 168);
+    padding: 5px;
+    border-radius: 5px;
+    margin: 4px;
+}
+
+.subforum-description *{
+    margin-block: 0;
+}
+
+.subforum-row{
+    display: grid;
+    grid-template-columns: 7% 60% 13% 20%;
+}
+
+.subforum-column{
+    padding: 10px;
+    margin: 4px;
+    border-radius: 5px;
+    background-color: rgb(199, 207, 207);
+}
+
+.center{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.subforum-icon i{
+    font-size:45px;
+}
+
+
+/* Mobile App*/
+@media screen and(max-width: 460px) {
+    .container{
+        margin: 10px;
+        padding: 10px;
+    }
+
+    .subforum-row{
+        display: grid;
+        grid-template-columns: 25% 75%;
+        grid-template-rows: 65% 35%;
+    }
+}
+
+/* Tablet App*/
+
+@media screen and (min-width: 460px), (max-width: 1024px) {
+    .container{
+        margin: 15px;
+        padding: 15px;
+    }
+
+    .subforum-row{
+        display: grid;
+        grid-template-columns: 10% 60% 10% 20%;
+    }
+    
+    .subforum-icon i{
+        font-size:35px;
+    }
+
+    html{
+        font-size: 16px;
+    }
+    h1{
+        font-size: 18px;
+    }
+}
