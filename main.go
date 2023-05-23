@@ -22,8 +22,17 @@ type Post struct {
 	Likes    int
 }
 
+var tpl *template.Template
+
+func init() {
+	tpl = template.Must(template.ParseGlob("templates/*.html"))
+}
+
+func staticHandler(w http.ResponseWriter, r *http.Request) {
+	http.ServeFile(w, r, r.URL.Path[1:])
+}
+
 func index(w http.ResponseWriter, r *http.Request) {
-	tpl := template.Must(template.ParseGlob("templates/*.html"))
 	err = tpl.ExecuteTemplate(w, "home.html", nil)
 	if err != nil {
 		log.Fatal(err)
@@ -41,9 +50,20 @@ func index(w http.ResponseWriter, r *http.Request) {
 			log.Fatal(err)
 		}
 	}
+}
 
-	fmt.Println("Data stored in the database")
+func UsersHandler(w http.ResponseWriter, r *http.Request) {
+	err = tpl.ExecuteTemplate(w, "sign-in.html", nil)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
 
+func PostsHandler(w http.ResponseWriter, r *http.Request) {
+	err = tpl.ExecuteTemplate(w, "create_post.html", nil)
+	if err != nil {
+		log.Fatal(err)
+	}
 }
 
 func UsernameCheck(w http.ResponseWriter, r *http.Request) {
@@ -66,9 +86,14 @@ func UsernameCheck(w http.ResponseWriter, r *http.Request) {
 func main() {
 	models.InitDB()
 	defer models.CloseDB()
-	http.HandleFunc("/check-username", UsernameCheck)
-	http.HandleFunc("/", index)
-	err := http.ListenAndServe(":8888", nil)
+
+	mux := http.NewServeMux()
+	mux.HandleFunc("/static/", staticHandler) // Add this line to handle the /static/ route
+	http.Handle("/static/", http.StripPrefix("/static/", mux))
+	mux.HandleFunc("/", index)
+	mux.HandleFunc("/sign-in", UsersHandler)
+	mux.HandleFunc("/posts", PostsHandler)
+	err := http.ListenAndServe(":8888", mux)
 	if err != nil {
 		log.Fatal(err)
 	}

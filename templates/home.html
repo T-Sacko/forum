@@ -1,100 +1,80 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Forum</title>
-  <style>
-    /* CSS styles */
-    #chk{
-		display: none;
-	}
-	.login{
-		height: 460px;
-		background: #eee;
-		border-radius: 60% / 10%;
-		transform: translateY(-180px);
-		transition: .8s ease-in-out;
-	}
-	.login label{
-		color: #573b8a;
-		transform: scale(.6);
-	}
-	.signup{
-		position: relative;
-		width:100%;
-		height: 100%;
-	}
-	label{
-		color: #fff;
-		font-size: 2.3em;
-		justify-content: center;
-		display: flex;
-		margin: 60px;
-		font-weight: bold;
-		cursor: pointer;
-		transition: .5s ease-in-out;
-	}
-	input{
-		width: 60%;
-		height: 20px;
-		background: #e0dede;
-		justify-content: center;
-		display: flex;
-		margin: 20px auto;
-		padding: 10px;
-		border: none;
-		outline: none;
-		border-radius: 5px;
-	}
-	button{
-		width: 60%;
-		height: 40px;
-		margin: 10px auto;
-		justify-content: center;
-		display: block;
-		color: #fff;
-		background: #573b8a;
-		font-size: 1em;
-		font-weight: bold;
-		margin-top: 20px;
-		outline: none;
-		border: none;
-		border-radius: 5px;
-		transition: .2s ease-in;
-		cursor: pointer;
-	}
-	button:hover{
-		background: #6d44b8;
-	}
-
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forum</title>
+    <link rel="stylesheet" href="../static/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital@1&display=swap" rel="stylesheet">
 </head>
+
 <body>
-  <h1>Forum</h1>
-  <form id="postForm">
-    <textarea id="postContent" placeholder="Enter your post"></textarea>
-    <input type="file" id="postImage" accept="image/*">
-    <button type="submit">Submit</button>
-  </form>
+    <header>
+        <!--NavBar Section-->
+        <div class="navbar">
+            <nav class="navigation hide" id="navigation">
+                <span class="close-icon" id="close-icon" onclick="IconBar()"><i class="fa fa-close"></i></span>
+                <ul class="nav-list">
+                    <li class="nav-item"><a href="/">Posts <i class="fa fa-home"></i></a></li>
+                    <li class="nav-item"><a href="/posts">Users</a></li>
+                    <li class="nav-item user"><a href="/sign-in">Sign In</i> <i class="fa fa-user-circle"></i><i class="fa fa-sign-in"></i></li></a>
+                    <!-- If user has Signed In, <i class="fa fa-sign-in"> should be replaced with  <i class="fa fa-sign-out">-->
+                </ul>
+            </nav>
+            <a class="bar-icon" id="iconBar" onclick="IconBar()"><i class="fa fa-bars"></i></a>
+            <div class="brand">Forum</div>
+        </div>
+        <!--SearchBox Section-->
+        <div class="search-box">
+            <div>
+                <select name="" id="">
+                    <option value="Everything">Everything</option>
+                    <option value="Titles">Titles</option>
+                    <option value="Descriptions">Descriptions</option>
+                </select>
+                <input type="text" name="q" placeholder="search ...">
+                <button><i class="fa fa-search"></i></button>
+            </div>
+        </div>
+    </header>
+    <div class="container">
+        <!--Navigation-->
+        <div class="navigate">
+            <span><a href="/sign-in">Forum</a> >> <a href="/posts">Users</a></span>
+        </div>
+        <!--Display posts table-->
+        <div class="posts-table">
+            <div class="table-head">
+                <div class="status">Status</div>
+                <div class="subjects">Subjects</div>
+                <div class="replies">Likes/Dislikes</div>
+            </div>
+            <div class="table-row">
+                <div class="status"><i class="fa fa-fire"></i></div>
+                <div class="subjects">
+                    <a href="">Is learning Python on 2021 worth it?</a>
+                    <br>
+                    <span>Started by <b><a href="">User</a></b> .</span>
+                </div>
+                <div class="replies">
+                <span id="likeCount">0</span><button id="like" onclick="incrementLikes()"><i class="fa fa-thumbs-o-up like"></i></button> <br> <span id="dislikeCount">0</span> <button id="dislike" onclick="incrementDislikes()"><i class="fa fa-thumbs-o-down like"></i></button>
+                </div>
+            </div>
+            <!--starts here-->
+            <!--ends here-->
+        </div>
+        <!--Pagination starts-->
+            <div class="pagination">
+                pages: <a href="">1</a><a href="">2</a><a href="">3</a>
+            </div>
+        <!--pagination ends-->
+    </div>
 
-  <div class="signup">
-    <form action = "/" method = "POST">
-        <label for="chk" aria-hidden="true">Sign up</label>
-        <input type="text" id="username" name="username" placeholder="Username" required="">
-        <input type="email" id="email" name="email" placeholder="Email" required="">
-        <input type="password" id="password" name="password" placeholder="Password" required="">
-        <button>Sign up</button>
-        <div id="errorMessage" style="display: none; color: red;"></div>
-    </form>
-</div>
-
-    <!-- Add this element inside the form -->
-<div id="errorMessage" style="display: none; color: red;"></div>
-
-  <div id="postsContainer">
-    <!-- Posts will be dynamically inserted here -->
-  </div>
-
-  <script src="script.js"></script>
+    <footer>
+        <span>&copy;  Forum | All Rights Reserved</span>
+    </footer>
+    <script src="../static/script.js"></script>
 </body>
 </html>
-
