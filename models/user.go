@@ -1,5 +1,9 @@
 package models
 
+func CreateUser(email, username, password string) {
+	db.Exec("INSERT INTO users VALUES (?,?,?)", email, username, password)
+}
+
 // import "time"
 
 // type User struct {

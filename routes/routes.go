@@ -5,7 +5,9 @@ import (
 	"net/http"
 )
 
-func main(){
+func SetUpRoutes(){
+
+http.HandleFunc("/",controllers.HomePage)
 
 http.HandleFunc("/register",controllers.RegisterHandler)
 
