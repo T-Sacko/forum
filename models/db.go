@@ -81,6 +81,8 @@ func InitDB() {
 	`)
 	if err != nil {
 		log.Fatal(err)
+	} else {
+		fmt.Println("Database initialized")
 	}
 
 	// Set database connection pool limits
@@ -88,7 +90,6 @@ func InitDB() {
 	db.SetMaxIdleConns(25)
 	db.SetConnMaxLifetime(5 * 60 * 1000)
 
-	fmt.Println("Database initialized")
 }
 
 func InsertDB(username, email, password string) error {
@@ -99,7 +100,6 @@ func InsertDB(username, email, password string) error {
 	}
 	defer stmt.Close()
 
-
 	// Execute the prepared statement with the provided values a
 	_, err = stmt.Exec(username, email, password)
 	if err != nil {
@@ -108,5 +108,3 @@ func InsertDB(username, email, password string) error {
 
 	return nil
 }
-
-
