@@ -125,7 +125,6 @@ h1{
     }
 
 }
-
 /*   Header Section    */
 
 header{
@@ -144,6 +143,7 @@ header{
     border-radius: 5px;
     max-height: 80px;
     margin-right:10px;
+    transition: .5s ease-in-out;
 }
 
 .close-icon i{
@@ -464,4 +464,3 @@ footer{
 .comment-area input:hover{
     border: solid 1px #000000;
 }
-

@@ -12,6 +12,60 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+var userDetails = `
+<html>
+<head>
+  <title>User Details</title>
+</head>
+<body>
+  <h1>User Details</h1>
+
+  <h2>User Information</h2>
+  <div>
+    <strong>Username:</strong> <span id="username"></span><br>
+    <strong>Email:</strong> <span id="email"></span>
+  </div>
+
+  <h2>Posts</h2>
+  <ul id="posts"></ul>
+
+  <script>
+    // Assuming you have a JavaScript object containing user data and posts
+    var userData = {
+      username: "JohnDoe",
+      email: "johndoe@example.com"
+    };
+
+    var userPosts = [
+      { id: 1, title: "Post 1", content: "Lorem ipsum dolor sit amet." },
+      { id: 2, title: "Post 2", content: "Pellentesque habitant morbi tristique senectus." },
+      { id: 3, title: "Post 3", content: "Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae." }
+    ];
+
+    // Update user information
+    document.getElementById("username").textContent = userData.username;
+    document.getElementById("email").textContent = userData.email;
+
+    // Render user posts
+    var postsElement = document.getElementById("posts");
+    userPosts.forEach(function(post) {
+      var li = document.createElement("li");
+      var title = document.createElement("h3");
+      var content = document.createElement("p");
+
+      title.textContent = post.title;
+      content.textContent = post.content;
+
+      li.appendChild(title);
+      li.appendChild(content);
+      postsElement.appendChild(li);
+    });
+  </script>
+</body>
+</html>
+`
+
+
 var err error
 
 type Post struct {
@@ -37,10 +91,23 @@ func index(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Fatal(err)
 	}
+	if r.URL.Path == "/account" {
+		tpl = template.Must(template.New("userDetails").Parse(userDetails))
+		//Open DB for the User's information
+		tpl.Execute(w, nil)
+	}
+}
+
+func UsersHandler(w http.ResponseWriter, r *http.Request) {
+	err = tpl.ExecuteTemplate(w, "sign-in.html", nil)
+	if err != nil {
+		log.Fatal(err)
+	}
 	if r.Method == "POST" {
 		username := r.FormValue("username")
 		email := r.FormValue("email")
 		password := r.FormValue("password")
+		fmt.Println(username, email, password)
 		HashedPass, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 		if err != nil {
 			log.Fatal(err)
@@ -49,13 +116,7 @@ func index(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			log.Fatal(err)
 		}
-	}
-}
-
-func UsersHandler(w http.ResponseWriter, r *http.Request) {
-	err = tpl.ExecuteTemplate(w, "sign-in.html", nil)
-	if err != nil {
-		log.Fatal(err)
+		return
 	}
 }
 
@@ -67,19 +128,26 @@ func PostsHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func UsernameCheck(w http.ResponseWriter, r *http.Request) {
-	if r.Method == "GET" {
-		username := r.URL.Query().Get("username")
-		available, err := models.IsUsernameAvailable(username)
-		if err != nil {
-			log.Fatal(err)
-		}
-		response := struct {
-			Available bool `json:"available"`
-		}{
-			Available: available,
-		}
-		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(response)
+	username := r.URL.Query().Get("username")
+
+	available, err := models.IsUsernameAvailable(username)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+
+	response := models.UsernameCheckResponse{
+		Available: available,
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	err = json.NewEncoder(w).Encode(response)
+
+	if err != nil {
+		log.Println(err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
 	}
 }
 
@@ -92,6 +160,7 @@ func main() {
 	http.Handle("/static/", http.StripPrefix("/static/", mux))
 	mux.HandleFunc("/", index)
 	mux.HandleFunc("/sign-in", UsersHandler)
+	mux.HandleFunc("/api/check-username", UsernameCheck)
 	mux.HandleFunc("/posts", PostsHandler)
 	err := http.ListenAndServe(":8888", mux)
 	if err != nil {

@@ -1,5 +1,9 @@
 package models
 
+
+type UsernameCheckResponse struct {
+	Available bool `json:"available"`
+}
 // import "time"
 
 // type User struct {
