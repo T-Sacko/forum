@@ -1,9 +1,9 @@
 package controllers
+/*
 
 import (
 	"net/http"
 )
-
 func LoginHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Handle login request
@@ -35,3 +35,4 @@ func CreatePostHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 // Add more handler functions as needed
+*/
