@@ -21,31 +21,32 @@ function checkUsername(username) {
   xhr.send();
 }
 
-document.getElementById('signupForm').addEventListener('submit', function(e) {
-    /*This function should check with Go as to whether or not the input is valid through the DB Check*/
-    e.preventDefault(); // Prevent the form from submitting normally
 
-    var userId = 123; // Replace with the actual user ID
+// document.getElementById('signupForm').addEventListener('submit', function(e) {
+//     /*This function should check with Go as to whether or not the input is valid through the DB Check*/
+//     e.preventDefault(); // Prevent the form from submitting normally
 
-    // Build the URL with the user ID and set it as the form's action
-    this.action = 'https://example.com/user/' + userId;
+//     var userId = 123; // Replace with the actual user ID
 
-    // Submit the form
-    this.submit();
-});
+//     // Build the URL with the user ID and set it as the form's action
+//     this.action = 'https://example.com/user/' + userId;
 
-document.getElementById('loginForm').addEventListener('submit', function(e) {
-    /*This function should check with Go as to whether or not the input is valid through the DB Check*/
-    e.preventDefault(); // Prevent the form from submitting normally
+//     // Submit the form
+//     this.submit();
+// });
 
-    var userId = 123; // The ID will come from the Go backend
+// document.getElementById('loginForm').addEventListener('submit', function(e) {
+//     /*This function should check with Go as to whether or not the input is valid through the DB Check*/
+//     e.preventDefault(); // Prevent the form from submitting normally
 
-    // Build the URL with the user ID and set it as the form's action
-    this.action = 'https://example.com/user/' + userId;
+//     var userId = 123; // The ID will come from the Go backend
 
-    // Submit the form
-    this.submit();
-});
+//     // Build the URL with the user ID and set it as the form's action
+//     this.action = 'https://example.com/user/' + userId;
+
+//     // Submit the form
+//     this.submit();
+// });
 
 
 //NavBar
