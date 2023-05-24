@@ -5,7 +5,6 @@ import (
 	c "forum/controllers"
 )
 
-var err error
 
 
 func SetUpRoutes(mux *http.ServeMux) {
