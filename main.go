@@ -65,7 +65,6 @@ var userDetails = `
 </html>
 `
 
-
 var err error
 
 type Post struct {
@@ -153,6 +152,7 @@ func UsernameCheck(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	models.InitDB()
+
 	defer models.CloseDB()
 
 	mux := http.NewServeMux()
@@ -162,6 +162,7 @@ func main() {
 	mux.HandleFunc("/sign-in", UsersHandler)
 	mux.HandleFunc("/api/check-username", UsernameCheck)
 	mux.HandleFunc("/posts", PostsHandler)
+	
 	err := http.ListenAndServe(":8888", mux)
 	if err != nil {
 		log.Fatal(err)
