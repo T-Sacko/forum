@@ -4,7 +4,6 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
-	"time"
 
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -26,7 +25,6 @@ func InitDB() {
 			username TEXT UNIQUE,
 			password TEXT,
 			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-			updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 		);
 
 		CREATE TABLE IF NOT EXISTS categories (
@@ -40,10 +38,9 @@ func InitDB() {
 			id INTEGER PRIMARY KEY,
 			title TEXT,
 			content TEXT,
-			category_id INTEGER,
+			category_id TEXT,
 			user_id INTEGER,
 			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-			updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 			FOREIGN KEY(category_id) REFERENCES categories(id),
 			FOREIGN KEY(user_id) REFERENCES users(id)
 		);
@@ -66,7 +63,6 @@ func InitDB() {
 			user_id INTEGER,
 			value INTEGER,
 			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-			updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 			FOREIGN KEY(post_id) REFERENCES posts(id),
 			FOREIGN KEY(comment_id) REFERENCES comments(id),
 			FOREIGN KEY(user_id) REFERENCES users(id)
@@ -98,18 +94,15 @@ func InitDB() {
 
 func InsertDB(username, email, password string) error {
 	// Prepare the SQL statement to insert a new post
-	stmt, err := db.Prepare("INSERT INTO users (username, email, password, updated_at) VALUES (?, ?, ?, ?)")
+	stmt, err := db.Prepare("INSERT INTO users (username, email, password) VALUES (?, ?, ?)")
 	if err != nil {
 		return err
 	}
 	defer stmt.Close()
 
-	
-	// Get the current timestamp
-	currentTime := time.Now()
 
-	// Execute the prepared statement with the provided values and current timestamp
-	_, err = stmt.Exec(username, email, password, currentTime)
+	// Execute the prepared statement with the provided values a
+	_, err = stmt.Exec(username, email, password)
 	if err != nil {
 		return err
 	}
@@ -117,18 +110,4 @@ func InsertDB(username, email, password string) error {
 	return nil
 }
 
-func IsUsernameAvailable(username string) (bool, error) {
-	var count int
-	err := db.QueryRow("SELECT COUNT(*) FROM users WHERE username = ?", username).Scan(&count)
-	if err != nil {
-		return false, err
-	}
-	return count == 0, nil
-}
 
-func CloseDB() {
-	if db != nil {
-		db.Close()
-		fmt.Println("Database connection closed")
-	}
-}
