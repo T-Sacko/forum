@@ -1,7 +1,7 @@
 package models
 
 func CreateUser(email, username, password string) {
-	db.Exec("INSERT INTO users VALUES (?,?,?)", email, username, password)
+	db.Exec("INSERT INTO users (email, username, password) VALUES (?,?,?)", email, username, password)
 }
 
 // import "time"
