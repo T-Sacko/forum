@@ -7,6 +7,7 @@ import (
 	"time"
 
 	_ "github.com/mattn/go-sqlite3"
+	"golang.org/x/crypto/bcrypt"
 )
 
 var db *sql.DB
@@ -104,7 +105,6 @@ func InsertDB(username, email, password string) error {
 	}
 	defer stmt.Close()
 
-	
 	// Get the current timestamp
 	currentTime := time.Now()
 
@@ -124,6 +124,47 @@ func IsUsernameAvailable(username string) (bool, error) {
 		return false, err
 	}
 	return count == 0, nil
+}
+
+func IsEmailAvailable(email string) (bool, error) {
+	var count int
+	err := db.QueryRow("SELECT COUNT(*) FROM users WHERE email = ?", email).Scan(&count)
+	if err != nil {
+		return false, err
+	}
+	return count == 0, nil
+}
+
+func ComparePasswords(hashedPassword, userPassword string) bool {
+	err := bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(userPassword))
+	return err == nil
+}
+
+func Check4User(email, password string) (bool, error) {
+	var hashedPassword string
+	err := db.QueryRow("SELECT password FROM users WHERE email = ?", email).Scan(&hashedPassword)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return false, err
+		} else {
+			return false, err
+		}
+	}
+	return ComparePasswords(hashedPassword, password), nil
+}
+func GetID(email string) (int, error) {
+	stmt, err := db.Prepare("SELECT id FROM users WHERE email = ?")
+	if err != nil {
+		return 0, err
+	}
+	defer stmt.Close()
+	var userID int
+	// Assuming "emailValue" is the email you want to search for
+	err = stmt.QueryRow(email).Scan(&userID)
+	if err != nil {
+		return 0, err
+	}
+	return userID, nil
 }
 
 func CloseDB() {

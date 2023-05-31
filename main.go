@@ -17,21 +17,23 @@ func init() {
 	c.Tpl = template.Must(template.ParseGlob("templates/*.html"))
 }
 
-func Start() {
-	main()
+func openBrowser(url string) error {
+	return exec.Command("xdg-open", url).Start()
 }
 
 func main() {
 	models.InitDB()
+
 	defer models.CloseDB()
-	LocalHost := ":8888"
-	url := "https://localhost" +LocalHost
-	exec.Command("open", url).Start()
+
 	mux := http.NewServeMux()
 	r.SetUpRoutes(mux)
-	err := http.ListenAndServe(LocalHost, mux)
-	if err != nil {
-		log.Fatal(err)
+	
+	openBrowser("http://localhost:8888")
+	if err := http.ListenAndServe(":8888", mux); err != nil {
+		log.Fatalf("Failure on Listening and Serving: %v", err)
 	}
+
+
 	fmt.Println("Serving on Port ->:8888")
 }

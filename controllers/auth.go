@@ -7,8 +7,6 @@ import (
 	"html/template"
 	"log"
 	"net/http"
-
-	"golang.org/x/crypto/bcrypt"
 )
 
 var err error
@@ -21,23 +19,47 @@ func StaticHandler(w http.ResponseWriter, r *http.Request) {
 
 func Index(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
-		username := r.FormValue("username")
-		email := r.FormValue("email")
-		password := r.FormValue("password")
-		fmt.Println(username)
-		HashedPass, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
-		if err != nil {
-			log.Fatal(err)
-		}
-		err = models.InsertDB(username, email, string(HashedPass))
-		if err != nil {
-			log.Fatal(err)
+		fmt.Println("DONE")
+		switch r.URL.Path {
+		case "/log-in":
+			auth, check := SigningIn(w, r)
+			if auth == "Authenticated" {
+				fmt.Println(auth)
+				err = Tpl.ExecuteTemplate(w, "home.html", check.UserInfo)
+				if err != nil {
+					log.Fatal(err)
+				}
+			} else {
+				http.Error(w, auth, http.StatusNoContent)
+			}
+		default:
+			err = getUser(r).Save()
+			if err != nil {
+				log.Fatal(err)
+			}
+			http.Redirect(w, r, "/", http.StatusAccepted)
 		}
 	}
 	err = Tpl.ExecuteTemplate(w, "home.html", nil)
 	if err != nil {
 		log.Fatal(err)
 	}
+}
+
+func getUser(r *http.Request) *models.User {
+	return &models.User{Email:r.FormValue("email"), Username:r.FormValue("username"), Password: r.FormValue("password")}
+}
+
+
+func SigningIn(w http.ResponseWriter, r *http.Request) (string, models.UserCheckResponse) {
+	check, err := getUser(r).LogIn()
+	if err != nil {
+		log.Fatal(err)
+	}
+	if check.Available {
+		return "Authenticated", check
+	}
+	return "Unauthenticated", models.UserCheckResponse{}
 }
 
 func UsersHandler(w http.ResponseWriter, r *http.Request) {
@@ -64,7 +86,31 @@ func UsernameCheck(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	response := models.UsernameCheckResponse{
+	response := models.UserCheckResponse{
+		Available: available,
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	err = json.NewEncoder(w).Encode(response)
+
+	if err != nil {
+		log.Println(err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+}
+
+func EmailCheck(w http.ResponseWriter, r *http.Request) {
+	email := r.URL.Query().Get("email")
+
+	available, err := models.IsEmailAvailable(email)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+
+	response := models.UserCheckResponse{
 		Available: available,
 	}
 

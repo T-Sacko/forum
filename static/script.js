@@ -20,6 +20,27 @@ function checkUsername(username) {
   };
   xhr.send();
 }
+function checkEmail(email) {
+  var xhr = new XMLHttpRequest();
+  xhr.open("GET", "/api/check-email?email=" + encodeURIComponent(email), true);
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState === XMLHttpRequest.DONE) {
+      if (xhr.status === 200) {
+        var response = JSON.parse(xhr.responseText);
+        var errorElement = document.getElementById("username-error");
+        if (response.available) {
+          errorElement.textContent = ""; // Clear any previous error message
+        } else {
+          errorElement.setAttribute("style", "display:block;")
+          errorElement.textContent = "Error:Email Already In Use";
+        }
+      } else {
+        console.error("Error:", xhr.status);
+      }
+    }
+  };
+  xhr.send();
+}
 
 
 // document.getElementById('signupForm').addEventListener('submit', function(e) {
