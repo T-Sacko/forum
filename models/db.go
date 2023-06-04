@@ -4,10 +4,8 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
-	"time"
 
 	_ "github.com/mattn/go-sqlite3"
-	"golang.org/x/crypto/bcrypt"
 )
 
 var db *sql.DB
@@ -97,61 +95,6 @@ func InitDB() {
 	fmt.Println("Database initialized")
 }
 
-func InsertDB(username, email, password string) error {
-	// Prepare the SQL statement to insert a new post
-	stmt, err := db.Prepare("INSERT INTO users (username, email, password, updated_at) VALUES (?, ?, ?, ?)")
-	if err != nil {
-		return err
-	}
-	defer stmt.Close()
-
-	// Get the current timestamp
-	currentTime := time.Now()
-
-	// Execute the prepared statement with the provided values and current timestamp
-	_, err = stmt.Exec(username, email, password, currentTime)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func IsUsernameAvailable(username string) (bool, error) {
-	var count int
-	err := db.QueryRow("SELECT COUNT(*) FROM users WHERE username = ?", username).Scan(&count)
-	if err != nil {
-		return false, err
-	}
-	return count == 0, nil
-}
-
-func IsEmailAvailable(email string) (bool, error) {
-	var count int
-	err := db.QueryRow("SELECT COUNT(*) FROM users WHERE email = ?", email).Scan(&count)
-	if err != nil {
-		return false, err
-	}
-	return count == 0, nil
-}
-
-func ComparePasswords(hashedPassword, userPassword string) bool {
-	err := bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(userPassword))
-	return err == nil
-}
-
-func Check4User(email, password string) (bool, error) {
-	var hashedPassword string
-	err := db.QueryRow("SELECT password FROM users WHERE email = ?", email).Scan(&hashedPassword)
-	if err != nil {
-		if err == sql.ErrNoRows {
-			return false, err
-		} else {
-			return false, err
-		}
-	}
-	return ComparePasswords(hashedPassword, password), nil
-}
 func GetID(email string) (int, error) {
 	stmt, err := db.Prepare("SELECT id FROM users WHERE email = ?")
 	if err != nil {

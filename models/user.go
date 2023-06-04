@@ -1,6 +1,9 @@
 package models
 
 import (
+	"database/sql"
+	"time"
+
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -15,14 +18,13 @@ type User struct {
 	Username string
 	Email    string
 	Password string
-	Post  Content
+	Post     Content
 	Likes    int
 	Dislikes int
 	Comments string
 }
 
 // import "time"
-
 
 func (newUser User) Save() error {
 	HashedPass, err := bcrypt.GenerateFromPassword([]byte(newUser.Password), bcrypt.DefaultCost)
@@ -42,7 +44,7 @@ func (user User) LogIn() (UserCheckResponse, error) {
 		return UserCheckResponse{Available: checked}, err
 	}
 
-	userInfo, err :=  user.GetUserByID()
+	userInfo, err := user.GetUserByID()
 	if err != nil {
 		return UserCheckResponse{}, err
 	}
@@ -75,23 +77,69 @@ func (user User) GetUserByID() (User, error) {
 	}
 
 	user = User{
-		Post: content,
-		Likes: likes,
+		Post:     content,
+		Likes:    likes,
 		Dislikes: dislikes,
 		Comments: comments,
 	}
-	
+
 	return user, err
 }
 
+func InsertDB(username, email, password string) error {
+	// Prepare the SQL statement to insert a new post
+	stmt, err := db.Prepare("INSERT INTO users (username, email, password, updated_at) VALUES (?, ?, ?, ?)")
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+
+	// Get the current timestamp
+	currentTime := time.Now()
+
+	// Execute the prepared statement with the provided values and current timestamp
+	_, err = stmt.Exec(username, email, password, currentTime)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func IsUsernameAvailable(username string) (bool, error) {
+	var count int
+	err := db.QueryRow("SELECT COUNT(*) FROM users WHERE username = ?", username).Scan(&count)
+	if err != nil {
+		return false, err
+	}
+	return count == 0, nil
+}
+
+func IsEmailAvailable(email string) (bool, error) {
+	var count int
+	err := db.QueryRow("SELECT COUNT(*) FROM users WHERE email = ?", email).Scan(&count)
+	if err != nil {
+		return false, err
+	}
+	return count == 0, nil
+}
+
+func ComparePasswords(hashedPassword, userPassword string) bool {
+	err := bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(userPassword))
+	return err == nil
+}
+
+func Check4User(email, password string) (bool, error) {
+	var hashedPassword string
+	err := db.QueryRow("SELECT password FROM users WHERE email = ?", email).Scan(&hashedPassword)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return false, err
+		} else {
+			return false, err
+		}
+	}
+	return ComparePasswords(hashedPassword, password), nil
+}
 
 
-
-
-// func (u *User) Save() error {
-//     // save the user to the database
-// }
-
-// func GetUserByID(id int) (*User, error) {
-//     // query the database for a user with the given ID
-// }

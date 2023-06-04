@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"encoding/json"
-	"fmt"
 	"forum/models"
 	"html/template"
 	"log"
@@ -17,39 +16,9 @@ func StaticHandler(w http.ResponseWriter, r *http.Request) {
 	http.ServeFile(w, r, r.URL.Path[1:])
 }
 
-func Index(w http.ResponseWriter, r *http.Request) {
-	if r.Method == "POST" {
-		fmt.Println("DONE")
-		switch r.URL.Path {
-		case "/log-in":
-			auth, check := SigningIn(w, r)
-			if auth == "Authenticated" {
-				fmt.Println(auth)
-				err = Tpl.ExecuteTemplate(w, "home.html", check.UserInfo)
-				if err != nil {
-					log.Fatal(err)
-				}
-			} else {
-				http.Error(w, auth, http.StatusNoContent)
-			}
-		default:
-			err = getUser(r).Save()
-			if err != nil {
-				log.Fatal(err)
-			}
-			http.Redirect(w, r, "/", http.StatusAccepted)
-		}
-	}
-	err = Tpl.ExecuteTemplate(w, "home.html", nil)
-	if err != nil {
-		log.Fatal(err)
-	}
-}
-
 func getUser(r *http.Request) *models.User {
-	return &models.User{Email:r.FormValue("email"), Username:r.FormValue("username"), Password: r.FormValue("password")}
+	return &models.User{Email: r.FormValue("email"), Username: r.FormValue("username"), Password: r.FormValue("password")}
 }
-
 
 func SigningIn(w http.ResponseWriter, r *http.Request) (string, models.UserCheckResponse) {
 	check, err := getUser(r).LogIn()
@@ -64,13 +33,6 @@ func SigningIn(w http.ResponseWriter, r *http.Request) (string, models.UserCheck
 
 func UsersHandler(w http.ResponseWriter, r *http.Request) {
 	err = Tpl.ExecuteTemplate(w, "sign-in.html", nil)
-	if err != nil {
-		log.Fatal(err)
-	}
-}
-
-func PostsHandler(w http.ResponseWriter, r *http.Request) {
-	err = Tpl.ExecuteTemplate(w, "create_post.html", nil)
 	if err != nil {
 		log.Fatal(err)
 	}
