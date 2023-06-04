@@ -1,7 +1,8 @@
 package controllers
 
 import (
-	"forum/models"
+	"fmt"
+	m "forum/models"
 	"html/template"
 	"net/http"
 )
@@ -33,16 +34,25 @@ func HomePage(w http.ResponseWriter, r *http.Request) {
 }
 
 func RegisterHandler(w http.ResponseWriter, r *http.Request) {
-	err := r.ParseForm()
-	if err != nil {
-		http.Error(w, "Failed to parseform", http.StatusBadRequest)
-	}
 
 	email := r.FormValue("email-address")
 	username := r.FormValue("username")
 	password := r.FormValue("password")
 
-	models.CreateUser(email, username, password)
+	user := m.User{
+		Email:    email,
+		Username: username,
+		Password: password,
+	}
+
+	err := user.Save()
+	if err != nil {
+		fmt.Println("what")
+		http.Error(w, "CANT SAVE USER", http.StatusBadRequest)
+		return
+	}
+	http.Redirect(w, r, "/", http.StatusFound)
+
 }
 
 // func CreatePostHandler(w http.ResponseWriter, r *http.Request) {
