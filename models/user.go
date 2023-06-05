@@ -19,37 +19,42 @@ type User struct {
 
 func (u *User) Save() error {
 
-	_, errs := db.Exec("INSERT INTO users (email, username, password) VALUES (?,?,?)", u.Email, u.Username, string(u.Password), )
+	_, errs := db.Exec("INSERT INTO users (email, username, password, sessionId) VALUES (?,?,?,?)", u.Email, u.Username, u.Password, u.SessionId)
 	if errs != nil {
 		return errs
 	}
+	fmt.Println("successfully made account")
 	return nil
 }
 
-func CheckUserCredentials(email, password string) (User, error) {
-	var user User
-	err := db.QueryRow("SELECT id, email, username, password FROM users WHERE email = ?", email).Scan(&user.ID, &user.Email, &user.Username, &user.Password)
-	if err != nil {
-		if err == sql.ErrNoRows {
-			fmt.Println("sql can qury to check creds")
-			return user, fmt.Errorf("invalid username or password")
-		}
-		return user, err
-	}
+// func CheckUserCredentials(email, password string) (*User, error) {
+// 	var user User
+// 	err := db.QueryRow("SELECT id, email, username, password FROM users WHERE email = ?", email).Scan(&user.ID, &user.Email, &user.Username, &user.Password)
+// 	if err != nil {
+// 		if err == sql.ErrNoRows {
+// 			fmt.Println("sql can qury to check creds")
+// 			return &user, fmt.Errorf("invalid username or password")
+// 		}
+// 		return &user, err
+// 	}
 
-	if !ComparePasswords(user.Password, password) {
-		fmt.Println("sql1 erere")
+// 	if !ComparePasswords(user.Password, password) {
+// 		fmt.Println("sql1 cant compare password")
 
-		return user, fmt.Errorf("invalid username or password")
-	}
+// 		return &user, fmt.Errorf("invalid username or password")
+// 	}
 
-	return user, nil
-}
+// 	return &user, nil
+// }
 
 func ComparePasswords(hashedPassword, userPassword string) bool {
-
-	db.QueryRow()
-	return hashedPassword == userPassword
+	var count int
+	err := db.QueryRow("SELECT COUNT(*) FROM users WHERE password = ?", hashedPassword).Scan(&count)
+	if err != nil {
+		fmt.Println("no match")
+		return false
+	}
+	return count == 1
 }
 
 func IsUsernameAvailable(username string) (bool, error) {
@@ -71,11 +76,11 @@ func IsEmailAvailable(email string) (bool, error) {
 	return count == 0, nil
 }
 
-func (u User) SetSessionId(sessionId string) error {
+func SetSessionId(email, sessionId string) error {
 
-	_, err := db.Exec("INSERT INTO users (sessionId) values(?)", sessionId)
+	_, err := db.Exec("UPDATE users SET sessionId = ? WHERE email = ?", sessionId, email)
 	if err != nil {
-		fmt.Println("cant insert sesh id")
+		fmt.Println("failed to update session ID:", err)
 		return err
 	}
 	return nil
@@ -85,6 +90,7 @@ func (u User) SetSessionId(sessionId string) error {
 func Check4User(email, password string) (bool, error) {
 	var hashedPassword string
 	err := db.QueryRow("SELECT password FROM users WHERE email = ?", email).Scan(&hashedPassword)
+	fmt.Println(err, hashedPassword)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return false, err
@@ -92,18 +98,18 @@ func Check4User(email, password string) (bool, error) {
 			return false, err
 		}
 	}
-	return ComparePasswords(hashedPassword, password), nil
+	return (hashedPassword == password), nil
 }
 
-func userExists(username string) bool {
-	var count int
+// func userExists(username string) bool {
+// 	var count int
 
-	err := db.QueryRow("SELECT COUNT(*) FROM users WHERE username = ?", username).Scan(&count)
-	if err != nil {
-		return false
-	}
-	return count > 0
-}
+// 	err := db.QueryRow("SELECT COUNT(*) FROM users WHERE username = ?", username).Scan(&count)
+// 	if err != nil {
+// 		return false
+// 	}
+// 	return count > 0
+// }
 
 // func GetUserByID(id int) (*User, error) {
 //     // query the database for a user with the given ID

@@ -44,16 +44,19 @@ func RegisterHandler(w http.ResponseWriter, r *http.Request) {
 		username := r.FormValue("username")
 		password := r.FormValue("password")
 
-		user := m.User{
-			Email:    email,
-			Username: username,
-			Password: password,
-		}
-
+		
 		usernameAvailable, _ := m.IsUsernameAvailable(username)
 		emailAvailable, _ := m.IsEmailAvailable(email)
-
+		
 		if usernameAvailable && emailAvailable {
+			
+			SessionId := uuid.New().String()
+			user := m.User{
+				Email:    email,
+				Username: username,
+				Password: password,
+				SessionId: SessionId,
+			}
 
 			err := user.Save()
 			if err != nil {
@@ -61,11 +64,11 @@ func RegisterHandler(w http.ResponseWriter, r *http.Request) {
 				http.Error(w, "CANT SAVE USER", http.StatusBadRequest)
 				return
 			}
-			sessionID := uuid.New().String()
-			user.SetSessionId(sessionID)
+
 			cookie := &http.Cookie{
 				Name:  "session",
-				Value: sessionID,
+				Value: user.SessionId,
+				
 			}
 			http.SetCookie(w, cookie)
 
@@ -98,20 +101,19 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		email := r.FormValue("email")
 		password := r.FormValue("password")
 
-		
-		user, err := m.CheckUserCredentials(email, password)
-		fmt.Println(user.Password,"its working")
+		isUser, err := m.Check4User(email, password)
+		fmt.Println(isUser,password)
 		if err != nil {
 			http.Error(w, "Invalid username or password", http.StatusUnauthorized)
 			return
 		}
 
 		// Set the session ID and create a cookie
-		sessionID := uuid.New().String()
-		user.SetSessionId(sessionID)
+		sessionId := uuid.New().String()
+		m.SetSessionId(email, sessionId)
 		cookie := &http.Cookie{
 			Name:  "session",
-			Value: sessionID,
+			Value: sessionId,
 			// Session cookie (valid until browser is closed)
 		}
 		http.SetCookie(w, cookie)
@@ -119,7 +121,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		// Redirect to the home page or a dashboard page
 		http.Redirect(w, r, "/", http.StatusFound)
 	} //else {
-		// Display the login form
+	// Display the login form
 	// 	tmpl, err := template.ParseFiles("login.html")
 	// 	if err != nil {
 	// 		http.Error(w, "Can't parse the HTML", http.StatusInternalServerError)
