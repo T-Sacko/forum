@@ -98,7 +98,9 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		email := r.FormValue("email")
 		password := r.FormValue("password")
 
+		
 		user, err := m.CheckUserCredentials(email, password)
+		fmt.Println(user.Password,"its working")
 		if err != nil {
 			http.Error(w, "Invalid username or password", http.StatusUnauthorized)
 			return

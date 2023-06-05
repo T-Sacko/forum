@@ -3,8 +3,6 @@ package models
 import (
 	"database/sql"
 	"fmt"
-
-	"golang.org/x/crypto/bcrypt"
 )
 
 // func CreateUser(email, username, password string) {
@@ -20,14 +18,10 @@ type User struct {
 }
 
 func (u *User) Save() error {
-	HashedPass, err := bcrypt.GenerateFromPassword([]byte(u.Password), bcrypt.DefaultCost)
-	if err != nil {
-		return err
-	}
 
-	_, errs := db.Exec("INSERT INTO users (email, username, password) VALUES (?,?,?)", u.Email, u.Username, HashedPass)
+	_, errs := db.Exec("INSERT INTO users (email, username, password) VALUES (?,?,?)", u.Email, u.Username, string(u.Password), )
 	if errs != nil {
-		return err
+		return errs
 	}
 	return nil
 }
@@ -37,19 +31,25 @@ func CheckUserCredentials(email, password string) (User, error) {
 	err := db.QueryRow("SELECT id, email, username, password FROM users WHERE email = ?", email).Scan(&user.ID, &user.Email, &user.Username, &user.Password)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			fmt.Println("sql erere")
+			fmt.Println("sql can qury to check creds")
 			return user, fmt.Errorf("invalid username or password")
 		}
 		return user, err
 	}
 
 	if !ComparePasswords(user.Password, password) {
-		fmt.Println("sql erere")
+		fmt.Println("sql1 erere")
 
 		return user, fmt.Errorf("invalid username or password")
 	}
 
 	return user, nil
+}
+
+func ComparePasswords(hashedPassword, userPassword string) bool {
+
+	db.QueryRow()
+	return hashedPassword == userPassword
 }
 
 func IsUsernameAvailable(username string) (bool, error) {
@@ -65,6 +65,7 @@ func IsEmailAvailable(email string) (bool, error) {
 	var count int
 	err := db.QueryRow("SELECT COUNT(*) FROM users WHERE email = ?", email).Scan(&count)
 	if err != nil {
+		fmt.Println("cant check if username available")
 		return false, err
 	}
 	return count == 0, nil
@@ -72,28 +73,13 @@ func IsEmailAvailable(email string) (bool, error) {
 
 func (u User) SetSessionId(sessionId string) error {
 
-	available, _ := IsUsernameAvailable(u.Username)
-
-	if available {
-
-		_, err := db.Exec("INSERT INTO users (sessionId) values(?)", sessionId)
-		if err != nil {
-			return err
-		}
-		return nil
-	}
-
-	_, err := db.Exec("UPDATE users SET sessionId WHERE id = ?", u.ID)
-
+	_, err := db.Exec("INSERT INTO users (sessionId) values(?)", sessionId)
 	if err != nil {
+		fmt.Println("cant insert sesh id")
 		return err
 	}
 	return nil
-}
 
-func ComparePasswords(hashedPassword, userPassword string) bool {
-	err := bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(userPassword))
-	return err == nil
 }
 
 func Check4User(email, password string) (bool, error) {
