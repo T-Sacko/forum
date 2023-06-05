@@ -11,10 +11,11 @@ import (
 // }
 
 type User struct {
-	ID       int    `json:"id"`
-	Email    string `json:"email"`
-	Username string `json:"username"`
-	Password string `json:"-"`
+	ID        int    `json:"id"`
+	Email     string `json:"email"`
+	Username  string `json:"username"`
+	Password  string `json:"-"`
+	SessionId string `json:"sessionid"`
 }
 
 func (u *User) Save() error {
@@ -26,22 +27,30 @@ func (u *User) Save() error {
 	return nil
 }
 
-func IsUsernameAvailable(username string) (bool, error) {
+func (u User) IsUsernameAvailable() (bool, error) {
 	var count int
-	err := db.QueryRow("SELECT COUNT(*) FROM users WHERE username = ?", username).Scan(&count)
+	err := db.QueryRow("SELECT COUNT(*) FROM users WHERE username = ?", u.Username).Scan(&count)
 	if err != nil {
 		return false, err
 	}
 	return count == 0, nil
 }
 
-func IsEmailAvailable(email string) (bool, error) {
+func (u User) IsEmailAvailable() (bool, error) {
 	var count int
-	err := db.QueryRow("SELECT COUNT(*) FROM users WHERE email = ?", email).Scan(&count)
+	err := db.QueryRow("SELECT COUNT(*) FROM users WHERE email = ?", u.Email).Scan(&count)
 	if err != nil {
 		return false, err
 	}
 	return count == 0, nil
+}
+
+func SetSessionId(sessionId string) error {
+	_, err := db.Exec("INSERT INTO users (sessionId) values(?)", sessionId)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func ComparePasswords(hashedPassword, userPassword string) bool {

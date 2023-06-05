@@ -23,7 +23,8 @@ func InitDB() {
 			id INTEGER PRIMARY KEY,
 			email TEXT UNIQUE,
 			username TEXT UNIQUE,
-			password TEXT
+			password TEXT,
+			sessionId TEXT UNIQUE
 		);
 
 		CREATE TABLE IF NOT EXISTS categories (
