@@ -90,7 +90,9 @@ func RegisterHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func LoginHandler(w http.ResponseWriter, r *http.Request) {
-
+	if r.method == "POST"{
+		
+	}
 }
 
 // func CreatePostHandler(w http.ResponseWriter, r *http.Request) {
