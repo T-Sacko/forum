@@ -62,10 +62,10 @@ func RegisterHandler(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 			sessionID := uuid.New().String()
-			m.SetSessionId(sessionID)
+			user.SetSessionId(sessionID)
 			cookie := &http.Cookie{
-				Name:   "session",
-				Value:  sessionID,
+				Name:  "session",
+				Value: sessionID,
 			}
 			http.SetCookie(w, cookie)
 
@@ -89,6 +89,10 @@ func RegisterHandler(w http.ResponseWriter, r *http.Request) {
 
 }
 
+// func getUser(r *http.Request) m.User {
+// 	return m.User{Email: r.FormValue("email"), Username: r.FormValue("username"), Password: r.FormValue("password")}
+// }
+
 func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
 		email := r.FormValue("email")
@@ -102,32 +106,31 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 
 		// Set the session ID and create a cookie
 		sessionID := uuid.New().String()
-		user.SetSessionID(sessionID)
+		user.SetSessionId(sessionID)
 		cookie := &http.Cookie{
-			Name:   "session",
-			Value:  sessionID,
-			MaxAge: -1, // Session cookie (valid until browser is closed)
+			Name:  "session",
+			Value: sessionID,
+			// Session cookie (valid until browser is closed)
 		}
 		http.SetCookie(w, cookie)
 
 		// Redirect to the home page or a dashboard page
 		http.Redirect(w, r, "/", http.StatusFound)
-	} else {
+	} //else {
 		// Display the login form
-		tmpl, err := template.ParseFiles("login.html")
-		if err != nil {
-			http.Error(w, "Can't parse the HTML", http.StatusInternalServerError)
-			return
-		}
+	// 	tmpl, err := template.ParseFiles("login.html")
+	// 	if err != nil {
+	// 		http.Error(w, "Can't parse the HTML", http.StatusInternalServerError)
+	// 		return
+	// 	}
 
-		err = tmpl.Execute(w, nil)
-		if err != nil {
-			http.Error(w, "Failed to execute HTML template", http.StatusInternalServerError)
-			return
-		}
-	}
+	// 	err = tmpl.Execute(w, nil)
+	// 	if err != nil {
+	// 		http.Error(w, "Failed to execute HTML template", http.StatusInternalServerError)
+	// 		return
+	// 	}
+	// }
 }
-
 
 // func CreatePostHandler(w http.ResponseWriter, r *http.Request) {
 

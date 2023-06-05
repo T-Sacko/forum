@@ -20,9 +20,13 @@ type User struct {
 }
 
 func (u *User) Save() error {
-
-	_, err := db.Exec("INSERT INTO users (email, username, password) VALUES (?,?,?)", u.Email, u.Username, u.Password)
+	HashedPass, err := bcrypt.GenerateFromPassword([]byte(u.Password), bcrypt.DefaultCost)
 	if err != nil {
+		return err
+	}
+
+	_, errs := db.Exec("INSERT INTO users (email, username, password) VALUES (?,?,?)", u.Email, u.Username, HashedPass)
+	if errs != nil {
 		return err
 	}
 	return nil
@@ -30,15 +34,18 @@ func (u *User) Save() error {
 
 func CheckUserCredentials(email, password string) (User, error) {
 	var user User
-	err := db.QueryRow("SELECT id, email, username, password FROM users WHERE username = ?", email).Scan(&user.ID, &user.Email, &user.Username, &user.Password)
+	err := db.QueryRow("SELECT id, email, username, password FROM users WHERE email = ?", email).Scan(&user.ID, &user.Email, &user.Username, &user.Password)
 	if err != nil {
 		if err == sql.ErrNoRows {
+			fmt.Println("sql erere")
 			return user, fmt.Errorf("invalid username or password")
 		}
 		return user, err
 	}
 
 	if !ComparePasswords(user.Password, password) {
+		fmt.Println("sql erere")
+
 		return user, fmt.Errorf("invalid username or password")
 	}
 
@@ -63,8 +70,21 @@ func IsEmailAvailable(email string) (bool, error) {
 	return count == 0, nil
 }
 
-func SetSessionId(sessionId string) error {
-	_, err := db.Exec("INSERT INTO users (sessionId) values(?)", sessionId)
+func (u User) SetSessionId(sessionId string) error {
+
+	available, _ := IsUsernameAvailable(u.Username)
+
+	if available {
+
+		_, err := db.Exec("INSERT INTO users (sessionId) values(?)", sessionId)
+		if err != nil {
+			return err
+		}
+		return nil
+	}
+
+	_, err := db.Exec("UPDATE users SET sessionId WHERE id = ?", u.ID)
+
 	if err != nil {
 		return err
 	}
@@ -87,6 +107,16 @@ func Check4User(email, password string) (bool, error) {
 		}
 	}
 	return ComparePasswords(hashedPassword, password), nil
+}
+
+func userExists(username string) bool {
+	var count int
+
+	err := db.QueryRow("SELECT COUNT(*) FROM users WHERE username = ?", username).Scan(&count)
+	if err != nil {
+		return false
+	}
+	return count > 0
 }
 
 // func GetUserByID(id int) (*User, error) {
