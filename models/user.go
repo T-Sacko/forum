@@ -2,6 +2,7 @@ package models
 
 import (
 	"database/sql"
+	"fmt"
 
 	"golang.org/x/crypto/bcrypt"
 )
@@ -27,18 +28,35 @@ func (u *User) Save() error {
 	return nil
 }
 
-func (u User) IsUsernameAvailable() (bool, error) {
+func CheckUserCredentials(email, password string) (User, error) {
+	var user User
+	err := db.QueryRow("SELECT id, email, username, password FROM users WHERE username = ?", email).Scan(&user.ID, &user.Email, &user.Username, &user.Password)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return user, fmt.Errorf("invalid username or password")
+		}
+		return user, err
+	}
+
+	if !ComparePasswords(user.Password, password) {
+		return user, fmt.Errorf("invalid username or password")
+	}
+
+	return user, nil
+}
+
+func IsUsernameAvailable(username string) (bool, error) {
 	var count int
-	err := db.QueryRow("SELECT COUNT(*) FROM users WHERE username = ?", u.Username).Scan(&count)
+	err := db.QueryRow("SELECT COUNT(*) FROM users WHERE username = ?", username).Scan(&count)
 	if err != nil {
 		return false, err
 	}
 	return count == 0, nil
 }
 
-func (u User) IsEmailAvailable() (bool, error) {
+func IsEmailAvailable(email string) (bool, error) {
 	var count int
-	err := db.QueryRow("SELECT COUNT(*) FROM users WHERE email = ?", u.Email).Scan(&count)
+	err := db.QueryRow("SELECT COUNT(*) FROM users WHERE email = ?", email).Scan(&count)
 	if err != nil {
 		return false, err
 	}

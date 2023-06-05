@@ -50,8 +50,8 @@ func RegisterHandler(w http.ResponseWriter, r *http.Request) {
 			Password: password,
 		}
 
-		usernameAvailable, _ := user.IsUsernameAvailable()
-		emailAvailable, _ := user.IsEmailAvailable()
+		usernameAvailable, _ := m.IsUsernameAvailable(username)
+		emailAvailable, _ := m.IsEmailAvailable(email)
 
 		if usernameAvailable && emailAvailable {
 
@@ -90,10 +90,44 @@ func RegisterHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func LoginHandler(w http.ResponseWriter, r *http.Request) {
-	if r.method == "POST"{
-		
+	if r.Method == "POST" {
+		email := r.FormValue("email")
+		password := r.FormValue("password")
+
+		user, err := m.CheckUserCredentials(email, password)
+		if err != nil {
+			http.Error(w, "Invalid username or password", http.StatusUnauthorized)
+			return
+		}
+
+		// Set the session ID and create a cookie
+		sessionID := uuid.New().String()
+		user.SetSessionID(sessionID)
+		cookie := &http.Cookie{
+			Name:   "session",
+			Value:  sessionID,
+			MaxAge: -1, // Session cookie (valid until browser is closed)
+		}
+		http.SetCookie(w, cookie)
+
+		// Redirect to the home page or a dashboard page
+		http.Redirect(w, r, "/", http.StatusFound)
+	} else {
+		// Display the login form
+		tmpl, err := template.ParseFiles("login.html")
+		if err != nil {
+			http.Error(w, "Can't parse the HTML", http.StatusInternalServerError)
+			return
+		}
+
+		err = tmpl.Execute(w, nil)
+		if err != nil {
+			http.Error(w, "Failed to execute HTML template", http.StatusInternalServerError)
+			return
+		}
 	}
 }
+
 
 // func CreatePostHandler(w http.ResponseWriter, r *http.Request) {
 
