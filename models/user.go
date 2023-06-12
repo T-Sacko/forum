@@ -24,7 +24,7 @@ type User struct {
 // import "time"
 
 
-func (newUser User) Save() error {
+func (newUser User) Register() error {
 	HashedPass, err := bcrypt.GenerateFromPassword([]byte(newUser.Password), bcrypt.DefaultCost)
 	if err != nil {
 		return err

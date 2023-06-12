@@ -7,7 +7,7 @@ import (
 
 
 func SetUpRoutes(mux *http.ServeMux) {
-	mux.HandleFunc("/static/", c.StaticHandler) // Add this line to handle the /static/ route
+	mux.HandleFunc("/static/", c.StaticHandler)
 	http.Handle("/static/", http.StripPrefix("/static/", mux))
 	mux.HandleFunc("/", c.Index)
 	mux.HandleFunc("/sign-in", c.UsersHandler)
