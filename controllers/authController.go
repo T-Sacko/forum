@@ -16,6 +16,7 @@ func StaticHandler(w http.ResponseWriter, r *http.Request) {
 }
 func getUser(r *http.Request) *models.User {
 	return &models.User{Email: r.FormValue("email"), Username: r.FormValue("username"), Password: r.FormValue("password")}
+	return &models.User{Email: r.FormValue("email"), Username: r.FormValue("username"), Password: r.FormValue("password")}
 }
 func SigningIn(w http.ResponseWriter, r *http.Request) (string, models.UserCheckResponse) {
 	check, err := getUser(r).LogIn()
