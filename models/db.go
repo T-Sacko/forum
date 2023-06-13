@@ -24,8 +24,7 @@ func InitDB() {
 			email TEXT UNIQUE,
 			username TEXT UNIQUE,
 			password TEXT,
-			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-			updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+			sessionId TEXT UNIQUE
 		);
 
 		CREATE TABLE IF NOT EXISTS categories (
@@ -93,6 +92,22 @@ func InitDB() {
 	db.SetConnMaxLifetime(5 * 60 * 1000)
 
 	fmt.Println("Database initialized")
+}
+
+func InsertDB(username, email, password string) error {
+	// Prepare the SQL statement to insert a new post
+	stmt, err := db.Prepare("INSERT INTO users (username, email, password) VALUES (?, ?, ?)")
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+	// Execute the prepared statement with the provided values and current timestamp
+	_, err = stmt.Exec(username, email, password)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func GetID(email string) (int, error) {

@@ -9,7 +9,7 @@ type Content struct {
 	CreatedAt  time.Time `json:"created_at"`
 }
 
-func getContent(ID int) (Content, error) {
+func getUserContent(ID int) (Content, error) {
 	var content Content
 
 	stmt, err := db.Prepare("SELECT title FROM posts WHERE id = ?")
@@ -60,18 +60,9 @@ func getContent(ID int) (Content, error) {
 	return content, nil
 }
 
-// func (p *Post) Save() error {
-//     // save the post to the database
-// }
+func GetAllContent() (Content, error){
 
-// func GetPostByID(id int) (*Post, error) {
-//     // query the database for a post with the given ID
-// }
+	
 
-// func GetPostsByCategoryID(id int) ([]*Post, error) {
-//     // query the database for all posts in a given category
-// }
-
-// func GetPostsByUserID(id int) ([]*Post, error) {
-//     // query the database for all posts created by a given user
-// }
+	return Content{}, nil
+}

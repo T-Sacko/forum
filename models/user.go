@@ -2,7 +2,7 @@ package models
 
 import (
 	"database/sql"
-	"time"
+	"fmt"
 
 	"golang.org/x/crypto/bcrypt"
 )
@@ -14,25 +14,23 @@ type UserCheckResponse struct {
 }
 
 type User struct {
-	ID       int
-	Username string
-	Email    string
-	Password string
+	ID        int    `json:"id"`
+	Email     string `json:"email"`
+	Username  string `json:"username"`
+	Password  string `json:"-"`
+	SessionId string `json:"sessionid"`
 	Post     Content
 	Likes    int
 	Dislikes int
 	Comments string
 }
 
-// import "time"
-
-
 func (newUser User) Register() error {
-	HashedPass, err := bcrypt.GenerateFromPassword([]byte(newUser.Password), bcrypt.DefaultCost)
+	Password, err := bcrypt.GenerateFromPassword([]byte(newUser.Password), bcrypt.DefaultCost)
 	if err != nil {
 		return err
 	}
-	err = InsertDB(newUser.Username, newUser.Email, string(HashedPass))
+	err = InsertDB(newUser.Username, newUser.Email, string(Password))
 	if err != nil {
 		return err
 	}
@@ -58,7 +56,7 @@ func (user User) GetUserByID() (User, error) {
 		return User{}, err
 	}
 	user.ID = ID
-	content, err := getContent(user.ID)
+	content, err := getUserContent(user.ID)
 	if err != nil {
 		return User{}, err
 	}
@@ -87,23 +85,12 @@ func (user User) GetUserByID() (User, error) {
 	return user, err
 }
 
-func InsertDB(username, email, password string) error {
-	// Prepare the SQL statement to insert a new post
-	stmt, err := db.Prepare("INSERT INTO users (username, email, password, updated_at) VALUES (?, ?, ?, ?)")
+func SetSessionId(email, sessionId string) error {
+	_, err := db.Exec("UPDATE users SET sessionId = ? WHERE email = ?", sessionId, email)
 	if err != nil {
+		fmt.Println("failed to update session ID:", err)
 		return err
 	}
-	defer stmt.Close()
-
-	// Get the current timestamp
-	currentTime := time.Now()
-
-	// Execute the prepared statement with the provided values and current timestamp
-	_, err = stmt.Exec(username, email, password, currentTime)
-	if err != nil {
-		return err
-	}
-
 	return nil
 }
 
@@ -125,6 +112,7 @@ func IsEmailAvailable(email string) (bool, error) {
 	return count == 0, nil
 }
 
+
 func ComparePasswords(hashedPassword, userPassword string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(userPassword))
 	return err == nil
@@ -142,5 +130,3 @@ func Check4User(email, password string) (bool, error) {
 	}
 	return ComparePasswords(hashedPassword, password), nil
 }
-
-
