@@ -14,11 +14,12 @@ fa-user-circle-o
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Forum</title>
-    <link rel="stylesheet" href="../static/styles.css">
+    <link rel="stylesheet" href="../static/css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital@1&display=swap" rel="stylesheet">
@@ -26,14 +27,15 @@ fa-user-circle-o
 
 <body>
     <header>
-            <!--NavBar Section-->
+        <!--NavBar Section-->
         <div class="navbar">
             <nav class="navigation hide" id="navigation">
                 <span class="close-icon" id="close-icon" onclick="IconBar()"><i class="fa fa-close"></i></span>
                 <ul class="nav-list">
                     <li class="nav-item"><a href="/">Posts <i class="fa fa-home"></i></a></li>
                     <li class="nav-item"><a href="/posts">Users</a></li>
-                    <li class="nav-item user"><a href="/sign-in">Sign In</i> <i class="fa fa-user-circle"></i><i class="fa fa-sign-in"></i></li></a>
+                    <li class="nav-item user"><a href="/sign-in">Sign In</i> <i class="fa fa-user-circle"></i><i
+                                class="fa fa-sign-in"></i></li></a>
                     <!-- If user has Signed In, <i class="fa fa-sign-in"> should be replaced with  <i class="fa fa-sign-out">-->
                 </ul>
             </nav>
@@ -53,13 +55,31 @@ fa-user-circle-o
             </div>
         </div>
         {{if .}}
-        <h4><p>Welcome to Forum <u>{{.Username}}</u>!</p></h4>
+        <h4>
+            <p>Welcome to Forum <u>{{.Username}}</u>!</p>
+        </h4>
         {{end}}
     </header>
+    <button id="create-post-button">Create Post</button>
+    
+    <!-- Hidden until create post button is clicked -->
+    <div id="modal-container">
+        <div id="modal-content">
+            <span id="close-button">&times;</span>
+            <form id="create-post-form">
+                <!-- Form fields -->
+                <input type="text" name="title" placeholder="Title" required>
+                <textarea name="content" placeholder="Content" required></textarea>
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+    </div>
+
     <div class="container">
         <!--Navigation-->
         <div class="navigate">
-            <span> <a href="/account"><i class ="fa fa-user-circle"></i></a> > <a href="/">Forum</a> >> <a href="/posts">Users</a></span>
+            <span> <a href="/account"><i class="fa fa-user-circle"></i></a> > <a href="/">Forum</a> >> <a
+                    href="/posts">Users</a></span>
         </div>
         <!--Display posts table-->
         <div class="posts-table">
@@ -76,21 +96,27 @@ fa-user-circle-o
                     <span>Started by <b><a href="">User</a></b> .</span>
                 </div>
                 <div class="replies">
-                <span id="likeCount">0</span><button id="like" onclick="incrementLikes()"><i class="fa fa-thumbs-o-up like"></i></button> <br> <span id="dislikeCount">0</span> <button id="dislike" onclick="incrementDislikes()"><i class="fa fa-thumbs-o-down like"></i></button>
+                    <span id="likeCount">0</span><button id="like" onclick="incrementLikes()"><i
+                            class="fa fa-thumbs-o-up like"></i></button> <br> <span id="dislikeCount">0</span> <button
+                        id="dislike" onclick="incrementDislikes()"><i class="fa fa-thumbs-o-down like"></i></button>
                 </div>
             </div>
             <!--starts here-->
             <!--ends here-->
         </div>
         <!--Pagination starts-->
-            <div class="pagination">
-                pages: <a href="">1</a><a href="">2</a><a href="">3</a>
-            </div>
+        <div class="pagination">
+            pages: <a href="">1</a><a href="">2</a><a href="">3</a>
+        </div>
         <!--pagination ends-->
     </div>
+
+    
+    <footer>
+        <span>&copy; Forum | All Rights Reserved</span>
+    </footer>
+    <script src="../static/js/script.js"></script>
+    <script src="../static/js/post.js"></script>
 </body>
-<script src="../static/script.js"></script>
-<footer>
-    <span>&copy;  Forum | All Rights Reserved</span>
-</footer>
+
 </html>
