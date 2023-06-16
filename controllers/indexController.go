@@ -51,6 +51,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 				Name:  "session",
 				Value: user.SessionId,
 			}
+			fmt.Println("man",cookie.Value)
 			http.SetCookie(w, cookie)
 			http.Redirect(w, r, "/", http.StatusAccepted)
 			user.Password = ""
