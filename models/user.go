@@ -30,7 +30,7 @@ func (newUser User) Register() error {
 	if err != nil {
 		return err
 	}
-	err = InsertDB(newUser.Username, newUser.Email, string(Password))
+	err = InsertDB(newUser.Username, newUser.Email, string(Password), newUser.SessionId)
 	if err != nil {
 		return err
 	}

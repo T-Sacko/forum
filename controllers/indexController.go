@@ -35,6 +35,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 			// Redirect to the home page or a dashboard page
 			http.Redirect(w, r, "/", http.StatusFound)
 		default:
+			
 			SessionId, err := uuid.NewV1()
 			if err != nil {
 				http.Error(w, "ERROR 500", http.StatusInternalServerError)

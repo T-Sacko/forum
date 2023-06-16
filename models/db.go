@@ -94,15 +94,15 @@ func InitDB() {
 	fmt.Println("Database initialized")
 }
 
-func InsertDB(username, email, password string) error {
+func InsertDB(username, email, password, seshId string) error {
 	// Prepare the SQL statement to insert a new post
-	stmt, err := db.Prepare("INSERT INTO users (username, email, password) VALUES (?, ?, ?)")
+	stmt, err := db.Prepare("INSERT INTO users (username, email, password) VALUES (?, ?, ?, ?)")
 	if err != nil {
 		return err
 	}
 	defer stmt.Close()
 	// Execute the prepared statement with the provided values and current timestamp
-	_, err = stmt.Exec(username, email, password)
+	_, err = stmt.Exec(username, email, password, seshId)
 	if err != nil {
 		return err
 	}
