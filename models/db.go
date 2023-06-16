@@ -96,7 +96,7 @@ func InitDB() {
 
 func InsertDB(username, email, password, seshId string) error {
 	// Prepare the SQL statement to insert a new post
-	stmt, err := db.Prepare("INSERT INTO users (username, email, password) VALUES (?, ?, ?, ?)")
+	stmt, err := db.Prepare("INSERT INTO users (username, email, password, sessionId) VALUES (?, ?, ?, ?)")
 	if err != nil {
 		return err
 	}

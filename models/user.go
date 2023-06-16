@@ -28,10 +28,13 @@ type User struct {
 func (newUser User) Register() error {
 	Password, err := bcrypt.GenerateFromPassword([]byte(newUser.Password), bcrypt.DefaultCost)
 	if err != nil {
+		fmt.Println("its whre")
+
 		return err
 	}
 	err = InsertDB(newUser.Username, newUser.Email, string(Password), newUser.SessionId)
 	if err != nil {
+		fmt.Println("its here")
 		return err
 	}
 	return nil

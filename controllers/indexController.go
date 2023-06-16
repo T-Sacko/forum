@@ -42,12 +42,12 @@ func Index(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 			user := getUser(r)
+			user.SessionId = SessionId.String()
 			err = user.Register()
 			if err != nil {
 				http.Error(w, "CANT SAVE USER", http.StatusBadRequest)
 				return
 			}
-			user.SessionId = SessionId.String()
 			cookie := &http.Cookie{
 				Name:  "session",
 				Value: user.SessionId,
