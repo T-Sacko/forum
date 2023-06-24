@@ -7,14 +7,20 @@ var isLoggedIn = document.cookie.indexOf("session=") !== -1;
 var modalContainer = document.getElementById("modal-container");
 var closeButton = document.getElementById("close-button");
 
-createPostButton.addEventListener("click", function () {
-  console.log("fgf")
-  modalContainer.style.display = "block";
-});
+createPostButton.onclick = function () {
+  console.log("clicked create post button")
+  modalContainer.style.display = "flex";
+};
 
-closeButton.addEventListener("click", function () {
+closeButton.onclick = function () {
   modalContainer.style.display = "none";
-});
+};
+
+window.onclick = function(event) {
+  if (event.target == modalContainer) {
+    modalContainer.style.display = "none";
+  }
+}
 
 // create post function ----------------------
 
