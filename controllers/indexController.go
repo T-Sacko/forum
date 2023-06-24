@@ -2,9 +2,10 @@ package controllers
 
 import (
 	"fmt"
+	m "forum/models"
 	"log"
 	"net/http"
-	m"forum/models"
+
 	"github.com/gofrs/uuid"
 )
 
@@ -35,7 +36,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 			// Redirect to the home page or a dashboard page
 			http.Redirect(w, r, "/", http.StatusFound)
 		default:
-			
+
 			SessionId, err := uuid.NewV1()
 			if err != nil {
 				http.Error(w, "ERROR 500", http.StatusInternalServerError)
@@ -52,11 +53,11 @@ func Index(w http.ResponseWriter, r *http.Request) {
 				Name:  "session",
 				Value: user.SessionId,
 			}
-			fmt.Println("man",cookie.Value)
+			fmt.Println("man", cookie.Value)
 			http.SetCookie(w, cookie)
 			http.Redirect(w, r, "/", http.StatusAccepted)
 			user.Password = ""
-		
+
 			err = Tpl.ExecuteTemplate(w, "home.html", user)
 			if err != nil {
 				log.Fatal(err)
@@ -64,5 +65,6 @@ func Index(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
+
 	Tpl.ExecuteTemplate(w, "home.html", nil)
 }

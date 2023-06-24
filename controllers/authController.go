@@ -57,7 +57,7 @@ func EmailCheck(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	err = json.NewEncoder(w).Encode(response)
 	if err != nil {
-		log.Println(err)
+		log.Println("can't encode email check response into json", err)
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		return
 	}

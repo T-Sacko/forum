@@ -19,7 +19,7 @@ type User struct {
 	Username  string `json:"username"`
 	Password  string `json:"-"`
 	SessionId string `json:"sessionid"`
-	Post     Content
+	Post     string
 	Likes    int
 	Dislikes int
 	Comments string
@@ -54,15 +54,15 @@ func (user User) LogIn() (UserCheckResponse, error) {
 }
 
 func (user User) GetUserByID() (User, error) {
-	ID, err := GetID(user.Email)
-	if err != nil {
-		return User{}, err
-	}
-	user.ID = ID
-	content, err := getUserContent(user.ID)
-	if err != nil {
-		return User{}, err
-	}
+	// ID, err := GetID(user.Email)
+	// if err != nil {
+	// 	return User{}, err
+	// }
+	// user.ID = ID
+	// content, err := getUserContent(user.ID)
+	// if err != nil {
+	// 	return User{}, err
+	// 
 	likes, err := getLikes(user.ID)
 	if err != nil {
 		return User{}, err
@@ -79,7 +79,7 @@ func (user User) GetUserByID() (User, error) {
 	}
 
 	user = User{
-		Post:     content,
+		
 		Likes:    likes,
 		Dislikes: dislikes,
 		Comments: comments,

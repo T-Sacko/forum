@@ -29,8 +29,8 @@ func main() {
 	mux := http.NewServeMux()
 	r.SetUpRoutes(mux)
 	
-	openBrowser("http://localhost:8888")
-	if err := http.ListenAndServe(":8888", mux); err != nil {
+	// openBrowser("http://0.0.0.0:8888")
+	if err := http.ListenAndServe("0.0.0.0:8888", mux); err != nil {
 		log.Fatalf("Failure on Listening and Serving: %v", err)
 	}
 

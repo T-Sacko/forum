@@ -91,7 +91,7 @@ func InitDB() {
 	db.SetMaxIdleConns(25)
 	db.SetConnMaxLifetime(5 * 60 * 1000)
 
-	fmt.Println("Database initialized")
+	fmt.Printf("Database initialized\n")
 }
 
 func InsertDB(username, email, password, seshId string) error {
