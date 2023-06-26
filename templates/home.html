@@ -60,19 +60,33 @@ fa-user-circle-o
             <p>Welcome to Forum <u>{{.Username}}</u>!</p>
         </h4>
         {{end}}
-    </header>                                                                               
+    </header>
     <button id="create-post-button">Create Post</button>
 
     <!-- Hidden until create post button is clicked -->
     <div id="modal-container">
-        <div id="modal-content">
-            <span id="close-button">&times;</span>
-            <form action="/create-post" id="create-post-form" method="post">
-                <!-- Form fields -->
-                <input type="text" name="title" placeholder="Title" required>
-                <textarea name="content" placeholder="Content" required></textarea>
-                <button id="submit-button" type="submit">Submit</button>
-            </form>
+        <div id="post-form">
+            <div class="form-header">
+                <span id="close-button">&times;</span>
+                <h2 style="color: #b3b9ff ;">Create post</h2>
+            </div>
+            <div class="form-body">
+                <form action="/create-post" id="create-post-form" method="post">
+                    <label for="">category</label>
+
+                    <select class="category" name="category">
+                         <option value="category1">Biology</option>
+                        <option value="category2">Etymology</option>
+                    </select>
+                    <label for="">Title</label>
+                    <input type="text" name="title" placeholder="Title" required>
+                    <label for="">content</label>
+
+                    <textarea name="content" placeholder="Content" required></textarea>
+                    <button id="submit-button" type="submit">Submit</button>
+                </form>
+            </div>
+
             <div id="error-message" style="display: none;"></div>
         </div>
     </div>

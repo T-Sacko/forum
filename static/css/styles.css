@@ -1,56 +1,112 @@
 /* ########################################### */
 /*                 Global                      */
 /* ########################################### */
+*{
+    margin: 0;
+}
 #modal-container {
     display: none;
     position: fixed;
-    z-index: 999;
     left: 0;
     top: 0;
     width: 100%;
-    height: 100%;
-    overflow: auto;
+    height: 100vh;
     background-color: rgba(0, 0, 0, 0.6);
+    
+    
   }
   
   
-  #modal-content {
-    background-color: white;
-    margin: 15% auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 55%;
+  #post-form {
+    margin:auto; 
     position: relative;
-    /* display: flex;
-    flex-direction: column; */
+    background-color: rgb(27, 28, 49);
+    width: 450px;
+    min-height: 400px;
+    position: relative;
+    padding: 0 20px 20px 20px;
   }
 
-  #modal-content form {
-    display: flex;
-    flex-direction: column;
-    justify-content: stretch;
-    align-items: stretch;
-    flex-grow: 1;
-     /* Center the form contents horizontally */
+  #post-form h2{
+    height: 100%;
   }
-  
-  #modal-content input, textarea {
-    width: 100%;
+
+  .form-header{
+    margin-bottom: 15px;
+    border-bottom: 1px solid #b3b9ff ;
+    display:flex ;
+    justify-content: center;
+    align-items: center;
+    padding: 15px 0;
     
-    margin: 0 auto;
-    margin-bottom: 10px; /* Add a small margin between input fields */
-    padding: 8px; /* Add padding to the input fields */
-    flex-grow: 1;
+  }
+
+
+
+
+  #post-form input, textarea, select{
+    width: 100%;
+    margin-bottom: 15px;
+    height: 35px;
+    font-size: 15px;
+    color: #b3b9ff;
+    background:#000000
+    
+  }
+
+  
+  #post-form button{
+    color: #fff;
+    background-color: black;
+    width: 100%;
+    padding: 10px ;
+    border-radius: 22px;
   }
   
+
   
+
   #close-button {
     position: absolute;
-    top: 0px;
-    right: 3px;
+    top: 0;
+    right: 0;
+    
     font-size: 24px;
     cursor: pointer;
+    background-color: green;
+    padding: 0;
   }
+
+  #post-form textarea {
+    width: 100%;
+    margin-bottom: 15px;
+    min-height: 35px; /* Set a minimum height */
+    height: auto; /* Allow the height to grow dynamically */
+    font-size: 15px;
+    color: #b3b9ff;
+    background: #000000;
+    resize: vertical; /* Enable vertical resizing */
+  }
+  
+//   #modal-content form {
+//     display: flex;
+//     flex-direction: column;
+//     justify-content: ;
+//     align-items: ;
+//     flex-grow: 1;
+//      /* Center the form contents horizontally */
+//   }
+  
+//   #modal-content input, textarea {
+    
+    
+//     margin: 0 auto;
+//     margin-bottom: 10px; /* Add a small margin between input fields */
+//     padding: 8px; /* Add padding to the input fields */
+//     flex-grow: 1;
+//   }
+  
+
   
 /* next   */
 

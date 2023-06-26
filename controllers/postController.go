@@ -16,6 +16,8 @@ func CheckSession(w http.ResponseWriter, r *http.Request) {
 	cookie, err := r.Cookie("session")
 	if err != nil {
 		http.Error(w, "unathorized to post", http.StatusUnauthorized)
+		fmt.Println("There is no cookie")
+		return
 	}
 
 	sessionId:=cookie.Value
@@ -23,7 +25,9 @@ func CheckSession(w http.ResponseWriter, r *http.Request) {
 	loggedIn, err := m.SessionIsActive(sessionId)
 
 	if err != nil {
-		fmt.Println(err, "problem with posting because of cookie")
+		http.Error(w, "unathorized: invalid sesh id", http.StatusUnauthorized)
+		fmt.Println(err, "invalid sesh id")
+		return
 	}
 
 	response := SessionStatusResponse{
@@ -41,9 +45,10 @@ func CheckSession(w http.ResponseWriter, r *http.Request) {
 
 }
 
- func getUser
+
 
 
 func CreatePost(w http.ResponseWriter, r *http.Request) {
-	user := getUser()
+	w.WriteHeader(http.StatusOK)
+	fmt.Println(r.Body)
 }

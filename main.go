@@ -28,12 +28,12 @@ func main() {
 
 	mux := http.NewServeMux()
 	r.SetUpRoutes(mux)
-	
+
 	// openBrowser("http://0.0.0.0:8888")
+	fmt.Println("Serving on Port ->:8888")
 	if err := http.ListenAndServe("0.0.0.0:8888", mux); err != nil {
+
 		log.Fatalf("Failure on Listening and Serving: %v", err)
 	}
 
-
-	fmt.Println("Serving on Port ->:8888")
 }

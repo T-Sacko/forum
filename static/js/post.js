@@ -26,11 +26,14 @@ window.onclick = function(event) {
 
 function checkSession() {
   var xhr = new XMLHttpRequest();
+  console.log("unsent",xhr.status)
   xhr.open("GET", "/api/create-post");
+  console.log("OPened",xhr.status)
+
   xhr.onreadystatechange = function () {
-    console.log("at leasr")
+    console.log("ready state is: ", xhr.readyState)
     if (xhr.readyState == 4 && xhr.status == 200) {
-        console.log("req sent")
+        console.log("response received")
       var response = JSON.parse(xhr.responseText);
       if (response.loggedIn) {
         // User is logged in

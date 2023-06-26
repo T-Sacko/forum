@@ -11,7 +11,7 @@ func SessionIsActive(sessionId string) (bool, error) {
 		fmt.Println("no cookie, ya cant post")
 		return false, err
 	}
-	fmt.Println("we logged in ina da ting")
+	fmt.Println("valid sesh id")
 	return count > 0, nil
 }
 

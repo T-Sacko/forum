@@ -34,7 +34,7 @@ func (newUser User) Register() error {
 	}
 	err = InsertDB(newUser.Username, newUser.Email, string(Password), newUser.SessionId)
 	if err != nil {
-		fmt.Println("its here")
+		fmt.Println("cant sign up user alredy exists")
 		return err
 	}
 	return nil
