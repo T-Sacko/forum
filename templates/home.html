@@ -72,17 +72,19 @@ fa-user-circle-o
             </div>
             <div class="form-body">
                 <form action="/create-post" id="create-post-form" method="post">
-                    <label for="">category</label>
 
-                    <select class="category" name="category">
-                         <option value="category1">Biology</option>
-                        <option value="category2">Etymology</option>
+                    <label for="categories">category</label>
+                    <select id="categories" class="category" name="category">
+                         <option value="Biology">Biology</option>
+                        <option value="Etymology">Etymology</option>
                     </select>
-                    <label for="">Title</label>
-                    <input type="text" name="title" placeholder="Title" required>
-                    <label for="">content</label>
 
+                    <label for="title">Title</label>
+                    <input id="title" type="text" name="title" placeholder="Title" required>
+
+                    <label for="content">content</label>
                     <textarea name="content" placeholder="Content" required></textarea>
+                    
                     <button id="submit-button" type="submit">Submit</button>
                 </form>
             </div>

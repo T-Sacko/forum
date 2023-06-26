@@ -49,6 +49,7 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 	err = user.Register()
 	if err != nil {
 		http.Error(w, "CANT SAVE USER", http.StatusBadRequest)
+		http.Redirect(w,r,"",http.StatusSeeOther)
 		return
 	}
 	cookie := &http.Cookie{

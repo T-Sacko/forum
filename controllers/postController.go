@@ -20,7 +20,7 @@ func CheckSession(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	sessionId:=cookie.Value
+	sessionId := cookie.Value
 
 	loggedIn, err := m.SessionIsActive(sessionId)
 
@@ -45,10 +45,6 @@ func CheckSession(w http.ResponseWriter, r *http.Request) {
 
 }
 
-
-
-
 func CreatePost(w http.ResponseWriter, r *http.Request) {
-	w.WriteHeader(http.StatusOK)
 	fmt.Println(r.Body)
 }
