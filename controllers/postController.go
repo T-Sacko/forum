@@ -46,5 +46,19 @@ func CheckSession(w http.ResponseWriter, r *http.Request) {
 }
 
 func CreatePost(w http.ResponseWriter, r *http.Request) {
-	fmt.Println(r.Body)
+	fmt.Println("making post began")
+	userId, err := m.GetUserByCookie(r)
+	if err != nil {
+		http.Error(w, "user has no cookie", http.StatusUnauthorized)
+		fmt.Println(err)
+		return
+	}
+
+	title := r.FormValue("title")
+	content := r.FormValue("content")
+	category := r.FormValue("category")
+
+	m.SaveCategory(category)
+
+	m.SavePost(title, content, category, userId)
 }

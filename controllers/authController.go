@@ -39,6 +39,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 }
 
 func SignUp(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("signup req received")
 	SessionId, err := uuid.NewV1()
 	if err != nil {
 		http.Error(w, "ERROR 500", http.StatusInternalServerError)

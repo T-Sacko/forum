@@ -2,6 +2,7 @@ package models
 
 import (
 	"fmt"
+	"net/http"
 )
 
 func SessionIsActive(sessionId string) (bool, error) {
@@ -15,21 +16,28 @@ func SessionIsActive(sessionId string) (bool, error) {
 	return count > 0, nil
 }
 
+func SavePost(title,content,category string, userId int){
+	_,err := db.Exec("INSERT INTO posts (title, content, category, userId) Values (?, ?, ?, ?)", title, content, category, userId)
+	if err != nil{
+		fmt.Println("Error inserting into posts: ", err)
+		return
+	}
+	fmt.Println("Successfully inserted into posts!!!!!!!")
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+func GetUserByCookie(r *http.Request) (int, error) {
+	cookie, _ := r.Cookie("session")
+	sessionId := cookie.Value
+	var userId int
+	err := db.QueryRow("SELECT id FROM users WHERE sessionId = ?", sessionId).Scan(&userId)
+	if err != nil {
+		// Handle the database query error accordingly
+		fmt.Println("user has no sesh id rn")
+		return 0, err
+	}
+	fmt.Printf("the user id is: %v", userId)
+	return userId, nil
+}
 
 // type Content struct {
 // 	ID         int       `json:"id"`

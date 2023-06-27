@@ -16,6 +16,6 @@ func SetUpRoutes(mux *http.ServeMux) {
 	mux.HandleFunc("/api/create-post", c.CheckSession)
 	mux.HandleFunc("/create-post",c.CreatePost)
 	mux.HandleFunc("/login",c.Login)
-	mux.HandleFunc("/signup",c.SignUp)
+	mux.HandleFunc("/sign-up",c.SignUp)
 	
 }

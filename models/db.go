@@ -38,47 +38,47 @@ func InitDB() {
 			id INTEGER PRIMARY KEY,
 			title TEXT,
 			content TEXT,
-			category_id INTEGER,
-			user_id INTEGER,
+			category TEXT,
+			userId INTEGER,
 			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 			updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-			FOREIGN KEY(category_id) REFERENCES categories(id),
-			FOREIGN KEY(user_id) REFERENCES users(id)
+			FOREIGN KEY(category) REFERENCES categories(id),
+			FOREIGN KEY(userId) REFERENCES users(id)
 		);
 
 		CREATE TABLE IF NOT EXISTS comments (
 			id INTEGER PRIMARY KEY,
 			content TEXT,
-			post_id INTEGER,
-			user_id INTEGER,
+			postId INTEGER,
+			userId INTEGER,
 			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 			updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-			FOREIGN KEY(post_id) REFERENCES posts(id),
-			FOREIGN KEY(user_id) REFERENCES users(id)
+			FOREIGN KEY(postId) REFERENCES posts(id),
+			FOREIGN KEY(userId) REFERENCES users(id)
 		);
 
 		CREATE TABLE IF NOT EXISTS likes (
 			id INTEGER PRIMARY KEY,
-			post_id INTEGER,
+			postId INTEGER,
 			comment_id INTEGER,
-			user_id INTEGER,
+			userId INTEGER,
 			value INTEGER,
 			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 			updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-			FOREIGN KEY(post_id) REFERENCES posts(id),
+			FOREIGN KEY(postId) REFERENCES posts(id),
 			FOREIGN KEY(comment_id) REFERENCES comments(id),
-			FOREIGN KEY(user_id) REFERENCES users(id)
+			FOREIGN KEY(userId) REFERENCES users(id)
 		);
 
         CREATE TABLE IF NOT EXISTS dislikes (
             id INTEGER PRIMARY KEY,
-            post_id INTEGER,
+            postId INTEGER,
             comment_id INTEGER,
-            user_id INTEGER,
+            userId INTEGER,
             value INTEGER,
-            FOREIGN KEY (post_id) REFERENCES posts (id) ON DELETE CASCADE,
+            FOREIGN KEY (postId) REFERENCES posts (id) ON DELETE CASCADE,
             FOREIGN KEY (comment_id) REFERENCES comments (id) ON DELETE CASCADE,
-            FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
+            FOREIGN KEY (userId) REFERENCES users (id) ON DELETE CASCADE
         );
         
 	`)

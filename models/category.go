@@ -1,5 +1,16 @@
 package models
 
+import "fmt"
+
+func SaveCategory(category string) {
+	_, err := db.Exec("INSERT INTO categories (name) VALUES (?)", category)
+	if err != nil {
+		fmt.Println("Error inserting category: ",err)
+		return
+	}
+	fmt.Println("Successfully inserted category!!!!!")
+}
+
 // type Category struct {
 //     ID   int    `json:"id"`
 //     Name string `json:"name"`
