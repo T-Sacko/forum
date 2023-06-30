@@ -37,7 +37,7 @@
 
   }
 
-  .close-button{
+  #close-button{
     position: absolute;
     right: 0;
     top: 0;
@@ -84,6 +84,7 @@
     border-radius: 10px;
     background-color: #110f24;
     color: #8982ca;
+    padding: 10px;
  }
 
  #submit-button{
