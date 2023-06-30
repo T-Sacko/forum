@@ -67,27 +67,32 @@ fa-user-circle-o
     <div id="modal-container">
         <div id="post-form">
             <div class="form-header">
-                <span id="close-button">&times;</span>
+                <span class="close-button">&times;</span>
                 <h2 style="color: #b3b9ff ;">Create post</h2>
             </div>
-            <div class="form-body">
-                <form action="/create-post" id="create-post-form" method="post">
 
-                    <label for="categories">category</label>
-                    <select id="categories" class="category" name="category">
-                         <option value="Biology">Biology</option>
-                        <option value="Etymology">Etymology</option>
-                    </select>
+            <form action="/create-post" id="create-post-form" method="post">
+                <div class="categories">
+                    <h3 class="categories-header">Categories:</h3>
+                    <div class="category">
+                        <label for="etymology">etymology</label>
+                        <input type="checkbox" style="width: max-content;" id="etymology" name="category"
+                            value="etymology">
+                    </div>
+                    <div class="category">
+                        <label for="biology">biology</label>
+                        <input type="checkbox" id="biology" name="category" value="biology">
+                    </div>
+                </div>
 
-                    <label for="title">Title</label>
-                    <input id="title" type="text" name="title" placeholder="Title" required>
+                <input id="title" type="text" name="title" placeholder="Title" required>
 
-                    <label for="content">content</label>
-                    <textarea name="content" placeholder="Content" required></textarea>
-                    
-                    <button id="submit-button" type="submit">Submit</button>
-                </form>
-            </div>
+
+                <textarea class="form-text" name="content" placeholder="Content" required></textarea>
+
+                <button id="submit-button" type="submit">Submit</button>
+            </form>
+
 
             <div id="error-message" style="display: none;"></div>
         </div>

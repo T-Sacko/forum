@@ -10,7 +10,7 @@
     left: 0;
     top: 0;
     width: 100%;
-    height: 100vh;
+    height: 100%;
     background-color: rgba(0, 0, 0, 0.6);
     
     
@@ -23,71 +23,80 @@
     background-color: rgb(27, 28, 49);
     width: 450px;
     min-height: 400px;
-    position: relative;
     padding: 0 20px 20px 20px;
-  }
-
-  #post-form h2{
-    height: 100%;
+    color: #fff;
+    border-radius: 10px;
   }
 
   .form-header{
-    margin-bottom: 15px;
-    border-bottom: 1px solid #b3b9ff ;
-    display:flex ;
-    justify-content: center;
+    height: 60px;
+    display: flex;
     align-items: center;
-    padding: 15px 0;
-    
+    justify-content: center;
+    border-bottom: 2px solid whitesmoke;
+
   }
 
-
-
-
-  #post-form input, textarea, select{
-    width: 100%;
-    margin-bottom: 15px;
-    height: 35px;
-    font-size: 15px;
-    color: #b3b9ff;
-    background:#000000
-    
-  }
-
-  
-  #post-form button{
-    color: #fff;
-    background-color: black;
-    width: 100%;
-    padding: 10px ;
-    border-radius: 22px;
-  }
-  
-
-  
-
-  #close-button {
+  .close-button{
     position: absolute;
-    top: 0;
     right: 0;
-    
-    font-size: 24px;
-    cursor: pointer;
+    top: 0;
+    width: 30px;
+    height: 30px;
     background-color: green;
-    padding: 0;
+    text-align: center;
+    line-height: 30px;
+    cursor: pointer;
+    border-top-right-radius: 10px;
+    border-bottom-left-radius: 10px;
   }
 
-  #post-form textarea {
-    width: 100%;
-    margin-bottom: 15px;
-    min-height: 35px; /* Set a minimum height */
-    height: auto; /* Allow the height to grow dynamically */
-    font-size: 15px;
-    color: #b3b9ff;
-    background: #000000;
-    resize: vertical; /* Enable vertical resizing */
+  .categories{
+    margin-top: 12px;
+    margin-bottom: 12px;
   }
+
+  .categories-header{
+    display: inline;
+  }
+
+  .category{
+    padding: 10px;
+    display: inline;
+  }
+
   
+
+  #title{
+    width: 100%;
+    margin-bottom: 12px;
+    border: none;
+    background-color: #110f24;
+    color: #8982ca;
+    padding: 10px;
+    border-radius: 10px;
+  }
+ .form-text{
+    width: 100%;
+    height: 170px;
+    outline: none;
+    border: none;
+    border-radius: 10px;
+    background-color: #110f24;
+    color: #8982ca;
+ }
+
+ #submit-button{
+    width: 100%;
+    margin-top: 15px;
+    color: white;
+    background-color: green;
+    padding: 10px;
+    outline: none;
+    border:none;
+    border-radius: 10px;
+ }
+ 
 //   #modal-content form {
 //     display: flex;
 //     flex-direction: column;
