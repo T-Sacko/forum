@@ -63,8 +63,12 @@
   .category{
     padding: 10px;
     display: inline;
+    width: max-content;
+    
   }
-
+  .category input,label{
+    cursor: pointer;
+  }
   
 
   #title{
@@ -85,6 +89,7 @@
     background-color: #110f24;
     color: #8982ca;
     padding: 10px;
+    resize: none;
  }
 
  #submit-button{
