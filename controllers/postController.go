@@ -56,9 +56,9 @@ func CreatePost(w http.ResponseWriter, r *http.Request) {
 
 	title := r.FormValue("title")
 	content := r.FormValue("content")
-	category := r.FormValue("category")
-
-	m.SaveCategory(category)
-
-	m.SavePost(title, content, category, userId)
+	categories := r.Form["category"]
+	fmt.Println(categories)		
+	ids:= m.GetCategoriesID(categories)
+	postId := m.SavePost(title, content,  userId)
+	m.LinkPostCategories(postId,ids)
 }

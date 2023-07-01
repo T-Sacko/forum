@@ -38,12 +38,18 @@ func InitDB() {
 			id INTEGER PRIMARY KEY,
 			title TEXT,
 			content TEXT,
-			category TEXT,
 			userId INTEGER,
 			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 			updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-			FOREIGN KEY(category) REFERENCES categories(id),
 			FOREIGN KEY(userId) REFERENCES users(id)
+		);
+
+		CREATE TABLE IF NOT EXISTS post_categories (
+			id INTEGER PRIMARY KEY,
+			post_id INTEGER,
+			category_id INTEGER,
+			FOREIGN KEY (post_id) REFERENCES posts(id),
+			FOREIGN KEY (category_id) REFERENCES categories(id)
 		);
 
 		CREATE TABLE IF NOT EXISTS comments (
@@ -84,6 +90,14 @@ func InitDB() {
 	`)
 	if err != nil {
 		log.Fatal(err)
+	}
+	_, err1 := db.Exec("INSERT INTO categories (name) VALUES (?)", "etymology")
+	if err1 != nil {
+		fmt.Println("cant insert into categoriy at the start")
+	}
+	_, err2 := db.Exec("INSERT INTO categories (name) VALUES (?)", "biology")
+	if err2 != nil {
+		fmt.Println("cant insert into categoriy at the start")
 	}
 
 	// Set database connection pool limits

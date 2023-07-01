@@ -5,6 +5,13 @@ import (
 	"net/http"
 )
 
+type Post struct {
+	Id         int
+	Title      string
+	content    string
+	categories []string
+}
+
 func SessionIsActive(sessionId string) (bool, error) {
 	var count int
 	err := db.QueryRow("SELECT COUNT(*) FROM users WHERE sessionId = ?", sessionId).Scan(&count)
@@ -16,13 +23,18 @@ func SessionIsActive(sessionId string) (bool, error) {
 	return count > 0, nil
 }
 
-func SavePost(title,content,category string, userId int){
-	_,err := db.Exec("INSERT INTO posts (title, content, category, userId) Values (?, ?, ?, ?)", title, content, category, userId)
-	if err != nil{
+func SavePost(title, content string, userId int) int {
+	result, err := db.Exec("INSERT INTO posts (title, content, userId) Values (?, ?, ?)", title, content, userId)
+	if err != nil {
 		fmt.Println("Error inserting into posts: ", err)
-		return
+		return 0
 	}
 	fmt.Println("Successfully inserted into posts!!!!!!!")
+	postId, err := result.LastInsertId()
+	if err != nil {
+		fmt.Println("error with getting postid from lastInserId")
+	}
+	return int(postId)
 }
 
 func GetUserByCookie(r *http.Request) (int, error) {
@@ -35,7 +47,7 @@ func GetUserByCookie(r *http.Request) (int, error) {
 		fmt.Println("user has no sesh id rn")
 		return 0, err
 	}
-	fmt.Printf("the user id is: %v", userId)
+	fmt.Printf("the user id is: %v\n", userId)
 	return userId, nil
 }
 
