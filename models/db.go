@@ -91,11 +91,11 @@ func InitDB() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	_, err1 := db.Exec("INSERT INTO categories (name) VALUES (?)", "etymology")
+	_, err1 := db.Exec("INSERT OR IGNORE INTO categories (name) VALUES (?)", "etymology")
 	if err1 != nil {
 		fmt.Println("cant insert into categoriy at the start")
 	}
-	_, err2 := db.Exec("INSERT INTO categories (name) VALUES (?)", "biology")
+	_, err2 := db.Exec("INSERT OR IGNORE INTO categories (name) VALUES (?)", "biology")
 	if err2 != nil {
 		fmt.Println("cant insert into categoriy at the start")
 	}

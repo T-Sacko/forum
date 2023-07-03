@@ -2,11 +2,12 @@ package models
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 )
 
 type Post struct {
-	ID       int
+	ID         int
 	Title      string
 	Content    string
 	Categories []string
@@ -50,8 +51,22 @@ func GetUserByCookie(r *http.Request) (int, error) {
 	fmt.Printf("the user id is: %v\n", userId)
 	return userId, nil
 }
+func Test() {
+	posts, err := GetPostsFromDB()
+	if err != nil {
+		log.Fatal("Failed to retrieve posts:", err)
+	}
 
-func getPostsFromDB() ([]Post, error) {
+	for _, post := range posts {
+		fmt.Printf("Post ID: %d\n", post.ID)
+		fmt.Printf("Title: %s\n", post.Title)
+		fmt.Printf("Content: %s\n", post.Content)
+		fmt.Printf("Categories: %v\n", post.Categories)
+		fmt.Println("-----------")
+	}
+}
+
+func GetPostsFromDB() ([]Post, error) {
 	query := `
 		SELECT posts.id, posts.title, posts.content, categories.name
 		FROM posts
