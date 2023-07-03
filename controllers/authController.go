@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"encoding/json"
-	"fmt"
 
 	m "forum/models"
 	"html/template"
@@ -11,63 +10,6 @@ import (
 
 	"github.com/gofrs/uuid"
 )
-
-func Login(w http.ResponseWriter, r *http.Request) {
-
-	user := getUser(r)
-	isUser, err := m.Check4User(user.Email, user.Password)
-	fmt.Println(isUser, user.Password)
-	if err != nil {
-		http.Error(w, "Invalid username or password", http.StatusUnauthorized)
-		return
-	}
-	// Set the session ID and create a cookie
-	SessionId, err := uuid.NewV1()
-	if err != nil {
-		http.Error(w, "ERROR 500", http.StatusInternalServerError)
-		return
-	}
-	m.SetSessionId(user.Email, SessionId.String())
-	cookie := &http.Cookie{
-		Name:  "session",
-		Value: SessionId.String(),
-		// Session cookie (valid until browser is closed)
-	}
-	http.SetCookie(w, cookie)
-	// Redirect to the home page or a dashboard page
-	http.Redirect(w, r, "/", http.StatusFound)
-}
-
-func SignUp(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("signup req received")
-	SessionId, err := uuid.NewV1()
-	if err != nil {
-		http.Error(w, "ERROR 500", http.StatusInternalServerError)
-		return
-	}
-	user := getUser(r)
-	user.SessionId = SessionId.String()
-	err = user.Register()
-	if err != nil {
-		http.Error(w, "CANT SAVE USER", http.StatusBadRequest)
-		http.Redirect(w,r,"",http.StatusSeeOther)
-		return
-	}
-	cookie := &http.Cookie{
-		Name:  "session",
-		Value: user.SessionId,
-	}
-	fmt.Println("man", cookie.Value)
-	http.SetCookie(w, cookie)
-	http.Redirect(w, r, "/", http.StatusAccepted)
-	user.Password = ""
-
-	err = Tpl.ExecuteTemplate(w, "home.html", user)
-	if err != nil {
-		log.Fatal(err)
-	}
-	
-}
 
 var err error
 var Tpl = template.Must(template.ParseGlob("/home/student/forum/templates/*.html"))
@@ -79,11 +21,18 @@ func getUser(r *http.Request) *m.User {
 	return &m.User{Email: r.FormValue("email"), Username: r.FormValue("username"), Password: r.FormValue("password")}
 }
 
-func UsersHandler(w http.ResponseWriter, r *http.Request) {
-	err = Tpl.ExecuteTemplate(w, "sign-in.html", nil)
+func CookieSetter(user *m.User) (*http.Cookie, error) {
+	SessionId, err := uuid.NewV4()
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
+	user.SessionId = SessionId.String()
+	cookie := &http.Cookie{
+		Name:  "session",
+		Value: user.SessionId,
+	}
+	m.SetSessionId(user.Email, user.SessionId)
+	return cookie, nil
 }
 
 // ----------------------------------------------------ajax

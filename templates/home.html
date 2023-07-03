@@ -14,94 +14,85 @@ fa-user-circle-o
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Forum</title>
-    <link rel="stylesheet" href="../static/css/styles.css">
+    <link rel="stylesheet" href="../static/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital@1&display=swap" rel="stylesheet">
-    <style>
-        li {
-            float: right;
-        }
-    </style>
 </head>
 
 <body>
     <header>
-        <!--NavBar Section-->
-        <div class="navbar">
-            <ul class="nav-list">
-                <li class="nav-item"><a href="/">Posts <i class="fa fa-home"></i></a></li>
-                <li class="nav-item"><a href="/posts">Users</a></li>
-                <li class="nav-item user"><a href="/sign-in">Sign In</i> <i class="fa fa-user-circle"></i><i
-                            class="fa fa-sign-in"></i></li></a>
-                <!-- If user has Signed In, <i class="fa fa-sign-in"> should be replaced with  <i class="fa fa-sign-out">-->
-            </ul>
-            <div class="brand">Forum</div>
-        </div>
-        <!--SearchBox Section-->
-        <div class="search-box">
-            <div>
-                <select name="categories" id="categories">
-                    <option value="Everything">Everything</option>
-                    <option value="Titles">Titles</option>
-                    <option value="Descriptions">Descriptions</option>
-                </select>
-                <input type="text" name="q" placeholder="search ...">
-                <button>Search <i class="fa fa-search"></i></button>
-            </div>
-        </div>
-        {{if .}}
-        <h4>
-            <p>Welcome to Forum <u>{{.Username}}</u>!</p>
-        </h4>
-        {{end}}
+        <nav class="navbar">
+            <a href="/" class="brand">Forum</a>
+            <a class="sign-in" id="sign-in">Sign In<i class="fa fa-sign-in" id="sign-i"></i></a>
+        </nav>
     </header>
-    <button id="create-post-button">Create Post</button>
 
-    <!-- Hidden until create post button is clicked -->
-    <div id="modal-container">
-        <div id="post-form">
-            <div class="form-header">
-                <span id="close-button">&times;</span>
-                <h2 style="color: #b3b9ff ;">Create post</h2>
-            </div>
-
-            <form action="/create-post" id="create-post-form" method="post">
-                <div class="categories">
-                    <h3 class="categories-header">Categories:</h3>
-                    <div class="category">
-                        <label for="etymology">etymology</label>
-                        <input type="checkbox"  id="etymology" name="category"
-                            value="etymology">
-                    </div>
-                    <div class="category">
-                        <label for="biology">biology</label>
-                        <input type="checkbox" id="biology" name="category" value="biology">
-                    </div>
+    <div class="everything">
+        <button class="post_btn" id="create-post-button">Create Post</button>
+        <div id="modal-container">
+            <div id="post-form">
+                <div class="form-header">
+                    <span id="close-button">&times;</span>
+                    <h2 style="color: #b3b9ff ;">Create post</h2>
                 </div>
-
-                <input id="title" type="text" name="title" placeholder="Title" required>
-
-
-                <textarea class="form-text" name="content" placeholder="Content" required></textarea>
-
-                <button id="submit-button" type="submit">Submit</button>
-            </form>
-
-
-            <div id="error-message" style="display: none;"></div>
+                    <form action="/post" id="create-post-form" method="post">
+                    <div class="categories">
+                        <h3 class="categories-header">Categories:</h3>
+                        <div class="category">
+                            <label for="etymology">etymology</label>
+                            <input type="checkbox"  id="etymology" name="category"
+                                value="etymology">
+                        </div>
+                        <div class="category">
+                            <label for="biology">biology</label>
+                            <input type="checkbox" id="biology" name="category" value="biology">
+                        </div>
+                    </div>
+                        <input id="title" type="text" name="title" placeholder="Title" required>
+                        <textarea class="form-text" name="content" placeholder="Content" required></textarea>
+                        <button id="submit-button" type="submit">Submit</button>
+                </form>
+                <div id="error-message" class="error-message"></div>
+            </div>
         </div>
-    </div>
-    <div class="container">
-        <!--Navigation-->
         <div class="navigate">
-            <span> <a href="/account"><i class="fa fa-user-circle"></i></a> > <a href="/">Forum</a> >> <a
-                    href="/posts">Users</a></span>
+            <span> <a href="/account"><i class ="fa fa-user-circle"></i></a> > <a href="/">Forum</a> >> <a href="/posts">Users</a></span>
+        </div>
+        <div class="overlay" id="popup-container">
+            <div class="popup-container">
+                <a class="close" onclick="closePopup()">&times;</a>
+            <div class="signup cntr" id="signup">
+                <form method="POST" action="/sign-up">
+                <label class="labels">Join <span class="forum">Forum</span></label>
+                <br>
+                <br>
+                <br>
+                <span class="error-message" id="username-error"></span>
+                <p><input type="text" name="username" placeholder="Username" onblur="checkUsername(this.value)" required></p>
+                <p><input type="email" name="email" placeholder="Email" onblur="checkEmail(this.value)" required></p>
+                <p><input type="password" name="password" placeholder="Password" required></p>
+                <button type="submit">Sign up</button>
+                </form>
+                <p class="text">Already have an account? <a class="register" id="login_btn">Log In</a></p>
+            </div>
+            <div class="login cntr" id="login">
+                <form method="POST" action="/log-in">
+                <label class="labels">Sign In to <span class="forum">Forum</span></label>
+                <br>
+                <br>
+                <br>
+                <p><input type="email" name="email" placeholder="Email" required></p>
+                <p><input type="password" name="password" placeholder="Password" required></p>
+                <button type="submit">Log In</button>
+                </form>
+                <p class="text">Don't have an account? <a class="register" id="register_btn">Register</a></p>
+            </div>
+            </div>
         </div>
         <!--Display posts table-->
         <div class="posts-table">
@@ -118,25 +109,21 @@ fa-user-circle-o
                     <span>Started by <b><a href="">User</a></b> .</span>
                 </div>
                 <div class="replies">
-                    <span id="likeCount">0</span><button id="like" onclick="incrementLikes()"><i
-                            class="fa fa-thumbs-o-up like"></i></button> <br> <span id="dislikeCount">0</span> <button
-                        id="dislike" onclick="incrementDislikes()"><i class="fa fa-thumbs-o-down like"></i></button>
+                <span id="likeCount">0</span><button id="like" onclick="incrementLikes('')"><i class="fa fa-thumbs-o-up like"></i></button> <br> <span id="dislikeCount">0</span> <button id="dislike" onclick="incrementDislikes()"><i class="fa fa-thumbs-o-down like"></i></button>
                 </div>
             </div>
             <!--starts here-->
             <!--ends here-->
         </div>
         <!--Pagination starts-->
-        <div class="pagination">
-            pages: <a href="">1</a><a href="">2</a><a href="">3</a>
-        </div>
+            <div class="pagination">
+                pages: <a href="">1</a><a href="">2</a><a href="">3</a>
+            </div>
         <!--pagination ends-->
     </div>
-    <footer>
-        <span>&copy; Forum | All Rights Reserved</span>
-    </footer>
-    <script src="../static/js/post.js"></script>
-    <!-- <script src="../static/js/script.js"></script> -->
+</div>
 </body>
-
+<script src="../static/script.js"></script>
+<footer>
+    <span>&copy;  Forum | All Rights Reserved</span>
 </html>
