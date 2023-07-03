@@ -53,16 +53,8 @@ func (user User) LogIn() (UserCheckResponse, error) {
 	return UserCheckResponse{Available: checked, UserInfo: userInfo}, nil
 }
 
+
 func (user User) GetUserByID() (User, error) {
-	// ID, err := GetID(user.Email)
-	// if err != nil {
-	// 	return User{}, err
-	// }
-	// user.ID = ID
-	// content, err := getUserContent(user.ID)
-	// if err != nil {
-	// 	return User{}, err
-	// 
 	likes, err := getLikes(user.ID)
 	if err != nil {
 		return User{}, err

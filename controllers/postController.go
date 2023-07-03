@@ -14,7 +14,6 @@ type SessionStatusResponse struct {
 
 
 func CheckSession(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("ajax active session request received")
 	cookie, err := r.Cookie("session")
 	if err != nil {
 		http.Error(w, "unathorized to post", http.StatusUnauthorized)

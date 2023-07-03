@@ -2,143 +2,22 @@
 /*                 Global                      */
 /* ########################################### */
 *{
-    margin: 0;
-}
-#modal-container {
-    display: none;
-    position: fixed;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.6);
-    
-    
-  }
-  
-  
-  #post-form {
-    margin:auto; 
-    position: relative;
-    background-color: rgb(27, 28, 49);
-    width: 450px;
-    min-height: 400px;
-    padding: 0 20px 20px 20px;
-    color: #fff;
-    border-radius: 10px;
-  }
-
-  .form-header{
-    height: 60px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-bottom: 2px solid whitesmoke;
-
-  }
-
-  #close-button{
-    position: absolute;
-    right: 0;
-    top: 0;
-    width: 30px;
-    height: 30px;
-    background-color: green;
-    text-align: center;
-    line-height: 30px;
-    cursor: pointer;
-    border-top-right-radius: 10px;
-    border-bottom-left-radius: 10px;
-  }
-
-  .categories{
-    margin-top: 12px;
-    margin-bottom: 12px;
-  }
-
-  .categories-header{
-    display: inline;
-  }
-
-  .category{
-    padding: 10px;
-    display: inline;
-    width: max-content;
-    
-  }
-  .category input,label{
-    cursor: pointer;
-  }
-  
-
-  #title{
-    width: 100%;
-    margin-bottom: 12px;
-    border: none;
-    background-color: #110f24;
-    color: #8982ca;
-    padding: 10px;
-    border-radius: 10px;
-  }
- .form-text{
-    width: 100%;
-    height: 170px;
-    outline: none;
-    border: none;
-    border-radius: 10px;
-    background-color: #110f24;
-    color: #8982ca;
-    padding: 10px;
-    resize: none;
- }
-
- #submit-button{
-    width: 100%;
-    margin-top: 15px;
-    color: white;
-    background-color: green;
-    padding: 10px;
-    outline: none;
-    border:none;
-    border-radius: 10px;
- }
- 
-//   #modal-content form {
-//     display: flex;
-//     flex-direction: column;
-//     justify-content: ;
-//     align-items: ;
-//     flex-grow: 1;
-//      /* Center the form contents horizontally */
-//   }
-  
-//   #modal-content input, textarea {
-    
-    
-//     margin: 0 auto;
-//     margin-bottom: 10px; /* Add a small margin between input fields */
-//     padding: 8px; /* Add padding to the input fields */
-//     flex-grow: 1;
-//   }
-  
-
-  
-/* next   */
-
-*{
     box-sizing: border-box;
 }
 
 html{
+    height: 100%;
+    width: 100%;
     font-size: 14px;
-    font-family: 'Inconsolata', sans-serif;
-    background-color:azure;
+    position: absolute;
+    font-family: monospace;
+    background:linear-gradient(rgb(89, 113, 179),azure);
+    background-repeat: no-repeat;
+    background-color: azure;
     color:black;
 }
 
 a{
-    color:blueviolet;
-    font-weight: bolder;
     text-decoration: none;
 }
 
@@ -146,61 +25,6 @@ h1{
     font-size:16px;
     font-weight: bolder;
 }
-
-
-/* ########################################### */
-/*           Forums.html                       */
-/* ########################################### */
-.container{
-    margin: 20px;
-    padding: 20px;
-}
-
-.subforum{
-    margin-top:20px;
-}
-
-.subforum-title{
-    background-color:rgb(149, 84, 168);
-    padding: 5px;
-    border-radius: 5px;
-    margin:4px;
-}
-
-.subforum-row{
-    display: grid;
-    grid-template-columns: 7% 60% 13% 20%;
-}
-
-.subforum-column{
-    padding: 10px;
-    margin:4px;
-    border-radius: 5px;
-    background-color:rgb(199, 207, 207);
-}
-
-.subforum-description *{
-    margin-block: 0;
-}
-
-.center{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.subforum-icon i{
-    font-size: 45px;
-}
-
-.subforum-devider{
-    display: none;   
-}
-
-.like i{
-    font-size: 45px;
-}
-
 
 /* For the smartphones */
 @media screen and (max-width: 460px) {
@@ -249,73 +73,275 @@ h1{
     }
 
 }
-/*   Header Section    */
 
-header{
-    margin-inline: 10px;
-}
   /* Nav Bar styles */
 .navbar{
     display:flex;
-    align-items: left;
-}
-.navigation{
-    background-color:rgb(149, 84, 168);
-    padding: 10px;
-    width: 65%;
-    display: inline-block;
-    border-radius: 5px;
-    max-height: 80px;
-    margin-right:10px;
-    transition: .5s ease-in-out;
-}
-
-.close-icon i{
-    font-size:60px;
-    float: left;
-    cursor: pointer;
-}
-
-.nav-list{
-    list-style-type:none;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1em;
+    background: inherit;
     overflow: hidden;
 }
 
-.nav-item a{
-    float: right;
-    display:block;
+.navbar a{
     text-align: center;
-    margin-inline: 20px;
-    font-size: 20px;
-    padding: 10px;
-    color:black;
+    cursor: pointer;
+    padding: 0.3em 0.4em;
+    font-size: 1em;
+    color: white;
 }
 
-.nav-item a:hover{
-    background-color: rgb(0,0,0,0.1);
+.navbar .sign-in:hover {
+    margin-left: auto;
+    text-decoration: underline;
 }
 
-.hide{
+.navbar .brand {
+    font-weight: bolder;
+    font-size: 1.5em;
+    top: 0;
+    left: 0;
+}
+
+.navbar .sign-in{
+    right: 0;
+}
+
+.sign-in i{
+    font-size: 1.35em;
+}
+
+.everything{
+    position: fixed;
+    display: block;
+    height: 90%;
+    width: 100%;
+    padding: 0.5em;
+    left: 0;
+    margin-right: 0.5em;
+    z-index: -1;
+    background: azure;
+}
+
+#modal-container {
+    display: none;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    
+    
+}
+
+
+#post-form {
+    margin:auto; 
+    position: relative;
+    background-color: rgb(27, 28, 49);
+    width: 450px;
+    min-height: 400px;
+    padding: 0 20px 20px 20px;
+    color: #fff;
+    border-radius: 10px;
+}
+
+.form-popup{
     display: none;
 }
 
-.bar-icon{
-    font-size: 60px;
-    display: inline-block;
-    margin-right:10px;
-    color: black;
+.form-header{
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 2px solid whitesmoke;
+}
+
+#close-button{
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 30px;
+    height: 30px;
+    background-color: green;
+    text-align: center;
+    line-height: 30px;
+    cursor: pointer;
+    border-top-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+.categories{
+    margin-top: 12px;
+    margin-bottom: 12px;
+}
+
+.categories-header{
+    display: inline;
+}
+
+.category{
+    padding: 10px;
+    display: inline;
+}
+
+#title{
+    width: 100%;
+    margin-bottom: 12px;
+    border: none;
+    background-color: #110f24;
+    color: #8982ca;
+    padding: 10px;
+    border-radius: 10px;
+}
+.form-text{
+    width: 100%;
+    height: 170px;
+    outline: none;
+    border: none;
+    border-radius: 10px;
+    background-color: #110f24;
+    color: #8982ca;
+    padding: 10px;
+}
+#submit-button{
+    width: 100%;
+    margin-top: 15px;
+    color: white;
+    background-color: green;
+    padding: 10px;
+    outline: none;
+    border:none;
+    border-radius: 10px;
+}
+
+/* POPUP SIGNUP PAGE */
+
+.overlay{
+    display: none;
+    position: fixed;
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(37, 37, 37, 0.6));
+    justify-content: center;
+    align-items: center;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 100%;
+}
+
+.popup-container {
+    background: #ddd;
+    padding: 2em 2em;
+    border-radius: 1.5em;
+    height: 75%;
+    width: 25%;
+}
+
+.close {
+    position: absolute;
+    top: 13%;
+    left: 61%;
+    font-size: 2em;
+    font-weight: bold;
+    color: rgb(153, 175, 175);
     cursor: pointer;
 }
 
-@font-face {
-    font-family:aquire;
-    src:url(aquire.otf);
+.login{
+    display: none;
 }
 
-.brand{
-    font-size:60px;
-    display: inline-block;
-    font-family: 'Inconsolata', sans-serif;
+.login  input{
+    padding: 1em;
+    font-size: 0.7em;
+    border-radius: 1em;
+    border: none;
+    margin-bottom: 1em;
+}
+
+.login button{
+    font-size: 100%;
+    padding: 1% 15%;
+    font-weight: bolder;
+    border-radius: 6em;
+    margin-top: 10%;
+    color: #468ebe;
+    border: none;
+    cursor: pointer;
+}
+
+.login button:hover{
+    background-color: #b9b9b9;
+}
+
+.text {
+    margin-top: 20%;
+    font-size: 60%;
+    color: #585656;
+}
+
+.text .register{
+    cursor: pointer;
+    color: #468ebe;
+}
+
+.text .register:hover{
+    text-decoration: underline;
+}
+
+.signup{
+    display: none;
+}
+
+.signup  input{
+    padding: 1em;
+    font-size: 0.7em;
+    border-radius: 1em;
+    border: none;
+    margin-bottom: 1em;
+}
+
+.signup button{
+    font-size: 100%;
+    font-weight: bolder;
+    padding: 1% 15%;
+    border-radius: 6em;
+    margin-top: 10%;
+    color: #468ebe;
+    border: none;
+    cursor: pointer;
+}
+
+.signup button:hover{
+    background-color: #b9b9b9;
+}
+
+.cntr{
+    text-align: center;
+    font-size: 20px;
+}
+
+.forum {
+    color: rgb(84, 154, 194);
+    font-weight: bold;
+    font-size: larger;
+    cursor: pointer;
+}
+
+.labels {
+    text-align: center;
+    font-weight: bold;
+    font-size: larger;
+    text-decoration: underline;
+}
+
+.error-message {
+    font-size: 1%;
+    color: red;
 }
 
 /*Navbar for the smartphones*/
@@ -346,34 +372,6 @@ header{
     }
 }
 
-  /* Search Box styles */
-.search-box{
-    border: solid 1px rgb(149, 84, 168);
-    padding: 10px;
-    display:flex;
-    box-shadow:1px 2px 3px rgb(149, 84, 168);
-}
-
-.search-box select{
-    padding: 10px;
-}
-
-.search-box input{
-    padding: 10px;
-}
-
-.search-box button{
-    padding: 10px;
-    background-color:#fff;
-    color:#000000;
-}
-
-.search-box button:hover{
-    background-color: #000000;
-    color: #fff;
-    box-shadow: 1px 2px 3px #fff;
-}
-
 /* search box for smrtphones */
 @media screen and (max-width: 460px){
     .search-box input, .search-box button, .search-box select{
@@ -396,10 +394,12 @@ header{
 /* Footer Styling */
 
 footer{
-    margin-top: 20px;
-    padding: 20px;
-    background-color:  rgb(149, 84, 168);
-    display: block;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 2em;
+    background-color:  rgb(110, 165, 162);
     text-align: center;
 }
 
@@ -408,10 +408,6 @@ footer{
 /* ########################################### */
 
 /* posts table's head  */
-
-.user i{
-    font-size: 23px;
-}
 
 .table-head{
     display: flex;
@@ -494,7 +490,7 @@ footer{
 }
 
 .navigate a:hover{
-    color:#a74ad3;
+    color:rgb(89, 113, 179);
     font-weight: bolder;
 }
 
