@@ -11,6 +11,8 @@ type SessionStatusResponse struct {
 	LoggedIn bool `json:"loggedIn"`
 }
 
+
+
 func CheckSession(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("ajax active session request received")
 	cookie, err := r.Cookie("session")

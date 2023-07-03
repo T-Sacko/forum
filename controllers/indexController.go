@@ -5,6 +5,6 @@ import (
 )
 
 func Index(w http.ResponseWriter, r *http.Request) {
-
+	
 	Tpl.ExecuteTemplate(w, "home.html", nil)
 }

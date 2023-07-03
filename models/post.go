@@ -6,10 +6,10 @@ import (
 )
 
 type Post struct {
-	Id         int
+	ID       int
 	Title      string
-	content    string
-	categories []string
+	Content    string
+	Categories []string
 }
 
 func SessionIsActive(sessionId string) (bool, error) {
@@ -51,65 +51,52 @@ func GetUserByCookie(r *http.Request) (int, error) {
 	return userId, nil
 }
 
-// type Content struct {
-// 	ID         int       `json:"id"`
-// 	Title      string    `json:"title"`
-// 	Content    string    `json:"content"`
-// 	CreatedAt  time.Time `json:"created_at"`
-// }
+func getPostsFromDB() ([]Post, error) {
+	query := `
+		SELECT posts.id, posts.title, posts.content, categories.name
+		FROM posts
+		INNER JOIN post_categories ON posts.id = post_categories.post_id
+		INNER JOIN categories ON post_categories.category_id = categories.id
+		ORDER BY posts.id
+	`
 
-// func getUserContent(ID int) (Content, error) {
-// 	var content Content
+	rows, err := db.Query(query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
 
-// 	stmt, err := db.Prepare("SELECT title FROM posts WHERE id = ?")
-// 	if err != nil {
-// 		return Content{}, err
-// 	}
-// 	defer stmt.Close()
+	posts := []Post{}
+	currentPost := Post{}
+	for rows.Next() {
+		var postID int
+		var title, content, categoryName string
+		err := rows.Scan(&postID, &title, &content, &categoryName)
+		if err != nil {
+			return nil, err
+		}
 
-// 	var title string
+		if currentPost.ID != postID {
+			if currentPost.ID != 0 {
+				posts = append(posts, currentPost)
+			}
+			currentPost = Post{
+				ID:      postID,
+				Title:   title,
+				Content: content,
+			}
+		}
 
-// 	err = stmt.QueryRow(ID).Scan(&title)
-// 	if err != nil {
-// 		return Content{}, err
-// 	}
+		currentPost.Categories = append(currentPost.Categories, categoryName)
+	}
 
-// 	stmt, err = db.Prepare("SELECT content FROM posts WHERE id = ?")
-// 	if err != nil {
-// 		return Content{}, err
-// 	}
-// 	defer stmt.Close()
+	if currentPost.ID != 0 {
+		posts = append(posts, currentPost)
+	}
 
-// 	var post string
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
 
-// 	err = stmt.QueryRow(ID).Scan(&post)
-// 	if err != nil {
-// 		return Content{}, err
-// 	}
-
-// 	stmt, err = db.Prepare("SELECT created_at FROM posts WHERE id = ?")
-// 	if err != nil {
-// 		return Content{}, err
-// 	}
-// 	defer stmt.Close()
-
-// 	var timeCreated time.Time
-
-// 	err = stmt.QueryRow(ID).Scan(&timeCreated)
-// 	if err != nil {
-// 		return Content{}, err
-// 	}
-
-// 	content = Content{
-// 		Title: title,
-// 		Content: post,
-// 		CreatedAt: timeCreated,
-// 	}
-
-// 	return content, nil
-// }
-
-// func GetAllContent() (Content, error){
-
-// 	return Content{}, nil
-// }
+	return posts, nil
+}
