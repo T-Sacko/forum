@@ -23,7 +23,7 @@ func CheckSession(w http.ResponseWriter, r *http.Request) {
 	}
 
 	sessionId := cookie.Value
-
+	
 	loggedIn, err := m.SessionIsActive(sessionId)
 
 	if err != nil {

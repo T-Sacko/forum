@@ -2,15 +2,18 @@ package models
 
 import (
 	"fmt"
-	"log"
 	"net/http"
+	"strings"
 )
 
 type Post struct {
 	ID         int
 	Title      string
 	Content    string
+	Username   string
 	Categories []string
+	Likes      int
+	Dislikes   int
 }
 
 func SessionIsActive(sessionId string) (bool, error) {
@@ -51,27 +54,19 @@ func GetUserByCookie(r *http.Request) (int, error) {
 	fmt.Printf("the user id is: %v\n", userId)
 	return userId, nil
 }
-func Test() {
-	posts, err := GetPostsFromDB()
-	if err != nil {
-		log.Fatal("Failed to retrieve posts:", err)
-	}
-
-	for _, post := range posts {
-		fmt.Printf("Post ID: %d\n", post.ID)
-		fmt.Printf("Title: %s\n", post.Title)
-		fmt.Printf("Content: %s\n", post.Content)
-		fmt.Printf("Categories: %v\n", post.Categories)
-		fmt.Println("-----------")
-	}
-}
 
 func GetPostsFromDB() ([]Post, error) {
 	query := `
-		SELECT posts.id, posts.title, posts.content, categories.name
+		SELECT posts.id, posts.title, posts.content, users.username,
+			GROUP_CONCAT(DISTINCT categories.name) AS categoryNames,
+			COALESCE(SUM(CASE WHEN likes.value = 1 THEN 1 ELSE 0 END), 0) AS likes,
+			COALESCE(SUM(CASE WHEN likes.value = -1 THEN 1 ELSE 0 END), 0) AS dislikes
 		FROM posts
+		INNER JOIN users ON posts.userId = users.id
 		INNER JOIN post_categories ON posts.id = post_categories.post_id
 		INNER JOIN categories ON post_categories.category_id = categories.id
+		LEFT JOIN likes ON likes.postId = posts.id
+		GROUP BY posts.id
 		ORDER BY posts.id
 	`
 
@@ -82,31 +77,27 @@ func GetPostsFromDB() ([]Post, error) {
 	defer rows.Close()
 
 	posts := []Post{}
-	currentPost := Post{}
 	for rows.Next() {
 		var postID int
-		var title, content, categoryName string
-		err := rows.Scan(&postID, &title, &content, &categoryName)
+		var title, content, username, categoryNames string
+		var likes, dislikes int
+		err := rows.Scan(&postID, &title, &content, &username, &categoryNames, &likes, &dislikes)
 		if err != nil {
 			return nil, err
 		}
 
-		if currentPost.ID != postID {
-			if currentPost.ID != 0 {
-				posts = append(posts, currentPost)
-			}
-			currentPost = Post{
-				ID:      postID,
-				Title:   title,
-				Content: content,
-			}
+		categories := strings.Split(categoryNames, ",")
+		post := Post{
+			ID:         postID,
+			Title:      title,
+			Content:    content,
+			Username:   username,
+			Categories: categories,
+			Likes:      likes,
+			Dislikes:   dislikes,
 		}
 
-		currentPost.Categories = append(currentPost.Categories, categoryName)
-	}
-
-	if currentPost.ID != 0 {
-		posts = append(posts, currentPost)
+		posts = append(posts, post)
 	}
 
 	if err = rows.Err(); err != nil {
@@ -115,3 +106,21 @@ func GetPostsFromDB() ([]Post, error) {
 
 	return posts, nil
 }
+
+// func findPostByID(posts []Post, postID int) *Post {
+// 	for i := range posts {
+// 		if posts[i].ID == postID {
+// 			return &posts[i]
+// 		}
+// 	}
+// 	return nil
+// }
+
+// func containsCategory(categories []string, category string) bool {
+// 	for _, c := range categories {
+// 		if c == category {
+// 			return true
+// 		}
+// 	}
+// 	return false
+// }

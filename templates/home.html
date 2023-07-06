@@ -19,10 +19,10 @@ fa-user-circle-o
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Forum</title>
-    <link rel="stylesheet" href="../static/css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital@1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../static/css/styles.css">
     <style>
         li {
             float: right;
@@ -57,7 +57,7 @@ fa-user-circle-o
         </div>
         {{if .}}
         <h4>
-            <p>Welcome to Forum <u>{{.Username}}</u>!</p>
+            <p>Welcome to Forum <u></u>!</p>
         </h4>
         {{end}}
     </header>
@@ -76,8 +76,7 @@ fa-user-circle-o
                     <h3 class="categories-header">Categories:</h3>
                     <div class="category">
                         <label for="etymology">etymology</label>
-                        <input type="checkbox"  id="etymology" name="category"
-                            value="etymology">
+                        <input type="checkbox" id="etymology" name="category" value="etymology">
                     </div>
                     <div class="category">
                         <label for="biology">biology</label>
@@ -97,44 +96,21 @@ fa-user-circle-o
             <div id="error-message" style="display: none;"></div>
         </div>
     </div>
-    <div class="container">
-        <!--Navigation-->
-        <div class="navigate">
-            <span> <a href="/account"><i class="fa fa-user-circle"></i></a> > <a href="/">Forum</a> >> <a
-                    href="/posts">Users</a></span>
+    <section class="main"
+        style=" width: 33vw; margin:auto; display: flex; flex-direction: column;">
+        {{ range .Posts }}
+        <div class="post">
+            <h4 class="post-user">{{ .Username }}</h4>
+            <h2 class="post-title">{{ .Title }}</h2>
+            <p class="post-categories">Categories: {{ range .Categories }}{{ . }} {{ end }}</p>
+            <p style="font-weight: 700; font-size: 1.5em;">{{ .Content }}</p>
+            <span><i class="fa fa-thumbs-up"></i>{{ .Likes }}</span1>
+            <span><i class="fa fa-thumbs-down"></i>{{ .Dislikes }}</span>
         </div>
-        <!--Display posts table-->
-        <div class="posts-table">
-            <div class="table-head">
-                <div class="status">Status</div>
-                <div class="subjects">Subjects</div>
-                <div class="replies">Likes/Dislikes</div>
-            </div>
-            <div class="table-row">
-                <div class="status"><i class="fa fa-fire"></i></div>
-                <div class="subjects">
-                    <a href="">Is learning Python on 2021 worth it?</a>
-                    <br>
-                    <span>Started by <b><a href="">User</a></b> .</span>
-                </div>
-                <div class="replies">
-                    <span id="likeCount">0</span><button id="like" onclick="incrementLikes()"><i
-                            class="fa fa-thumbs-o-up like"></i></button> <br> <span id="dislikeCount">0</span> <button
-                        id="dislike" onclick="incrementDislikes()"><i class="fa fa-thumbs-o-down like"></i></button>
-                </div>
-            </div>
-            <!--starts here-->
-            <!--ends here-->
-        </div>
-        <!--Pagination starts-->
-        <div class="pagination">
-            pages: <a href="">1</a><a href="">2</a><a href="">3</a>
-        </div>
-        <!--pagination ends-->
-    </div>
-    <footer>
-        <span>&copy; Forum | All Rights Reserved</span>
-    </footer>
+        {{end}}
+    </section>
+
+
     <script src="../static/js/post.js"></script>
     <!-- <script src="../static/js/script.js"></script> -->
 </body>

@@ -4,6 +4,22 @@
 *{
     margin: 0;
 }
+
+/*-------------------------------------------posts*/
+
+.post{
+    max-height: 50vh;
+    width: 100%;
+    margin-bottom: 15px;
+    background-color: #9792cc;
+    padding: 6px;
+}
+
+.post-user{
+    margin-bottom: 5px;
+}
+
+/*--------------------------------------create post modal*/
 #modal-container {
     display: none;
     position: fixed;
