@@ -25,19 +25,29 @@ fa-user-circle-o
 </head>
 
 <body>
+    {{if .}}
     <header>
         <nav class="navbar">
             <a href="/" class="brand">Forum</a>
+            {{if .UserInfo}}
+            <a class="account" id="account-link">{{.UserInfo.Username}} <i class ="fa fa-user-circle"></i></a>
+            {{end}}
             <a class="sign-in" id="sign-in">Sign In<i class="fa fa-sign-in" id="sign-i"></i></a>
         </nav>
     </header>
-
+    {{if .Available}}
+    <script>
+    window.addEventListener("DOMContentLoaded", function () {
+        checkSession();
+    });
+    </script>
+    {{end}}
     <div class="everything">
-        <button class="post_btn" id="create-post-button">Create Post</button>
+        <button class="post_btn" id="create-post-button">Create Post <span class="plus-sign">&plus;</span></button>
         <div id="modal-container">
-            <div id="post-form">
+            <div class="post-form" id="post-form">
                 <div class="form-header">
-                    <span id="close-button">&times;</span>
+                    <span id="close-button" onclick="closePopup()" >&times;</span>
                     <h2 style="color: #b3b9ff ;">Create post</h2>
                 </div>
                     <form action="/post" id="create-post-form" method="post">
@@ -53,9 +63,11 @@ fa-user-circle-o
                             <input type="checkbox" id="biology" name="category" value="biology">
                         </div>
                     </div>
+                        <label for="image">Upload Image:</label>
+                        <input type="file" id="image" name="image">
                         <input id="title" type="text" name="title" placeholder="Title" required>
                         <textarea class="form-text" name="content" placeholder="Content" required></textarea>
-                        <button id="submit-button" type="submit">Submit</button>
+                        <button type="submit">Submit</button>
                 </form>
                 <div id="error-message" class="error-message"></div>
             </div>
@@ -64,21 +76,27 @@ fa-user-circle-o
             <span> <a href="/account"><i class ="fa fa-user-circle"></i></a> > <a href="/">Forum</a> >> <a href="/posts">Users</a></span>
         </div>
         <div class="overlay" id="popup-container">
-            <div class="popup-container">
-                <a class="close" onclick="closePopup()">&times;</a>
+            <div class="popup-container" id="container-div">
+                <a class="close" onclick="closePopup()" id="close">&times;</a>
             <div class="signup cntr" id="signup">
                 <form method="POST" action="/sign-up">
                 <label class="labels">Join <span class="forum">Forum</span></label>
                 <br>
                 <br>
                 <br>
-                <span class="error-message" id="username-error"></span>
+                <span class="error-message" id="error"></span>
                 <p><input type="text" name="username" placeholder="Username" onblur="checkUsername(this.value)" required></p>
                 <p><input type="email" name="email" placeholder="Email" onblur="checkEmail(this.value)" required></p>
                 <p><input type="password" name="password" placeholder="Password" required></p>
                 <button type="submit">Sign up</button>
                 </form>
                 <p class="text">Already have an account? <a class="register" id="login_btn">Log In</a></p>
+            </div>
+            <div id="sign_out" class="sign-out cntr">
+                <label class="labels">Are you sure you want to sign out?</label>
+        
+                <input type="button" onclick="SignOut()" value="Yes">
+                <input type="button" onclick="closePopup()" value="No">
             </div>
             <div class="login cntr" id="login">
                 <form method="POST" action="/log-in">
@@ -94,34 +112,14 @@ fa-user-circle-o
             </div>
             </div>
         </div>
-        <!--Display posts table-->
-        <div class="posts-table">
-            <div class="table-head">
-                <div class="status">Status</div>
-                <div class="subjects">Subjects</div>
-                <div class="replies">Likes/Dislikes</div>
-            </div>
-            <div class="table-row">
-                <div class="status"><i class="fa fa-fire"></i></div>
-                <div class="subjects">
-                    <a href="">Is learning Python on 2021 worth it?</a>
-                    <br>
-                    <span>Started by <b><a href="">User</a></b> .</span>
-                </div>
-                <div class="replies">
-                <span id="likeCount">0</span><button id="like" onclick="incrementLikes('')"><i class="fa fa-thumbs-o-up like"></i></button> <br> <span id="dislikeCount">0</span> <button id="dislike" onclick="incrementDislikes()"><i class="fa fa-thumbs-o-down like"></i></button>
-                </div>
-            </div>
-            <!--starts here-->
-            <!--ends here-->
+        {{end}}
+        <div class="posts">
+            <h1>Posted by: Enzo</h1>
+            <h3>Dog Post</h3>
+            <div class="image"><img src="../dog.jpg" alt="">Image</div>
+            <div class="comments"></div>
         </div>
-        <!--Pagination starts-->
-            <div class="pagination">
-                pages: <a href="">1</a><a href="">2</a><a href="">3</a>
-            </div>
-        <!--pagination ends-->
     </div>
-</div>
 </body>
 <script src="../static/script.js"></script>
 <footer>

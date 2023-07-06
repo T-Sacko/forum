@@ -93,7 +93,7 @@ h1{
 }
 
 .navbar .sign-in:hover {
-    margin-left: auto;
+    /* margin-left: auto; */
     text-decoration: underline;
 }
 
@@ -106,6 +106,17 @@ h1{
 
 .navbar .sign-in{
     right: 0;
+}
+
+.navbar .account{
+    margin-left: 75%;
+    font-size: larger;
+    display: none;
+}
+
+.navbar .account:hover{
+    background-color: rgb(103, 131, 192);
+    padding: 0.35em;
 }
 
 .sign-in i{
@@ -136,6 +147,58 @@ h1{
     
 }
 
+.post_btn{
+    cursor: pointer;
+    padding: 1em 1em;
+    border: none;
+    color: rgb(121, 117, 117);
+    background-color: inherit;
+    font-weight: bolder;
+    font-size: 1em;
+    display: none;
+}
+
+.post-form button{
+    padding: 0.2em 2em;
+    background-color: green;
+}
+
+.post_btn:hover{
+    text-decoration: underline;
+    background-color: #eeebeb;
+}
+
+.plus-sign{
+    font-size: large;
+}
+
+
+.posts {
+    height: 65%;
+    width: 30%;
+    size: auto;
+    text-align: center;
+    background-color: rgb(249, 255, 255);
+    justify-content: center; /* Center horizontally */
+    margin: auto;
+    border-radius: 5%;
+    border-style:groove;
+    border-color: inherit;
+}
+
+.image{
+    height: 80%;
+    width: 60%;
+    size: auto;
+    margin: auto;
+}
+
+.image img{
+    height: auto;
+    width: 100%;
+    border-radius: 5%;
+    border-style: groove;
+}
 
 #post-form {
     margin:auto; 
@@ -251,6 +314,30 @@ h1{
     cursor: pointer;
 }
 
+.sign-out{
+    display: none;
+}
+
+.sign-out label{
+    font-size: 0.65em;
+    text-decoration: none;
+}
+
+.sign-out input{
+    font-size: 70%;
+    padding: 1% 15%;
+    font-weight: bolder;
+    border-radius: 6em;
+    margin-top: 10%;
+    color: #468ebe;
+    border: none;
+    cursor: pointer;
+}
+
+.sign-out input:hover{
+    background-color: #b9b9b9;
+}
+
 .login{
     display: none;
 }
@@ -340,8 +427,8 @@ h1{
 }
 
 .error-message {
-    font-size: 1%;
     color: red;
+    font-size: 70%;
 }
 
 /*Navbar for the smartphones*/
@@ -492,24 +579,6 @@ footer{
 .navigate a:hover{
     color:rgb(89, 113, 179);
     font-weight: bolder;
-}
-
-/* Pagination*/
-
-.pagination{
-    padding: 20px;
-    font-size: 15px;
-}
-
-.pagination a{
-    color: black;
-    margin-inline: 5px;
-    padding: 5px 10px;
-    border: solid 0.5px #a74ad3;
-}
-
-.pagination a:hover{
-    opacity: 0.5;
 }
 
 

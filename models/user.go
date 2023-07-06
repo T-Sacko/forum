@@ -8,9 +8,8 @@ import (
 )
 
 type UserCheckResponse struct {
-	ID        int  `json:"id"`
 	Available bool `json:"available"`
-	UserInfo  User
+	UserInfo  *User
 }
 
 type User struct {
@@ -19,7 +18,7 @@ type User struct {
 	Username  string `json:"username"`
 	Password  string `json:"-"`
 	SessionId string `json:"sessionid"`
-	Post     string
+	Post     []Post
 	Likes    int
 	Dislikes int
 	Comments string
@@ -29,7 +28,6 @@ func (newUser User) Register() error {
 	Password, err := bcrypt.GenerateFromPassword([]byte(newUser.Password), bcrypt.DefaultCost)
 	if err != nil {
 		fmt.Println("its whre")
-
 		return err
 	}
 	err = InsertDB(newUser.Username, newUser.Email, string(Password), newUser.SessionId)
@@ -54,23 +52,23 @@ func (user User) LogIn() (UserCheckResponse, error) {
 }
 
 
-func (user User) GetUserByID() (User, error) {
+func (user *User) GetUserByID() (*User, error) {
 	likes, err := getLikes(user.ID)
 	if err != nil {
-		return User{}, err
+		return &User{}, err
 	}
 
 	dislikes, err := getDislikes(user.ID)
 	if err != nil {
-		return User{}, err
+		return &User{}, err
 	}
 
 	comments, err := getComments(user.ID)
 	if err != nil {
-		return User{}, err
+		return &User{}, err
 	}
 
-	user = User{
+	user = &User{
 		
 		Likes:    likes,
 		Dislikes: dislikes,

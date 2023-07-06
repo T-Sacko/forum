@@ -3,20 +3,19 @@ const signupLink = document.getElementById('sign-in');
 const registerLink =document.getElementById('register_btn')
 const loginLink = document.getElementById('login_btn')
 const popupContainer = document.getElementById('popup-container');
+const popupDiv = document.getElementById('container-div')
 const login = document.getElementById('login')
 const signup = document.getElementById('signup')
 const createPostButton = document.getElementById("create-post-button");
 const modalContainer = document.getElementById("modal-container");
 const closeButton = document.getElementById("close-button");
-const errorElement = document.getElementById("username-error");
+const errorElement = document.getElementById("error");
+const accountLink = document.getElementById("account-link")
+const signOut = document.getElementById("sign_out")
 
 createPostButton.onclick = function () {
   console.log("clicked create post button")
   modalContainer.style.display = "flex";
-};
-
-closeButton.onclick = function () {
-  modalContainer.style.display = "none";
 };
 
 window.onclick = function(event) {
@@ -26,6 +25,14 @@ window.onclick = function(event) {
 }
 
 signupLink.addEventListener('click', function() {
+    if (signupLink.innerText === 'Sign Out') {
+        let close = document.getElementById('close')
+        popupContainer.style.display = 'flex'
+        popupDiv.style.height = 'auto'
+        close.style.display = 'none'
+        signOut.style.display = 'block'
+        return
+    }
     if (popupContainer.style.display === 'flex') {
         popupContainer.style.display = 'none';
         return
@@ -37,8 +44,30 @@ signupLink.addEventListener('click', function() {
     login.style.display = 'block'
 });
 
+
+
+function SignOut() {
+  console.log("function being called")
+    fetch('/del-cookie', {
+        method: 'POST',
+  }).then(response=> {
+    if (response.ok) {
+      let signIncode = `<a class="sign-in" id="sign-in">Sign In<i class="fa fa-sign-in" id="sign-i"></i></a>`
+      document.getElementById("sign-in").innerHTML = signIncode
+      accountLink.style.display = 'none'
+      createPostButton.style.display = 'none'
+      popupContainer.style.display = "none";
+    } else {
+      console.log("failed to execute deletion")
+    }})
+    .catch(error => {
+      console.error('Error occurred while deleting user session:', error);
+    });
+};
+
 function closePopup() {
     popupContainer.style.display = "none";
+    modalContainer.style.display = "none";
 }
 
 registerLink.addEventListener('click', function() {
@@ -51,43 +80,31 @@ loginLink.addEventListener('click', function() {
     login.style.display = 'block'
 });
 
-  function checkSession() {
-  let xhr = new XMLHttpRequest();
-  xhr.open("GET", "/api/create-post");
-  xhr.onreadystatechange = function () {
-    if (xhr.readyState == 4 && xhr.status == 200) {
-      let response = JSON.parse(xhr.responseText);
-      if (response.loggedIn) {
-        // User is logged in
-          let signOutcode = `<a class="sign-in" id="sign-in"><i class="fa fa-sign-out"></i>Sign Out</a>`
-          console.log(document.getElementById("sign-in"))
-          document.getElementById("sign-in").innerHTML = signOutcode
-        // Continue with posting the form data or other actions
-        document.getElementById("create-post-form").submit();
-      } else {
-        // User is not logged in
-        const errorMessage = document.getElementById("error-message");
-        errorMessage.style.color = "red"
-        errorMessage.textContent = "You are not logged in";
-        errorMessage.style.display = "block";
-        // Hide the error message after 3 seconds
-      }
+function checkSession() {
+  //const errorDiv = document.getElementById('error-message')
+  console.log('checkSession function being called')
+  fetch('/check-session', {
+    method: 'POST',
+    credentials: 'include' // Include cookies for session tracking
+  })
+  .then(response => {
+    if (response.ok) {
+      let signOutcode = `<a class="sign-in" id="sign-in"><i class="fa fa-sign-out"></i>Sign Out</a>`
+      console.log(document.getElementById("sign-i"))
+      document.getElementById("sign-in").innerHTML = signOutcode
+      accountLink.style.display = 'block'
+      createPostButton.style.display = 'block'
+      console.log('User session is valid');
     } else {
-      // Handle the request error
-      console.log("Request failed with status: " + xhr.status);
+      console.log('User session is invalid or expired');
     }
-  };
-  xhr.send();
+  })
+  .catch(error => {
+    // Handle any network errors
+    console.error('Error occurred while checking user session:', error);
+    // Show error message to the user or retry the request
+  });
 }
-
-// Add event listener to the submit button
-var submitButton = document.getElementById("submit-button");
-submitButton.addEventListener("click", function (event) {
-  event.preventDefault(); // Prevent the form from submitting
-  console.log("Cliked submit button")
-  // Check if the user is logged in
-  checkSession();
-});
 
 
 function checkUsername(username) {
@@ -114,6 +131,7 @@ function checkUsername(username) {
   };
   xhr.send();
 }
+
 function checkEmail(email) {
   if (email === '') {
     errorElement.style.display = "none";

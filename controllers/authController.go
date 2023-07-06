@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"encoding/json"
+	"fmt"
 
 	m "forum/models"
 	"html/template"
@@ -26,6 +27,7 @@ func CookieSetter(user *m.User) (*http.Cookie, error) {
 	if err != nil {
 		return nil, err
 	}
+	
 	user.SessionId = SessionId.String()
 	cookie := &http.Cookie{
 		Name:  "session",
@@ -48,12 +50,11 @@ func UsernameCheck(w http.ResponseWriter, r *http.Request) {
 	response := m.UserCheckResponse{
 		Available: available,
 	}
-	w.Header().Set("Content-Type", "application/json")
-	err = json.NewEncoder(w).Encode(response)
+	fmt.Printf("Your username is not already being used: %v", available)
+	err = JSsender(w, response)
 	if err != nil {
-		log.Println(err)
+		log.Println("can't encode username check response into json", err)
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-		return
 	}
 }
 func EmailCheck(w http.ResponseWriter, r *http.Request) {
@@ -67,11 +68,20 @@ func EmailCheck(w http.ResponseWriter, r *http.Request) {
 	response := m.UserCheckResponse{
 		Available: available,
 	}
-	w.Header().Set("Content-Type", "application/json")
-	err = json.NewEncoder(w).Encode(response)
+
+	fmt.Printf("Your email is not already being used: %v/n", available)
+	err = JSsender(w, response)
 	if err != nil {
 		log.Println("can't encode email check response into json", err)
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-		return
 	}
+}
+
+func JSsender(w http.ResponseWriter, response interface{}) error {
+	w.Header().Set("Content-Type", "application/json")
+	err = json.NewEncoder(w).Encode(response)
+	if err != nil {
+		return err
+	}
+	return nil
 }

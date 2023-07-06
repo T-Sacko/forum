@@ -8,7 +8,9 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"os"
 	"os/exec"
+	"runtime"
 
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -18,7 +20,18 @@ func init() {
 }
 
 func openBrowser(url string) error {
-	return exec.Command("xdg-open", url).Start()
+	var cmd *exec.Cmd
+
+	switch runtime.GOOS {
+	case "linux":
+		cmd = exec.Command("xdg-open", url)
+	case "windows":
+		cmd = exec.Command("cmd", "/c", "start", url)
+	default:
+		return os.ErrInvalid
+	}
+
+	return cmd.Start()
 }
 
 func main() {

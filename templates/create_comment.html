@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <style>
+        body{
+            background: blue;
+            height: 100%;
+            width: 100%;
+        }
+        .sign-out{
+            background: azure;
+            margin:auto;
+            width: 25%;
+            height: auto;
+            text-align: center;
+            justify-content: center; 
+            border-radius: 2%;
+            padding: 2em 2em;
+            padding-bottom: 1em;
+        }
+        .labels{
+            text-align: center;
+            font-weight: bold;
+            font-size: larger;
+            text-decoration: underline;
+        
+        }
+        .sign-out input{
+            font-size: 100%;
+            padding: 1% 15%;
+            font-weight: bolder;
+            border-radius: 6em;
+            margin-top: 10%;
+            color: #468ebe;
+            border: none;
+            cursor: pointer;
+        }
+
+        .sign-out input:hover{
+            background-color: #b9b9b9;
+        }
+
+    </style>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="sign_out" class="sign-out">
+        <label class="labels">Are you sure you want to sign out?</label>
+
+        <input type="button" value="Yes">
+        <input type="button" value="No">
+    </div>
+</body>
+</html>

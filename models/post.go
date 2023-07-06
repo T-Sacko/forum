@@ -8,7 +8,7 @@ import (
 
 type Post struct {
 	ID         int
-	Title      string
+	Title      string 
 	Content    string
 	Categories []string
 }
@@ -51,6 +51,7 @@ func GetUserByCookie(r *http.Request) (int, error) {
 	fmt.Printf("the user id is: %v\n", userId)
 	return userId, nil
 }
+
 func Test() {
 	posts, err := GetPostsFromDB()
 	if err != nil {
@@ -77,6 +78,7 @@ func GetPostsFromDB() ([]Post, error) {
 
 	rows, err := db.Query(query)
 	if err != nil {
+
 		return nil, err
 	}
 	defer rows.Close()
