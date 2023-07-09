@@ -22,7 +22,7 @@ fa-user-circle-o
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital@1&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../static/css/styles.css">
+    <link rel="stylesheet" href="/static/css/styles.css">
 
 </head>
 
@@ -51,11 +51,11 @@ fa-user-circle-o
                 <button>Search <i class="fa fa-search"></i></button>
             </div>
         </div>
-        {{if .}}
+
         <h4>
             <p>Welcome to Forum <u></u>!</p>
         </h4>
-        {{end}}
+
     </header>
     <button id="create-post-button">Create Post</button>
 
@@ -92,24 +92,25 @@ fa-user-circle-o
             <div id="error-message" style="display: none;"></div>
         </div>
     </div>
-    <section  style=" width: 33vw; margin:auto; word-wrap: break-word; ">
+    <section style=" width: 33vw; margin:auto; word-wrap: break-word; ">
         {{ range .Posts}}
         <div class="post">
             <div class="post-header">
-                <h5 class="post-user">{{ .Username }}</h5>
-                <h3 class="post-title">{{.Titledddddddddddddddddd}}</h3>
+                <span class="post-user">posted by {{ .Username }}</span>
+                <span class="post-categories">Categories: {{ range .Categories }}{{ . }} {{ end }}</span>
             </div>
-            <p class="post-categories">Categories: {{ range .Categories }}{{ . }}, {{ end }}</p>
-            <p style="font-weight:100; ">{{ .Content }}what is the origin of the word theasaurus</p>
-            <span><i class="fa fa-thumbs-up"></i>{{ .Likes }}</span1>
-                <span><i class="fa fa-thumbs-down"></i>{{ .Dislikes }}</span>
+            <h3 class="post-title">{{.Title}}</h3>
+            <p class="post-content" style="font-weight:100; ">{{ .Content }}</p>
+            <span><i class="fa fa-thumbs-up"></i> {{ .Likes }}</span>
+            <span><i class="fa fa-thumbs-down"></i> {{ .Dislikes }}</span>
+            <span><i class="fa fa-comment"></i> comment</span>
         </div>
         {{end}}
     </section>
 
 
     <script src="../static/js/post.js"></script>
-    <!-- <script src="../static/js/script.js"></script> -->
+    <!-- <script src="/static/js/script.js"></script> -->
 </body>
 
 </html>

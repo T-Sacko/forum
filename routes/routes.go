@@ -8,7 +8,12 @@ import (
 
 func SetUpRoutes(mux *http.ServeMux) {
 	
-	http.Handle("/static/", http.StripPrefix("/static/", mux))
+	
+	fs := http.FileServer(http.Dir("static"))
+	staticPrefix := "/static/"
+	mux.Handle(staticPrefix, http.StripPrefix(staticPrefix, fs))  
+	
+	
 	mux.HandleFunc("/", c.Index)
 	mux.HandleFunc("/sign-in", c.UsersHandler)
 	mux.HandleFunc("/api/check-username", c.UsernameCheck)

@@ -15,32 +15,41 @@
     padding: 6px;
 }
 
-.post > *{
-    margin-bottom: .5em
+.post span{
+    padding-right: 0.8rem;
 }
 
 .post-user{
-    margin-bottom: 0.2rem;
+  display: inline;
+  
 }
 
 
+.post-title{
+  margin-bottom: 0.4rem;
+}
 
-// .post-categories{
+.post-content{
+  margin-bottom: 0.3rem;
+}
+
+
+.post-categories{
     
-// }
+    width: 50%;
+}
 
 .post-header{
    
    
     
     margin-bottom: .3rem;
-    border-bottom: 1px solid black;
-    padding-bottom: 0.2rem;
+    
 }
 
-.post-header h2{
-    display: inline;
-}
+// .post-header {
+//     display: inline;
+// }
 
 /*--------------------------------------create post modal*/
 #modal-container {

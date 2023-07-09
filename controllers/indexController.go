@@ -3,10 +3,8 @@ package controllers
 import (
 	"fmt"
 	m "forum/models"
-	"html/template"
 	"net/http"
 )
-var tol *template.Template
 
 func Index(w http.ResponseWriter, r *http.Request) {
 	posts, err := m.GetPostsFromDB()
@@ -22,12 +20,12 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	}{
 		Posts: posts,
 	}
- tol,_=template.ParseFiles("../templates/home.html")
-	errs := tol.Execute(w, data)
-	
+
+	errs := Tpl.ExecuteTemplate(w, "home.html", data)
+	fmt.Println("no sirr")
 	if errs != nil {
 		fmt.Println("no sir", errs)
-		// http.Error(w, "Failed to render template", http.StatusInternalServerError)
+		http.Error(w, "Failed to render template", http.StatusInternalServerError)
 		return
 	}
 }
