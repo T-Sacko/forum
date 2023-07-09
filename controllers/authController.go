@@ -11,6 +11,8 @@ import (
 
 	"github.com/gofrs/uuid"
 )
+var err error
+var Tpl = template.Must(template.ParseGlob("templates/*.html"))
 
 func Login(w http.ResponseWriter, r *http.Request) {
 
@@ -59,22 +61,15 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 	}
 	fmt.Println("man", cookie.Value)
 	http.SetCookie(w, cookie)
-	http.Redirect(w, r, "/", http.StatusAccepted)
-	user.Password = ""
-
-	err = Tpl.ExecuteTemplate(w, "home.html", user)
-	if err != nil {
-		log.Fatal(err)
-	}
+	http.Redirect(w, r, "/", http.StatusFound)
+	
 	
 }
 
-var err error
-var Tpl = template.Must(template.ParseGlob("/home/student/forum/templates/*.html"))
 
-func StaticHandler(w http.ResponseWriter, r *http.Request) {
-	http.ServeFile(w, r, r.URL.Path[1:])
-}
+// func StaticHandler(w http.ResponseWriter, r *http.Request) {
+// 	http.ServeFile(w, r, r.URL.Path[1:])
+// }
 func getUser(r *http.Request) *m.User {
 	return &m.User{Email: r.FormValue("email"), Username: r.FormValue("username"), Password: r.FormValue("password")}
 }

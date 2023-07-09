@@ -2,20 +2,19 @@ package main
 
 import (
 	"fmt"
-	c "forum/controllers"
 	"forum/models"
 	r "forum/routes"
-	"html/template"
 	"log"
 	"net/http"
+
 	//"os/exec"
 
 	_ "github.com/mattn/go-sqlite3"
 )
 
-func init() {
-	c.Tpl = template.Must(template.ParseGlob("templates/*.html"))
-}
+// func init() {
+// 	c.Tpl = template.Must(template.ParseGlob("templates/*.html"))
+// }
 
 // func openBrowser(url string) error {
 // 	return exec.Command("xdg-open", url).Start()
@@ -33,7 +32,7 @@ func main() {
 
 	// openBrowser("http://0.0.0.0:8888")
 	fmt.Println("Serving on Port ->:8888")
-	if err := http.ListenAndServe("0.0.0.0:8888", mux); err != nil {
+	if err := http.ListenAndServe(":8888", mux); err != nil {
 
 		log.Fatalf("Failure on Listening and Serving: %v", err)
 	}

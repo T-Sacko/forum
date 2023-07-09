@@ -23,11 +23,7 @@ fa-user-circle-o
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital@1&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../static/css/styles.css">
-    <style>
-        li {
-            float: right;
-        }
-    </style>
+
 </head>
 
 <body>
@@ -96,16 +92,17 @@ fa-user-circle-o
             <div id="error-message" style="display: none;"></div>
         </div>
     </div>
-    <section class="main"
-        style=" width: 33vw; margin:auto; display: flex; flex-direction: column;">
-        {{ range .Posts }}
+    <section  style=" width: 33vw; margin:auto; word-wrap: break-word; ">
+        {{ range .Posts}}
         <div class="post">
-            <h4 class="post-user">{{ .Username }}</h4>
-            <h2 class="post-title">{{ .Title }}</h2>
-            <p class="post-categories">Categories: {{ range .Categories }}{{ . }} {{ end }}</p>
-            <p style="font-weight: 700; font-size: 1.5em;">{{ .Content }}</p>
+            <div class="post-header">
+                <h5 class="post-user">{{ .Username }}</h5>
+                <h3 class="post-title">{{.Titledddddddddddddddddd}}</h3>
+            </div>
+            <p class="post-categories">Categories: {{ range .Categories }}{{ . }}, {{ end }}</p>
+            <p style="font-weight:100; ">{{ .Content }}what is the origin of the word theasaurus</p>
             <span><i class="fa fa-thumbs-up"></i>{{ .Likes }}</span1>
-            <span><i class="fa fa-thumbs-down"></i>{{ .Dislikes }}</span>
+                <span><i class="fa fa-thumbs-down"></i>{{ .Dislikes }}</span>
         </div>
         {{end}}
     </section>
