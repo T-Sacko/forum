@@ -47,6 +47,8 @@ signupLink.addEventListener('click', function() {
 
 
 function SignOut() {
+  signOut.style.display = "none"
+  console.log("Sign out function called:", signOut.style.display)
   console.log("function being called")
     fetch('/del-cookie', {
         method: 'POST',
