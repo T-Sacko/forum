@@ -57,6 +57,8 @@ function SignOut() {
       accountLink.style.display = 'none'
       createPostButton.style.display = 'none'
       popupContainer.style.display = "none";
+      signOut.style.display = "none"
+      console.log("Sign out function called:", signOut.style.display)
     } else {
       console.log("failed to execute deletion")
     }})
