@@ -74,6 +74,7 @@ func InitDB() {
 			FOREIGN KEY(postId) REFERENCES posts(id),
 			FOREIGN KEY(comment_id) REFERENCES comments(id),
 			FOREIGN KEY(userId) REFERENCES users(id)
+			UNIQUE(postId, userId)
 		);
 
         CREATE TABLE IF NOT EXISTS dislikes (

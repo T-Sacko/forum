@@ -16,7 +16,7 @@ closeButton.onclick = function () {
   modalContainer.style.display = "none";
 };
 
-window.onclick = function(event) {
+window.onclick = function (event) {
   if (event.target == modalContainer) {
     modalContainer.style.display = "none";
   }
@@ -26,14 +26,13 @@ window.onclick = function(event) {
 
 function checkSession() {
   var xhr = new XMLHttpRequest();
-  console.log("unsent",xhr.status)
   xhr.open("GET", "/api/create-post");
-  console.log("OPened",xhr.status)
+  console.log("OPened", xhr.status)
 
   xhr.onreadystatechange = function () {
     console.log("ready state is: ", xhr.readyState)
     if (xhr.readyState == 4 && xhr.status == 200) {
-        console.log("response received")
+      console.log("response received")
       var response = JSON.parse(xhr.responseText);
       if (response.loggedIn) {
         // User is logged in
@@ -68,3 +67,25 @@ submitButton.addEventListener("click", function (event) {
   // Check if the user is logged in
   checkSession();
 });
+
+const likes = document.querySelectorAll('.likes')
+
+likes.forEach(like => {
+  console.log("yhh")
+  const postId = like.getAttribute('id')
+  like.addEventListener('click', () => {
+    console.log(postId)
+    likePost(postId)
+  })
+})
+
+function likePost(postId) {
+
+  fetch('/like-post', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ postId: postId })
+  })
+}

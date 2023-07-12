@@ -7,6 +7,12 @@
 
 /*-------------------------------------------posts*/
 
+main{
+  word-wrap: break-word;
+  width: 570px;
+  margin: auto;
+}
+
 .post{
     max-height: 50vh;
     width: 100%;

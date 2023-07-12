@@ -1,8 +1,8 @@
 package models
 
 import (
+	"database/sql"
 	"fmt"
-	"net/http"
 	"strings"
 )
 
@@ -16,15 +16,19 @@ type Post struct {
 	Dislikes   int
 }
 
-func SessionIsActive(sessionId string) (bool, error) {
-	var count int
-	err := db.QueryRow("SELECT COUNT(*) FROM users WHERE sessionId = ?", sessionId).Scan(&count)
+func SessionIsActive(sessionId string) (int, bool, error) {
+	var userId int
+	err := db.QueryRow("SELECT id FROM users WHERE sessionId = ?", sessionId).Scan(&userId)
 	if err != nil {
-		fmt.Println("no cookie, ya cant post")
-		return false, err
+		if err == sql.ErrNoRows {
+			fmt.Println("No cookie, you can't post")
+			return 0, false, err
+		}
+		fmt.Println("Error retrieving session ID:", err)
+		return 0, false, err
 	}
-	fmt.Println("valid sesh id")
-	return count > 0, nil
+	fmt.Println("Valid session ID")
+	return userId, true, nil
 }
 
 func SavePost(title, content string, userId int) int {
@@ -39,20 +43,6 @@ func SavePost(title, content string, userId int) int {
 		fmt.Println("error with getting postid from lastInserId")
 	}
 	return int(postId)
-}
-
-func GetUserByCookie(r *http.Request) (int, error) {
-	cookie, _ := r.Cookie("session")
-	sessionId := cookie.Value
-	var userId int
-	err := db.QueryRow("SELECT id FROM users WHERE sessionId = ?", sessionId).Scan(&userId)
-	if err != nil {
-		// Handle the database query error accordingly
-		fmt.Println("user has no sesh id rn")
-		return 0, err
-	}
-	fmt.Printf("the user id is: %v\n", userId)
-	return userId, nil
 }
 
 func GetPostsFromDB() ([]Post, error) {

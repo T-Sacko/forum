@@ -2,21 +2,21 @@ package models
 
 // import "time"
 
-func getComments(ID int) (string, error) {
-	stmt, err := db.Prepare("SELECT content FROM comments WHERE id = ?")
-	if err != nil {
-		return "", err
-	}
-	defer stmt.Close()
+// func getComments(ID int) (string, error) {
+// 	stmt, err := db.Prepare("SELECT content FROM comments WHERE id = ?")
+// 	if err != nil {
+// 		return "", err
+// 	}
+// 	defer stmt.Close()
 
-	var comments string
-	// Assuming "idValue" is the ID of the comment you want to retrieve
-	err = stmt.QueryRow(ID).Scan(&comments)
-	if err != nil {
-		return "", err
-	}
-	return comments, nil
-}
+// 	var comments string
+// 	// Assuming "idValue" is the ID of the comment you want to retrieve
+// 	err = stmt.QueryRow(ID).Scan(&comments)
+// 	if err != nil {
+// 		return "", err
+// 	}
+// 	return comments, nil
+// }
 
 // type Comment struct {
 //     ID          int       `json:"id"`

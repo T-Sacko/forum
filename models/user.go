@@ -3,6 +3,7 @@ package models
 import (
 	"database/sql"
 	"fmt"
+	"net/http"
 
 	"golang.org/x/crypto/bcrypt"
 )
@@ -19,10 +20,27 @@ type User struct {
 	Username  string `json:"username"`
 	Password  string `json:"-"`
 	SessionId string `json:"sessionid"`
-	Post     string
-	Likes    int
-	Dislikes int
-	Comments string
+	Post      string
+	Likes     int
+	Dislikes  int
+	Comments  string
+}
+
+func GetUserByCookie(r *http.Request) (int, error) {
+	cookie, errs := r.Cookie("session")
+	if errs!= nil{
+		return 0, errs
+	}
+	sessionId := cookie.Value
+	var userId int
+	err := db.QueryRow("SELECT id FROM users WHERE sessionId = ?", sessionId).Scan(&userId)
+	if err != nil {
+		// Handle the database query error accordingly
+		fmt.Println("user has no sesh id rn")
+		return 0, err
+	}
+	fmt.Printf("the user id is: %v\n", userId)
+	return userId, nil
 }
 
 func (newUser User) Register() error {
@@ -62,30 +80,30 @@ func (user User) GetUserByID() (User, error) {
 	// content, err := getUserContent(user.ID)
 	// if err != nil {
 	// 	return User{}, err
-	// 
-	likes, err := getLikes(user.ID)
-	if err != nil {
-		return User{}, err
-	}
+	//
+	// likes, err := getLikes(user.ID)
+	// if err != nil {
+	// 	return User{}, err
+	// }
 
-	dislikes, err := getDislikes(user.ID)
-	if err != nil {
-		return User{}, err
-	}
+	// dislikes, err := getDislikes(user.ID)
+	// if err != nil {
+	// 	return User{}, err
+	// }
 
-	comments, err := getComments(user.ID)
-	if err != nil {
-		return User{}, err
-	}
+	// comments, err := getComments(user.ID)
+	// if err != nil {
+	// 	return User{}, err
+	// }
 
-	user = User{
-		
-		Likes:    likes,
-		Dislikes: dislikes,
-		Comments: comments,
-	}
+	// user = User{
 
-	return user, err
+	// 	Likes:    likes,
+	// 	Dislikes: dislikes,
+	// 	Comments: comments,
+	// }
+
+	return user, nil
 }
 
 func SetSessionId(email, sessionId string) error {
@@ -114,7 +132,6 @@ func IsEmailAvailable(email string) (bool, error) {
 	}
 	return count == 0, nil
 }
-
 
 func ComparePasswords(hashedPassword, userPassword string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(userPassword))

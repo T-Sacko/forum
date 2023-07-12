@@ -90,7 +90,7 @@ fa-user-circle-o
             <div id="error-message" style="display: none;"></div>
         </div>
     </div>
-    <section style=" width: 33vw; margin:auto; word-wrap: break-word; ">
+    <main>
         {{ range .Posts}}
         <div class="post">
             <div class="post-header">
@@ -99,12 +99,26 @@ fa-user-circle-o
             </div>
             <h3 class="post-title">{{.Title}}</h3>
             <p class="post-content" style="font-weight:100; ">{{ .Content }}</p>
-            <span><i class="fa fa-thumbs-up"></i> {{ .Likes }}</span>
-            <span><i class="fa fa-thumbs-down"></i> {{ .Dislikes }}</span>
+            <span><i class="fa fa-thumbs-o-up likes" id="{{.ID}}" style="cursor: pointer;"></i><span id="{{.ID}}1">{{.Likes }}</span></span>
+            <span><i class="fa fa-thumbs-o-down dislikes" id="{{.ID}}"></i> <span id="{{.ID}}">{{ .Dislikes }}</span></span>
+
             <span><i class="fa fa-comment"></i> comment</span>
         </div>
+        <!-- <div class="post">
+            <div class="post-header">
+                <span class="post-user">posted by {{ .Username }}</span>
+                <span class="post-categories">Categories: {{ range .Categories }}{{ . }} {{ end }}</span>
+            </div>
+            <h3 class="post-title">{{.Title}}</h3>
+            <p class="post-content" style="font-weight:100; ">{{ .Content }}</p>
+            <span><i class="fa fa-thumbs-o-up likes" id="like2" style="cursor: pointer;"></i><span id="like21">{{
+                    .Likes }}</span></span>
+            <span><i class="fa fa-thumbs-o-down"></i> <span id="dislikeCount">{{ .Dislikes }}</span></span>
+
+            <span><i class="fa fa-comment"></i> comment</span>
+        </div> -->
         {{end}}
-    </section>
+    </main>
 
 
     <script src="../static/js/post.js"></script>

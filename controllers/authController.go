@@ -11,12 +11,15 @@ import (
 
 	"github.com/gofrs/uuid"
 )
+
 var err error
 var Tpl = template.Must(template.ParseGlob("templates/*.html"))
 
-func StaticHandler(w http.ResponseWriter, r *http.Request) {
-	http.ServeFile(w, r, r.URL.Path[1:])
-}
+// func StaticHandler(w http.ResponseWriter, r *http.Request) {
+// 	http.ServeFile(w, r, r.URL.Path[1:])
+// }func StaticHandler(w http.ResponseWriter, r *http.Request) {
+// 	http.ServeFile(w, r, r.URL.Path[1:])
+// }
 
 func Login(w http.ResponseWriter, r *http.Request) {
 
@@ -56,7 +59,7 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 	err = user.Register()
 	if err != nil {
 		http.Error(w, "CANT SAVE USER", http.StatusBadRequest)
-		http.Redirect(w,r,"",http.StatusSeeOther)
+		http.Redirect(w, r, "", http.StatusSeeOther)
 		return
 	}
 	cookie := &http.Cookie{
@@ -66,14 +69,10 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("man", cookie.Value)
 	http.SetCookie(w, cookie)
 	http.Redirect(w, r, "/", http.StatusFound)
-	
-	
+
 }
 
 
-// func StaticHandler(w http.ResponseWriter, r *http.Request) {
-// 	http.ServeFile(w, r, r.URL.Path[1:])
-// }
 func getUser(r *http.Request) *m.User {
 	return &m.User{Email: r.FormValue("email"), Username: r.FormValue("username"), Password: r.FormValue("password")}
 }
