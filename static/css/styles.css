@@ -6,6 +6,9 @@
 }
 
 /*-------------------------------------------posts*/
+.liked{
+  color: blue;
+}
 
 main{
   word-wrap: break-word;

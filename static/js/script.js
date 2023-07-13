@@ -1,4 +1,61 @@
 // script.js
+
+fetch("/get-post-likes", {
+  method: "GET"
+})
+  .then(response => response.json())
+  .then(data => {
+    // Handle the like data
+    console.log(data, 'this is the data');
+
+    for (const likeData of data) {
+      const postId = likeData.postId;
+      const value = likeData.value;
+      if (value === 1) {
+        const likeButton = document.getElementById(`${postId}-like`);
+        if (likeButton) {
+          liked(likeButton)
+          console.log("liked it up still")
+        }
+      } else {
+        const dislikeButton = document.getElementById(`${postId}-dislike`);
+        disliked(dislikeButton)
+
+      }
+
+    }
+  })
+  .catch(error => {
+    console.error("Error with the posts liked data is:", error);
+    // Handle the error
+  });
+
+function liked(likeButton) {
+  likeButton.classList.add('liked')
+  likeButton.classList.toggle('fa-thumbs-o-up')
+  likeButton.classList.add('fa-thumbs-up');
+}
+
+function disliked(dislikeButton){
+  dislikeButton.classList.toggle('disliked')
+  dislikeButton.classList.toggle('fa-thumbs-o-down')
+  dislikeButton.classList.toggle('fa-thumbs-down')
+}
+
+
+const likes = document.querySelectorAll('.likes')
+
+likes.forEach(like => {
+  console.log("yhh")
+  const postId = like.getAttribute('id')
+  like.addEventListener('click', () => {
+    
+  })
+})
+
+
+
+//////////////////////////////////////////////////////////////////
 function checkUsername(username) {
   var xhr = new XMLHttpRequest();
   xhr.open("GET", "/api/check-username?username=" + encodeURIComponent(username), true);
@@ -71,7 +128,7 @@ function checkEmail(email) {
 
 
 //NavBar
-function IconBar(){
+function IconBar() {
   var iconBar = document.getElementById("iconBar");
   var navigation = document.getElementById("navigation");
   if (navigation.classList.contains("hide")) {
@@ -84,23 +141,23 @@ function IconBar(){
 }
 
 function incrementLikes() {
-    var likeCountElement = document.getElementById("likeCount");
-    var likeCount = parseInt(likeCountElement.innerHTML);
-    likeCount++;
-    likeCountElement.innerHTML = likeCount;
+  var likeCountElement = document.getElementById("likeCount");
+  var likeCount = parseInt(likeCountElement.innerHTML);
+  likeCount++;
+  likeCountElement.innerHTML = likeCount;
 }
 function incrementDislikes() {
-    var dislikeCountElement = document.getElementById("dislikeCount");
-    var dislikeCount = parseInt(dislikeCountElement.innerHTML);
-    dislikeCount++;
-    dislikeCountElement.innerHTML = dislikeCount;
+  var dislikeCountElement = document.getElementById("dislikeCount");
+  var dislikeCount = parseInt(dislikeCountElement.innerHTML);
+  dislikeCount++;
+  dislikeCountElement.innerHTML = dislikeCount;
 }
-function showComment(){
-    var commentArea = document.getElementById("comment-area");
-    if (commentArea.classList.contains("hide")) {
-        commentArea.classList.remove("hide");
-    } else {
-        commentArea.classList.add("hide");
-    }
-    
+function showComment() {
+  var commentArea = document.getElementById("comment-area");
+  if (commentArea.classList.contains("hide")) {
+    commentArea.classList.remove("hide");
+  } else {
+    commentArea.classList.add("hide");
+  }
+
 }

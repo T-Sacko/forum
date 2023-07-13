@@ -99,8 +99,8 @@ fa-user-circle-o
             </div>
             <h3 class="post-title">{{.Title}}</h3>
             <p class="post-content" style="font-weight:100; ">{{ .Content }}</p>
-            <span><i class="fa fa-thumbs-o-up likes" id="{{.ID}}" style="cursor: pointer;"></i><span id="{{.ID}}1">{{.Likes }}</span></span>
-            <span><i class="fa fa-thumbs-o-down dislikes" id="{{.ID}}"></i> <span id="{{.ID}}">{{ .Dislikes }}</span></span>
+            <span><i class="fa fa-thumbs-o-up likes" id="{{.ID}}-like" style="cursor: pointer;"></i><span id="{{.ID}}-likes">{{.Likes }}</span></span>
+            <span><i class="fa fa-thumbs-o-down dislikes" id="{{.ID}}-dislike"></i> <span id="{{.ID}}-dislikes">{{ .Dislikes }}</span></span>
 
             <span><i class="fa fa-comment"></i> comment</span>
         </div>
@@ -122,6 +122,7 @@ fa-user-circle-o
 
 
     <script src="../static/js/post.js"></script>
+    <script src="../static/js/script.js"></script>
     <!-- <script src="/static/js/script.js"></script> -->
 </body>
 

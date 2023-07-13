@@ -23,5 +23,6 @@ func SetUpRoutes(mux *http.ServeMux) {
 	mux.HandleFunc("/login",c.Login)
 	mux.HandleFunc("/sign-up",c.SignUp)
 	mux.HandleFunc("/like-post",c.LikePost)
+	mux.HandleFunc("/get-post-likes",c.GetPostLikes)
 	
 }
