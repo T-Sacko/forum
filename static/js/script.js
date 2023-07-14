@@ -66,12 +66,26 @@ likes.forEach(likeButton => {
       unlikePost(postId)
     } else {
       //send like req
+      console.log("unliked to liked")
       likePost(postId)
     }
 
 
   })
 })
+
+function unlikePost()
+
+function likePost(postId) {
+
+  fetch('/like-post', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ postId: postId })
+  })
+}
 
 
 

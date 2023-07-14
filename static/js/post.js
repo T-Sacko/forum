@@ -79,13 +79,3 @@ submitButton.addEventListener("click", function (event) {
 //   })
 // })
 
-function likePost(postId) {
-
-  fetch('/like-post', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ postId: postId })
-  })
-}
