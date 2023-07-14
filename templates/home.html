@@ -115,7 +115,7 @@ fa-user-circle-o
                     .Likes }}</span></span>
             <span><i class="fa fa-thumbs-o-down"></i> <span id="dislikeCount">{{ .Dislikes }}</span></span>
 
-            <span><i class="fa fa-comment"></i> comment</span>
+            <span><i class="fa fa-comment" id="comment-btn"></i> comment<span id="comments">{{range .Comments}}{{.}} {{end}}</span></span>
         </div> -->
         {{end}}
     </main>
