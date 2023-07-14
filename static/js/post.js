@@ -68,16 +68,16 @@ submitButton.addEventListener("click", function (event) {
   checkSession();
 });
 
-const likes = document.querySelectorAll('.likes')
+// const likes = document.querySelectorAll('.likes')
 
-likes.forEach(like => {
-  console.log("yhh")
-  const postId = like.getAttribute('id')
-  like.addEventListener('click', () => {
-    console.log(postId)
-    likePost(postId)
-  })
-})
+// likes.forEach(like => {
+//   console.log("yhh")
+//   const postId = like.getAttribute('id')
+//   like.addEventListener('click', () => {
+//     console.log(postId)
+//     likePost(postId)
+//   })
+// })
 
 function likePost(postId) {
 

@@ -1,5 +1,3 @@
-// script.js
-
 fetch("/get-post-likes", {
   method: "GET"
 })
@@ -14,8 +12,8 @@ fetch("/get-post-likes", {
       if (value === 1) {
         const likeButton = document.getElementById(`${postId}-like`);
         if (likeButton) {
-          liked(likeButton)
-          console.log("liked it up still")
+          toggleLiked(likeButton)
+          console.log("toggleLiked it up still")
         }
       } else {
         const dislikeButton = document.getElementById(`${postId}-dislike`);
@@ -26,17 +24,23 @@ fetch("/get-post-likes", {
     }
   })
   .catch(error => {
-    console.error("Error with the posts liked data is:", error);
+    console.error("Error with the posts toggleLiked data is:", error);
     // Handle the error
   });
 
-function liked(likeButton) {
-  likeButton.classList.add('liked')
+function toggleLiked(likeButton) {
+  likeButton.classList.toggle('liked')
   likeButton.classList.toggle('fa-thumbs-o-up')
-  likeButton.classList.add('fa-thumbs-up');
+  likeButton.classList.toggle('fa-thumbs-up');
 }
 
-function disliked(dislikeButton){
+function unlike(likeButton) {
+  likeButton.classList.toggle('liked')
+  likeButton.classList.toggle('fa-thumbs-o-up')
+  likeButton.classList.toggle('fa-thumbs-up');
+}
+
+function disliked(dislikeButton) {
   dislikeButton.classList.toggle('disliked')
   dislikeButton.classList.toggle('fa-thumbs-o-down')
   dislikeButton.classList.toggle('fa-thumbs-down')
@@ -45,11 +49,27 @@ function disliked(dislikeButton){
 
 const likes = document.querySelectorAll('.likes')
 
-likes.forEach(like => {
+likes.forEach(likeButton => {
   console.log("yhh")
-  const postId = like.getAttribute('id')
-  like.addEventListener('click', () => {
-    
+  var str = likeButton.getAttribute('id');
+  var postId = str.split('-')[0]; // This will split the likeId string at the '-' character
+
+  console.log(postId, "mans up inna da ting uno"); // Outputs: [part1, part2, ...]
+
+
+  likeButton.addEventListener('click', () => {
+    // toggle like button 
+
+    toggleLiked(likeButton)
+    if (likeButton.classList.contains('liked')) {
+      // send unlike req to server
+      unlikePost(postId)
+    } else {
+      //send like req
+      likePost(postId)
+    }
+
+
   })
 })
 
