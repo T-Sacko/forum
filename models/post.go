@@ -27,7 +27,6 @@ func SessionIsActive(sessionId string) (int, bool, error) {
 		fmt.Println("Error retrieving session ID:", err)
 		return 0, false, err
 	}
-	fmt.Println("Valid session ID")
 	return userId, true, nil
 }
 

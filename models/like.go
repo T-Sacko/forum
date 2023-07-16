@@ -48,6 +48,7 @@ func GetLikedPosts(userId int) ([]LikeData, error) {
 }
 
 func SaveLike(postId, userId int) {
+	RemoveDislike(postId,userId)
 	_, err := db.Exec("INSERT INTO likes (postId, userId, value) Values (?, ?, ?)", postId, userId, 1)
 	if err != nil {
 		fmt.Println("like.go error inserting like: ", err)
@@ -62,6 +63,7 @@ func RemoveLike(postId, userId int) {
 }
 
 func SaveDislike(postId, userId int) {
+	RemoveLike(postId,userId)
 	_, err := db.Exec("INSERT INTO likes (postId, userId, value) VALUES (?, ?, ?)", postId, userId, -1)
 	if err != nil {
 		fmt.Println("like.go error inserting dislike: ", err)

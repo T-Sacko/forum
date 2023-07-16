@@ -67,7 +67,7 @@ likes.forEach(likeButton => {
         // send req to remove dislike
         handleLikeAction(postId, "removeDislike")
       }
-      setTimeout(() => handleLikeAction(postId, "like"), 200)
+      handleLikeAction(postId, "like")
     } else {
       //send unlike req
       console.log("we unliking suttin")
@@ -91,7 +91,7 @@ likes.forEach(likeButton => {
         // send req to remove like
         handleLikeAction(postId, "unlike")
       }
-      setTimeout(() => handleLikeAction(postId, "dislike"), 200)
+      handleLikeAction(postId, "dislike")
     } else {
       //send remove dislike req
       console.log("we removing dislike")
