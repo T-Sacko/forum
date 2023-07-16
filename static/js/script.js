@@ -1,3 +1,5 @@
+
+// get liked posts data
 fetch("/get-post-likes", {
   method: "GET"
 })
@@ -9,15 +11,15 @@ fetch("/get-post-likes", {
     for (const likeData of data) {
       const postId = likeData.postId;
       const value = likeData.value;
-      if (value === 1) {
-        const likeButton = document.getElementById(`${postId}-like`);
+      const likeButton = document.getElementById(`${postId}-like`);
+      if (value == 1) {
         if (likeButton) {
           toggleLiked(likeButton)
           console.log("toggleLiked it up still")
         }
       } else {
         const dislikeButton = document.getElementById(`${postId}-dislike`);
-        disliked(dislikeButton)
+        toggleDisliked(dislikeButton)
 
       }
 
@@ -34,13 +36,8 @@ function toggleLiked(likeButton) {
   likeButton.classList.toggle('fa-thumbs-up');
 }
 
-function unlike(likeButton) {
-  likeButton.classList.toggle('liked')
-  likeButton.classList.toggle('fa-thumbs-o-up')
-  likeButton.classList.toggle('fa-thumbs-up');
-}
 
-function disliked(dislikeButton) {
+function toggleDisliked(dislikeButton) {
   dislikeButton.classList.toggle('disliked')
   dislikeButton.classList.toggle('fa-thumbs-o-down')
   dislikeButton.classList.toggle('fa-thumbs-down')
@@ -50,42 +47,74 @@ function disliked(dislikeButton) {
 const likes = document.querySelectorAll('.likes')
 
 likes.forEach(likeButton => {
-  console.log("yhh")
-  var str = likeButton.getAttribute('id');
-  var postId = str.split('-')[0]; // This will split the likeId string at the '-' character
-
+  console.log("a post")
+  const likeStr = likeButton.getAttribute('id');
+  const postId = likeStr.split('-')[0]; // This will split the likeId string at the '-' character
+  const dislikeButton = document.getElementById(`${postId}-dislike`)
   console.log(postId, "mans up inna da ting uno"); // Outputs: [part1, part2, ...]
 
 
   likeButton.addEventListener('click', () => {
     // toggle like button 
-
     toggleLiked(likeButton)
+
+
     if (likeButton.classList.contains('liked')) {
-      // send unlike req to server
-      unlikePost(postId)
+      // send like req to server
+      console.log("we liking suttin")
+      if (dislikeButton.classList.contains('disliked')) {
+        toggleDisliked(dislikeButton)
+        // send req to remove dislike
+        handleLikeAction(postId, "removeDislike")
+      }
+      setTimeout(() => handleLikeAction(postId, "like"), 200)
     } else {
-      //send like req
-      console.log("unliked to liked")
-      likePost(postId)
+      //send unlike req
+      console.log("we unliking suttin")
+      handleLikeAction(postId, "unlike")
+    }
+
+
+
+  })
+
+  dislikeButton.addEventListener('click', () => {
+    // toggle like button 
+    toggleDisliked(dislikeButton)
+
+
+    if (dislikeButton.classList.contains('disliked')) {
+      // send dislike req to server
+      console.log("we disliking suttin")
+      if (likeButton.classList.contains('liked')) {
+        toggleLiked(likeButton)
+        // send req to remove like
+        handleLikeAction(postId, "unlike")
+      }
+      setTimeout(() => handleLikeAction(postId, "dislike"), 200)
+    } else {
+      //send remove dislike req
+      console.log("we removing dislike")
+      handleLikeAction(postId, "removeDislike")
     }
 
 
   })
+
 })
 
-function unlikePost()
 
-function likePost(postId) {
 
-  fetch('/like-post', {
+function handleLikeAction(postId, action) {
+  fetch('/handle-like-action', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ postId: postId })
-  })
+    body: JSON.stringify({ postId: postId, action: action })
+  });
 }
+
 
 
 

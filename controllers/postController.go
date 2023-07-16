@@ -83,6 +83,7 @@ func LikePost(w http.ResponseWriter, r *http.Request) {
 	userId, session, err1 := m.SessionIsActive(sessionId)
 	if err1 != nil {
 		fmt.Println("post.controller.go Error func LikePost: ", err1)
+		return
 	}
 
 	if session {

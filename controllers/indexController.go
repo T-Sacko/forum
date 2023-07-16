@@ -37,10 +37,15 @@ func GetPostLikes(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(r.Method, "the ,ethod is <<")
 	userId, err := m.GetUserByCookie(r)
 	if err != nil {
+		fmt.Println("no cookie tring to get user liked posts",err)
 		return
 	}
-	likesData, _ := m.GetLikedPosts(userId)
-	fmt.Println(likesData[0], "likes data is here u know")
+	fmt.Println("getting user post likes for user ", userId, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+	likesData, err := m.GetLikedPosts(userId)
+	if err!= nil{
+		fmt.Println("error with suttin")
+	}
+	fmt.Println(likesData, "likes data is here u know")
 	err1 := json.NewEncoder(w).Encode(likesData)
 	if err1 != nil {
 		fmt.Println("cant encode suttin")

@@ -7,6 +7,11 @@ type LikeData struct {
 	Value  int `json:"value"`
 }
 
+type PostActionReq struct {
+	PostId string `json:"postId"`
+	Action string `json:"action"`
+}
+
 func GetLikedPosts(userId int) ([]LikeData, error) {
 	query := `
 		SELECT postId, value
@@ -45,51 +50,27 @@ func GetLikedPosts(userId int) ([]LikeData, error) {
 func SaveLike(postId, userId int) {
 	_, err := db.Exec("INSERT INTO likes (postId, userId, value) Values (?, ?, ?)", postId, userId, 1)
 	if err != nil {
-		fmt.Println("Error in post.go, inserting like: ", err)
+		fmt.Println("like.go error inserting like: ", err)
 	}
 }
 
-// func getLikes(ID int) (int, error) {
-// 	stmt, err := db.Prepare("SELECT value FROM likes WHERE id = ?")
-// 	if err != nil {
-// 		return 0, err
-// 	}
-// 	defer stmt.Close()
+func RemoveLike(postId, userId int) {
+	_, err := db.Exec("DELETE FROM likes WHERE postId = ? AND userId = ? AND value = 1", postId, userId)
+	if err != nil {
+		fmt.Println("like.go error removing like: ", err)
+	}
+}
 
-// 	var likes int
-// 	// Assuming "idValue" is the ID of the comment you want to retrieve
-// 	err = stmt.QueryRow(ID).Scan(&likes)
-// 	if err != nil {
-// 		return 0, err
-// 	}
-// 	return likes, nil
-// }
+func SaveDislike(postId, userId int) {
+	_, err := db.Exec("INSERT INTO likes (postId, userId, value) VALUES (?, ?, ?)", postId, userId, -1)
+	if err != nil {
+		fmt.Println("like.go error inserting dislike: ", err)
+	}
+}
 
-// func getDislikes(ID int) (int, error) {
-// 	stmt, err := db.Prepare("SELECT value FROM likes WHERE id = ?")
-// 	if err != nil {
-// 		return 0, err
-// 	}
-// 	defer stmt.Close()
-
-// 	var dislikes int
-// 	// Assuming "idValue" is the ID of the comment you want to retrieve
-// 	err = stmt.QueryRow(ID).Scan(&dislikes)
-// 	if err != nil {
-// 		return 0, err
-// 	}
-// 	return dislikes, nil
-// }
-//  {
-//     ID     int `json:"id"`
-//     PostID int `json:"post_id"`
-//     UserID int `json:"user_id"`
-// }
-
-// func (l *Like) Save() error {
-//     // save the like to the database
-// }
-
-// func GetLikesByPostID(id int) ([]*Like, error) {
-//     // query the database for all likes on a given post
-// }
+func RemoveDislike(postId, userId int) {
+	_, err := db.Exec("DELETE FROM likes WHERE postId = ? AND userId = ? AND value = -1", postId, userId)
+	if err != nil {
+		fmt.Println("like.go error removing dislike: ", err)
+	}
+}

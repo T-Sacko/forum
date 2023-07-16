@@ -1,17 +1,3 @@
-<!-- 
-fa-sign-in
-fa-sign-out
-fa-user
-fa-user-o
-fa-users
-fa-user-md
-fa-user-secret
-fa-user-plus
-fa-user-times
-fa-user-circle
-fa-user-circle-o
--->
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -99,24 +85,11 @@ fa-user-circle-o
             </div>
             <h3 class="post-title">{{.Title}}</h3>
             <p class="post-content" style="font-weight:100; ">{{ .Content }}</p>
-            <span><i class="fa fa-thumbs-o-up likes" id="{{.ID}}-like" style="cursor: pointer;"></i><span id="{{.ID}}-likes">{{.Likes }}</span></span>
-            <span><i class="fa fa-thumbs-o-down dislikes" id="{{.ID}}-dislike"></i> <span id="{{.ID}}-dislikes">{{ .Dislikes }}</span></span>
+            <span><i class="fa fa-thumbs-o-up likes" id="{{.ID}}-like" style="cursor: pointer;"></i><span id="{{.ID}}-1">{{.Likes }}</span></span>
+            <span><i class="fa fa-thumbs-o-down dislikes" id="{{.ID}}-dislike" style="cursor: pointer;"></i> <span id="{{.ID}}-2">{{ .Dislikes }}</span></span>
 
             <span><i class="fa fa-comment"></i> comment</span>
         </div>
-        <!-- <div class="post">
-            <div class="post-header">
-                <span class="post-user">posted by {{ .Username }}</span>
-                <span class="post-categories">Categories: {{ range .Categories }}{{ . }} {{ end }}</span>
-            </div>
-            <h3 class="post-title">{{.Title}}</h3>
-            <p class="post-content" style="font-weight:100; ">{{ .Content }}</p>
-            <span><i class="fa fa-thumbs-o-up likes" id="like2" style="cursor: pointer;"></i><span id="like21">{{
-                    .Likes }}</span></span>
-            <span><i class="fa fa-thumbs-o-down"></i> <span id="dislikeCount">{{ .Dislikes }}</span></span>
-
-            <span><i class="fa fa-comment"></i> comment</span>
-        </div> -->
         {{end}}
     </main>
 
