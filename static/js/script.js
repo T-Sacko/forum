@@ -43,6 +43,23 @@ function toggleDisliked(dislikeButton) {
   dislikeButton.classList.toggle('fa-thumbs-down')
 }
 
+function increment(postId, id) {
+  const dislikeCountElement = document.getElementById(`${postId}-${id}`);
+  const dislikeCountText = dislikeCountElement.textContent;
+  const dislikeCountValue = parseInt(dislikeCountText);
+  const incrementedCount = dislikeCountValue + 1;
+  dislikeCountElement.textContent = incrementedCount.toString();
+}
+
+function decrement(postId, id) {
+  const dislikeCountElement = document.getElementById(`${postId}-${id}`);
+  const dislikeCountText = dislikeCountElement.textContent;
+  const dislikeCountValue = parseInt(dislikeCountText);
+  const decrementedCount = dislikeCountValue - 1;
+  dislikeCountElement.textContent = decrementedCount.toString();
+}
+
+
 
 const likes = document.querySelectorAll('.likes')
 
@@ -51,6 +68,7 @@ likes.forEach(likeButton => {
   const likeStr = likeButton.getAttribute('id');
   const postId = likeStr.split('-')[0]; // This will split the likeId string at the '-' character
   const dislikeButton = document.getElementById(`${postId}-dislike`)
+
   console.log(postId, "mans up inna da ting uno"); // Outputs: [part1, part2, ...]
 
 
@@ -59,11 +77,14 @@ likes.forEach(likeButton => {
     toggleLiked(likeButton)
 
 
+
     if (likeButton.classList.contains('liked')) {
       // send like req to server
       console.log("we liking suttin")
+      increment(postId, 1)
       if (dislikeButton.classList.contains('disliked')) {
         toggleDisliked(dislikeButton)
+        decrement(postId, 2)
         // send req to remove dislike
         handleLikeAction(postId, "removeDislike")
       }
@@ -72,6 +93,7 @@ likes.forEach(likeButton => {
       //send unlike req
       console.log("we unliking suttin")
       handleLikeAction(postId, "unlike")
+      decrement(postId, 1)
     }
 
 
@@ -86,14 +108,17 @@ likes.forEach(likeButton => {
     if (dislikeButton.classList.contains('disliked')) {
       // send dislike req to server
       console.log("we disliking suttin")
+      increment(postId, 2)
       if (likeButton.classList.contains('liked')) {
         toggleLiked(likeButton)
+        decrement(postId, 1)
         // send req to remove like
         handleLikeAction(postId, "unlike")
       }
       handleLikeAction(postId, "dislike")
     } else {
       //send remove dislike req
+      decrement(postId, 2)
       console.log("we removing dislike")
       handleLikeAction(postId, "removeDislike")
     }

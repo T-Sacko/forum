@@ -15,11 +15,6 @@ import (
 var err error
 var Tpl = template.Must(template.ParseGlob("templates/*.html"))
 
-// func StaticHandler(w http.ResponseWriter, r *http.Request) {
-// 	http.ServeFile(w, r, r.URL.Path[1:])
-// }func StaticHandler(w http.ResponseWriter, r *http.Request) {
-// 	http.ServeFile(w, r, r.URL.Path[1:])
-// }
 
 func Login(w http.ResponseWriter, r *http.Request) {
 
