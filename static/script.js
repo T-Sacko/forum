@@ -80,7 +80,6 @@ signupLink.addEventListener('click', function() {
 
 
 function SignOut() {
-  const close = document.getElementById('close')
   console.log("function being called")
     fetch('/del-cookie', {
         method: 'POST',
