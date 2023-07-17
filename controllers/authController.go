@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"encoding/json"
-	"fmt"
+	"time"
 
 	m "forum/models"
 	"html/template"
@@ -27,11 +27,12 @@ func CookieSetter(user *m.User) (*http.Cookie, error) {
 	if err != nil {
 		return nil, err
 	}
-	
+
 	user.SessionId = SessionId.String()
 	cookie := &http.Cookie{
-		Name:  "session",
-		Value: user.SessionId,
+		Name:    "session",
+		Value:   user.SessionId,
+		Expires: time.Now().Add(time.Hour),
 	}
 	m.SetSessionId(user.Email, user.SessionId)
 	return cookie, nil
@@ -50,7 +51,6 @@ func UsernameCheck(w http.ResponseWriter, r *http.Request) {
 	response := m.UserCheckResponse{
 		Available: available,
 	}
-	fmt.Printf("Your username is not already being used: %v", available)
 	err = JSsender(w, response)
 	if err != nil {
 		log.Println("can't encode username check response into json", err)
@@ -69,7 +69,6 @@ func EmailCheck(w http.ResponseWriter, r *http.Request) {
 		Available: available,
 	}
 
-	fmt.Printf("Your email is not already being used: %v/n", available)
 	err = JSsender(w, response)
 	if err != nil {
 		log.Println("can't encode email check response into json", err)

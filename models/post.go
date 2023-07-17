@@ -1,119 +1,163 @@
 package models
 
 import (
-	"fmt"
-	"log"
 	"net/http"
+	"strconv"
+	"strings"
 )
 
 type Post struct {
 	ID         int
-	Title      string 
+	Title      string
 	Content    string
+	Username   string
 	Categories []string
+	Comments   []Comment
+	Likes      int
+	Dislikes   int
 }
 
 func SessionIsActive(sessionId string) (bool, error) {
 	var count int
 	err := db.QueryRow("SELECT COUNT(*) FROM users WHERE sessionId = ?", sessionId).Scan(&count)
 	if err != nil {
-		fmt.Println("no cookie, ya cant post")
 		return false, err
 	}
-	fmt.Println("valid sesh id")
 	return count > 0, nil
 }
 
-func SavePost(title, content string, userId int) int {
+func SavePost(title, content string, userId int) (int, error) {
 	result, err := db.Exec("INSERT INTO posts (title, content, userId) Values (?, ?, ?)", title, content, userId)
 	if err != nil {
-		fmt.Println("Error inserting into posts: ", err)
-		return 0
-	}
-	fmt.Println("Successfully inserted into posts!!!!!!!")
-	postId, err := result.LastInsertId()
-	if err != nil {
-		fmt.Println("error with getting postid from lastInserId")
-	}
-	return int(postId)
-}
-
-func GetUserByCookie(r *http.Request) (int, error) {
-	cookie, _ := r.Cookie("session")
-	sessionId := cookie.Value
-	var userId int
-	err := db.QueryRow("SELECT id FROM users WHERE sessionId = ?", sessionId).Scan(&userId)
-	if err != nil {
-		// Handle the database query error accordingly
-		fmt.Println("user has no sesh id rn")
 		return 0, err
 	}
-	fmt.Printf("the user id is: %v\n", userId)
-	return userId, nil
+	postId, err := result.LastInsertId()
+	if err != nil {
+		return 0, err
+	}
+	return int(postId), nil
 }
 
-func Test() {
-	posts, err := GetPostsFromDB()
+func GetUserByCookie(r *http.Request) (*User, error) {
+
+	var username string
+
+	cookie, err := r.Cookie("session")
 	if err != nil {
-		log.Fatal("Failed to retrieve posts:", err)
+		return &User{}, err
+	}
+	sessionId := cookie.Value
+	var userId int
+	err = db.QueryRow("SELECT id, username FROM users WHERE sessionId = ?", sessionId).Scan(&userId, &username)
+	if err != nil {
+		return &User{}, err
 	}
 
-	for _, post := range posts {
-		fmt.Printf("Post ID: %d\n", post.ID)
-		fmt.Printf("Title: %s\n", post.Title)
-		fmt.Printf("Content: %s\n", post.Content)
-		fmt.Printf("Categories: %v\n", post.Categories)
-		fmt.Println("-----------")
-	}
+	user := &User{ID: userId, Username: username}
+
+	return user, nil
 }
 
 func GetPostsFromDB() ([]Post, error) {
 	query := `
-		SELECT posts.id, posts.title, posts.content, categories.name
+		SELECT posts.id, posts.title, posts.content, users.username,
+			GROUP_CONCAT(DISTINCT categories.name) AS categoryNames,
+			COALESCE(SUM(CASE WHEN likes.value = 1 THEN 1 ELSE 0 END), 0) AS likes,
+			COALESCE(SUM(CASE WHEN likes.value = -1 THEN 1 ELSE 0 END), 0) AS dislikes
 		FROM posts
+		INNER JOIN users ON posts.userId = users.id
 		INNER JOIN post_categories ON posts.id = post_categories.post_id
 		INNER JOIN categories ON post_categories.category_id = categories.id
+		LEFT JOIN likes ON likes.postId = posts.id
+		GROUP BY posts.id, users.username
 		ORDER BY posts.id
 	`
 
 	rows, err := db.Query(query)
 	if err != nil {
-
 		return nil, err
 	}
 	defer rows.Close()
 
 	posts := []Post{}
-	currentPost := Post{}
 	for rows.Next() {
+		var title, content, username, categoryNames string
 		var postID int
-		var title, content, categoryName string
-		err := rows.Scan(&postID, &title, &content, &categoryName)
+		var likes, dislikes int
+		err := rows.Scan(&postID, &title, &content, &username, &categoryNames, &likes, &dislikes)
 		if err != nil {
 			return nil, err
 		}
-
-		if currentPost.ID != postID {
-			if currentPost.ID != 0 {
-				posts = append(posts, currentPost)
-			}
-			currentPost = Post{
-				ID:      postID,
-				Title:   title,
-				Content: content,
-			}
+		categories := strings.Split(categoryNames, ",")
+		post := Post{
+			ID:         postID,
+			Title:      title,
+			Content:    content,
+			Username:   username,
+			Categories: categories,
+			Likes:      likes,
+			Dislikes:   dislikes,
 		}
 
-		currentPost.Categories = append(currentPost.Categories, categoryName)
-	}
+		comments, err := getCommentsForPost(postID)
+		if err != nil {
+			return nil, err
+		}
+		post.Comments = comments
 
-	if currentPost.ID != 0 {
-		posts = append(posts, currentPost)
+		posts = append(posts, post)
 	}
 
 	if err = rows.Err(); err != nil {
 		return nil, err
 	}
 
+	posts = reversePosts(posts)
+
 	return posts, nil
+}
+
+func getCommentsForPost(postID int) ([]Comment, error) {
+	query := `
+		SELECT comments.content, comments.userId
+		FROM comments
+		WHERE comments.postId = ?
+		ORDER BY comments.id
+	`
+
+	rows, err := db.Query(query, postID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	comments := []Comment{}
+	for rows.Next() {
+		var content string
+		var userID int
+		err := rows.Scan(&content, &userID)
+		if err != nil {
+			return nil, err
+		}
+		comment := Comment{
+			UserID:  userID,
+			PostID:  strconv.Itoa(postID),
+			Comment: content,
+		}
+		comments = append(comments, comment)
+	}
+
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return comments, nil
+}
+
+func reversePosts(posts []Post) []Post {
+	var reversedPosts []Post
+	for i := len(posts) - 1; i >= 0; i-- {
+		reversedPosts = append(reversedPosts, posts[i])
+	}
+	return reversedPosts
 }

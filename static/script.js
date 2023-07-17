@@ -12,6 +12,40 @@ const closeButton = document.getElementById("close-button");
 const errorElement = document.getElementById("error");
 const accountLink = document.getElementById("account-link")
 const signOut = document.getElementById("sign_out")
+const commentBtn = document.getElementById("comment-btn")
+
+
+function comment() {
+  const postId = document.getElementsByClassName("posts").id
+  const comment = document.querySelector(".comment-box").value;
+
+  console.log("Here is the id",comment.id)
+
+  const requestBody = {
+    postId: postId,
+    comment: comment
+  };
+  console.log(postId)
+
+  console.log(requestBody)
+  fetch('/comment', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(requestBody)
+  }).then(response=> {
+    if (response.ok) {
+      console.log("postId and Comment submitted")
+    } else {
+      console.log("failed to submit comment")
+    }
+      location.reload();
+
+    }).catch(error => {
+      console.error('Error occurred while deleting user session:', error);
+    });
+}
 
 createPostButton.onclick = function () {
   console.log("clicked create post button")
@@ -25,28 +59,28 @@ window.onclick = function(event) {
 }
 
 signupLink.addEventListener('click', function() {
-    if (signupLink.innerText === 'Sign Out') {
-        let close = document.getElementById('close')
-        popupContainer.style.display = 'flex'
-        popupDiv.style.height = 'auto'
-        close.style.display = 'none'
-        signOut.style.display = 'block'
-        return
-    }
-    if (popupContainer.style.display === 'flex') {
-        popupContainer.style.display = 'none';
-        return
-    }
-    if (signup.style.display === 'block') {
-        signup.style.display = 'none'
-    }
-    popupContainer.style.display = 'flex';
-    login.style.display = 'block'
+  if (signupLink.innerText === 'Sign Out') {
+      const close = document.getElementById('close')
+      popupContainer.style.display = 'flex'
+      popupDiv.style.height = 'auto'
+      close.style.display = 'none'
+      signOut.style.display = 'block'
+      return
+  }
+  if (popupContainer.style.display === 'flex') {
+      popupContainer.style.display = 'none';
+      return
+  }
+  if (signup.style.display === 'block') {
+      signup.style.display = 'none'
+  }
+  popupContainer.style.display = 'flex';
+  login.style.display = 'block'
 });
 
 
-
 function SignOut() {
+  const close = document.getElementById('close')
   console.log("function being called")
     fetch('/del-cookie', {
         method: 'POST',
@@ -56,14 +90,17 @@ function SignOut() {
       document.getElementById("sign-in").innerHTML = signIncode
       accountLink.style.display = 'none'
       createPostButton.style.display = 'none'
-      popupContainer.style.display = "none";
+      popupContainer.style.display = 'none';
+      signOut.style.display = "none"
+      close.style.display = "block"
     } else {
       console.log("failed to execute deletion")
     }})
     .catch(error => {
       console.error('Error occurred while deleting user session:', error);
     });
-};
+};      
+
 
 function closePopup() {
     popupContainer.style.display = "none";
@@ -81,7 +118,6 @@ loginLink.addEventListener('click', function() {
 });
 
 function checkSession() {
-  //const errorDiv = document.getElementById('error-message')
   console.log('checkSession function being called')
   fetch('/check-session', {
     method: 'POST',
@@ -94,6 +130,7 @@ function checkSession() {
       document.getElementById("sign-in").innerHTML = signOutcode
       accountLink.style.display = 'block'
       createPostButton.style.display = 'block'
+      //commentSesh.style.display = 'block'
       console.log('User session is valid');
     } else {
       console.log('User session is invalid or expired');
@@ -157,21 +194,8 @@ function checkEmail(email) {
   };
   xhr.send();
 }
-//NavBar
-function incrementLikes(postID) {
-  var xhr = new XMLHttpRequest();
-  xhr.open("GET", "/api/likes?email=" + encodeURIComponent(postID), true);
-    var likeCountElement = document.getElementById("likeCount");
-    var likeCount = parseInt(likeCountElement.innerHTML);
-    likeCount++;
-    likeCountElement.innerHTML = likeCount;
-}
-function incrementDislikes(postID) {
-    var dislikeCountElement = document.getElementById("dislikeCount");
-    var dislikeCount = parseInt(dislikeCountElement.innerHTML);
-    dislikeCount++;
-    dislikeCountElement.innerHTML = dislikeCount;
-}
+
+
 function showComment(){
     var commentArea = document.getElementById("comment-area");
     if (commentArea.classList.contains("hide")) {

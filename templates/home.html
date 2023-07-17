@@ -1,17 +1,3 @@
-<!-- 
-fa-sign-in
-fa-sign-out
-fa-user
-fa-user-o
-fa-users
-fa-user-md
-fa-user-secret
-fa-user-plus
-fa-user-times
-fa-user-circle
-fa-user-circle-o
--->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -51,30 +37,29 @@ fa-user-circle-o
                     <h2 style="color: #b3b9ff ;">Create post</h2>
                 </div>
                     <form action="/post" id="create-post-form" method="post">
-                    <div class="categories">
-                        <h3 class="categories-header">Categories:</h3>
-                        <div class="category">
-                            <label for="etymology">etymology</label>
-                            <input type="checkbox"  id="etymology" name="category"
-                                value="etymology">
+                        <div class="categories">
+                            <h3 class="categories-header">Categories:</h3>
+                            <div class="category">
+                                <label for="etymology">etymology</label>
+                                <input type="checkbox"  id="etymology" name="category"
+                                    value="etymology">
+                            </div>
+                            <div class="category">
+                                <label for="biology">biology</label>
+                                <input type="checkbox" id="biology" name="category" value="biology">
+                            </div>
                         </div>
-                        <div class="category">
-                            <label for="biology">biology</label>
-                            <input type="checkbox" id="biology" name="category" value="biology">
-                        </div>
-                    </div>
-                        <label for="image">Upload Image:</label>
-                        <input type="file" id="image" name="image">
-                        <input id="title" type="text" name="title" placeholder="Title" required>
-                        <textarea class="form-text" name="content" placeholder="Content" required></textarea>
-                        <button type="submit">Submit</button>
-                </form>
-                <div id="error-message" class="error-message"></div>
+                            <label for="image">Upload Image:</label>
+                            <input type="file" id="image" name="image">
+                            <input id="title" type="text" name="title" placeholder="Title" required>
+                            <textarea class="form-text" name="content" placeholder="Content" required></textarea>
+                            <button type="submit">Submit</button>
+                    </form>
             </div>
         </div>
-        <div class="navigate">
+        <!-- <div class="navigate">
             <span> <a href="/account"><i class ="fa fa-user-circle"></i></a> > <a href="/">Forum</a> >> <a href="/posts">Users</a></span>
-        </div>
+        </div> -->
         <div class="overlay" id="popup-container">
             <div class="popup-container" id="container-div">
                 <a class="close" onclick="closePopup()" id="close">&times;</a>
@@ -112,16 +97,42 @@ fa-user-circle-o
             </div>
             </div>
         </div>
-        {{end}}
-        <div class="posts">
-            <h1>Posted by: Enzo</h1>
-            <h3>Dog Post</h3>
-            <div class="image"><img src="../dog.jpg" alt="">Image</div>
-            <div class="comments"></div>
+        {{if .UserInfo}}
+        {{if .UserInfo.Post}}
+        {{range .UserInfo.Post}}
+        <div class="posts" id="{{.ID}}">
+            <pre class="author" ><i class="fa fa-user-circle"></i> {{.Username}}</pre>
+            <br>
+            <br>
+            <div class="content">
+                <p class="title">{{.Title}}</p>
+                <!-- <div class="image"><img src="../dog.jpg" alt="">Image</div> -->
+                <div class="written-content" >{{.Content}}</div>
+            </div>
+            <br>
+            <p>Comment Section</p>
+            <div class="comment-section">
+            {{range .Comments}}
+            <div class="comments" id="{{.UserID}}"> 
+                <p>{{.Comment}}</p>
+            </div>
+            <br>
+            {{end}}
         </div>
+            <div class="comment" id="comment">
+                <textarea class="comment-box" id="comment {{.ID}}" name="comment" rows="2" cols="40" placeholder="Write your comment..." required></textarea>
+                <button class="submit-button" type="submit" onclick="comment()">Comment</button>
+            </div>
+        </div>
+        <br>
+        <br>
+        {{end}}
+        {{end}}
+        {{end}}
+        {{end}}
     </div>
 </body>
 <script src="../static/script.js"></script>
-<footer>
-    <span>&copy;  Forum | All Rights Reserved</span>
+<!-- <footer>
+    <span>&copy;  Forum | All Rights Reserved</span> -->
 </html>

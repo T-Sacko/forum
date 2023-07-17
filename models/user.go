@@ -19,9 +19,6 @@ type User struct {
 	Password  string `json:"-"`
 	SessionId string `json:"sessionid"`
 	Post     []Post
-	Likes    int
-	Dislikes int
-	Comments string
 }
 
 func (newUser User) Register() error {
@@ -36,46 +33,6 @@ func (newUser User) Register() error {
 		return err
 	}
 	return nil
-}
-
-func (user User) LogIn() (UserCheckResponse, error) {
-	checked, err := Check4User(user.Email, user.Password)
-	if err != nil {
-		return UserCheckResponse{Available: checked}, err
-	}
-
-	userInfo, err := user.GetUserByID()
-	if err != nil {
-		return UserCheckResponse{}, err
-	}
-	return UserCheckResponse{Available: checked, UserInfo: userInfo}, nil
-}
-
-
-func (user *User) GetUserByID() (*User, error) {
-	likes, err := getLikes(user.ID)
-	if err != nil {
-		return &User{}, err
-	}
-
-	dislikes, err := getDislikes(user.ID)
-	if err != nil {
-		return &User{}, err
-	}
-
-	comments, err := getComments(user.ID)
-	if err != nil {
-		return &User{}, err
-	}
-
-	user = &User{
-		
-		Likes:    likes,
-		Dislikes: dislikes,
-		Comments: comments,
-	}
-
-	return user, err
 }
 
 func SetSessionId(email, sessionId string) error {

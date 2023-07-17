@@ -2,21 +2,45 @@ package models
 
 // import "time"
 
-func getComments(ID int) (string, error) {
-	stmt, err := db.Prepare("SELECT content FROM comments WHERE id = ?")
+type Comment struct {
+	UserID 	int	`json:"userId"`
+	PostID  string `json:"postId"`
+	Comment string `json:"comment"`
+}
+
+
+func (comment Comment) SaveComment() (error){
+	stmt, err := db.Prepare("INSERT INTO comments (content, postId, userId) VALUES (?, ?, ?)")
 	if err != nil {
-		return "", err
+		return err
 	}
 	defer stmt.Close()
-
-	var comments string
-	// Assuming "idValue" is the ID of the comment you want to retrieve
-	err = stmt.QueryRow(ID).Scan(&comments)
+	// Execute the prepared statement with the provided values and current timestamp
+	_, err = stmt.Exec(comment.Comment, comment.PostID, comment.UserID)
 	if err != nil {
-		return "", err
+		return err
 	}
-	return comments, nil
+
+	return nil
 }
+	
+
+
+// func getComments(ID int) (string, error) {
+// 	stmt, err := db.Prepare("SELECT content FROM comments WHERE id = ?")
+// 	if err != nil {
+// 		return "", err
+// 	}
+// 	defer stmt.Close()
+
+// 	var comments string
+// 	// Assuming "idValue" is the ID of the comment you want to retrieve
+// 	err = stmt.QueryRow(ID).Scan(&comments)
+// 	if err != nil {
+// 		return "", err
+// 	}
+// 	return comments, nil
+// }
 
 // type Comment struct {
 //     ID          int       `json:"id"`

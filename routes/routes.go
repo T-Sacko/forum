@@ -13,4 +13,5 @@ func SetUpRoutes(mux *http.ServeMux) {
 	mux.HandleFunc("/api/check-username", c.UsernameCheck)
 	mux.HandleFunc("/api/check-email", c.EmailCheck)
 	mux.HandleFunc("/check-session", c.CheckSession)
+	mux.HandleFunc("/comment", c.CommentHandler)
 }

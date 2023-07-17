@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"database/sql"
 	"fmt"
 	m "forum/models"
 	"log"
@@ -8,11 +9,21 @@ import (
 	"time"
 )
 
-var user *m.User
-
-var data *m.UserCheckResponse
-
 func Index(w http.ResponseWriter, r *http.Request) {
+	var user *m.User
+
+	posts, err := m.GetPostsFromDB()
+	if err != nil {
+		if err != sql.ErrNoRows {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	} else {
+		user = &m.User{Post: posts}
+	}
+
+	var data *m.UserCheckResponse
+
 	if r.Method == "POST" {
 		switch r.URL.Path {
 		case "/log-in":
@@ -28,9 +39,8 @@ func Index(w http.ResponseWriter, r *http.Request) {
 				http.Error(w, "500", http.StatusInternalServerError)
 				return
 			}
-			data.Available = true
+
 			http.SetCookie(w, cookie)
-			fmt.Println("YO", data.Available)
 			http.Redirect(w, r, "/", http.StatusFound)
 		case "/sign-up":
 			user = getUser(r)
@@ -46,40 +56,50 @@ func Index(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 
-			fmt.Println("Here", data.Available)
 			http.SetCookie(w, cookie)
 			http.Redirect(w, r, "/", http.StatusAccepted)
 		case "/post":
-			file, header, err := r.FormFile("image")
+			fmt.Println("post being created")
+			err := CreatePost(r)
 			if err != nil {
-				http.Error(w, "500", http.StatusInternalServerError)
+				http.Error(w, err.Error(), http.StatusInternalServerError)
 				return
 			}
-			fmt.Println(header)
-			defer file.Close()
-
-			// CreatePost(w, r)
 
 			http.Redirect(w, r, "/", 200)
 		case "/del-cookie":
-			fmt.Println("yo")
 			expiredCookie := http.Cookie{
-				Name: "session",
-				Value: "",
+				Name:    "session",
+				Value:   "",
 				Expires: time.Unix(0, 0),
 			}
 			http.SetCookie(w, &expiredCookie)
 			w.WriteHeader(http.StatusOK)
 		}
 	}
+	_, err = r.Cookie("session")
+	if err != http.ErrNoCookie {
+		user, err = m.GetUserByCookie(r)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		posts, err := m.GetPostsFromDB()
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		user = &m.User{ID: user.ID, Username: user.Username, Post: posts}
+	}
 
 	data = &m.UserCheckResponse{
-		UserInfo: user,
+		UserInfo:  user,
+		Available: true,
 	}
-	if data.UserInfo != nil {
-		data.Available = true
-	}
-	err := Tpl.ExecuteTemplate(w, "home.html", data)
+
+	err = Tpl.ExecuteTemplate(w, "home.html", data)
 	if err != nil {
 		log.Fatal(err)
 	}
