@@ -86,6 +86,7 @@ function SignOut() {
   }).then(response=> {
     if (response.ok) {
       let signIncode = `<a class="sign-in" id="sign-in">Sign In<i class="fa fa-sign-in" id="sign-i"></i></a>`
+      let close = document.getElementById("close")
       document.getElementById("sign-in").innerHTML = signIncode
       accountLink.style.display = 'none'
       createPostButton.style.display = 'none'
