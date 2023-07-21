@@ -30,18 +30,18 @@ func SessionIsActive(sessionId string) (int, bool, error) {
 	return userId, true, nil
 }
 
-func SavePost(title, content string, userId int) int {
+func SavePost(title, content string, userId int) (int, error) {
 	result, err := db.Exec("INSERT INTO posts (title, content, userId) Values (?, ?, ?)", title, content, userId)
 	if err != nil {
 		fmt.Println("Error inserting into posts: ", err)
-		return 0
+		return 0, err
 	}
 	fmt.Println("Successfully inserted into posts!!!!!!!")
 	postId, err := result.LastInsertId()
 	if err != nil {
 		fmt.Println("error with getting postid from lastInserId")
 	}
-	return int(postId)
+	return int(postId), nil
 }
 
 func GetPostsFromDB() ([]Post, error) {

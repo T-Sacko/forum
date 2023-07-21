@@ -60,7 +60,11 @@ func CreatePost(w http.ResponseWriter, r *http.Request) {
 	categories := r.Form["category"]
 	fmt.Println(categories)
 	ids := m.GetCategoriesID(categories)
-	postId := m.SavePost(title, content, userId)
+	postId, err := m.SavePost(title, content, userId)
+	if err!=nil{
+		fmt.Println("couldnt save post", err)
+		return
+	}
 	http.Redirect(w,r,"/",http.StatusFound)
 	m.LinkPostCategories(postId, ids)
 }
