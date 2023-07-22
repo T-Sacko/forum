@@ -1,60 +1,128 @@
 /* ########################################### */
 /*                 Global                      */
 /* ########################################### */
-*{
-    margin: 0;
+* {
+  margin: 0;
 }
 
+
+
+// ------------------------------------------------header
+
+html {
+  height: 100%;
+  width: 100%;
+  font-size: 14px;
+  position: absolute;
+  font-family: monospace;
+  background: linear-gradient(rgb(89, 113, 179), azure);
+  background-repeat: no-repeat;
+  background-color: azure;
+  color: black;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1em;
+  background: inherit;
+  overflow: hidden;
+  background-color: white;
+}
+
+.navbar a {
+  text-align: center;
+  cursor: pointer;
+  padding: 0.3em 0.4em;
+  font-size: 1em;
+  color: white;
+}
+
+.navbar .sign-in:hover {
+  /* margin-left: auto; */
+  text-decoration: underline;
+}
+
+.navbar .brand {
+  font-weight: bolder;
+  font-size: 1.5em;
+  top: 0;
+  left: 0;
+}
+
+.navbar .sign-in {
+  right: 0;
+}
+
+.navbar .account {
+  margin-left: 75%;
+  font-size: larger;
+  display: none;
+}
+
+.navbar .account:hover {
+  background-color: rgb(103, 131, 192);
+  padding: 0.35em;
+}
+
+.sign-in i {
+  font-size: 1.35em;
+}
+
+
+
 /*-------------------------------------------posts*/
-.liked{
+.liked {
   color: blue;
 }
 
-main{
+main {
   word-wrap: break-word;
   width: 570px;
+  max-width: 80%;
   margin: auto;
 }
 
-.post{
-    max-height: 50vh;
-    width: 100%;
-    margin-bottom: 15px;
-    background-color: #9792cc;
-    padding: 6px;
-    border-radius: 4px;
+.post {
+  max-height: 50vh;
+  width: 100%;
+  margin-bottom: 15px;
+  background-color: #9792cc;
+  padding: 6px;
+  border-radius: 4px;
 }
 
-.post span{
-    padding-right: 0.8rem;
+.post span {
+  padding-right: 0.8rem;
 }
 
-.post-user{
+.post-user {
   display: inline;
-  
+
 }
 
 
-.post-title{
+.post-title {
   margin-bottom: 0.4rem;
 }
 
-.post-content{
+.post-content {
   margin-bottom: 0.3rem;
 }
 
 
-.post-categories{
-    
-    width: 50%;
+.post-categories {
+
+  width: 50%;
 }
 
-.post-header{
-   
-   
-    
-    margin-bottom: .3rem;
-    
+.post-header {
+
+
+
+  margin-bottom: .3rem;
+
 }
 
 // .post-header {
@@ -63,106 +131,114 @@ main{
 
 /*--------------------------------------create post modal*/
 #modal-container {
-    display: none;
-    position: fixed;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.6);
-    
-    
-  }
-  
-  
-  #post-form {
-    margin:auto; 
-    position: relative;
-    background-color: rgb(27, 28, 49);
-    width: 450px;
-    min-height: 400px;
-    padding: 0 20px 20px 20px;
-    color: #fff;
-    border-radius: 10px;
-  }
+  display: none;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
 
-  .form-header{
-    height: 60px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-bottom: 2px solid whitesmoke;
 
-  }
-
-  #close-button{
-    position: absolute;
-    right: 0;
-    top: 0;
-    width: 30px;
-    height: 30px;
-    background-color: green;
-    text-align: center;
-    line-height: 30px;
-    cursor: pointer;
-    border-top-right-radius: 10px;
-    border-bottom-left-radius: 10px;
-  }
-
-  .categories{
-    margin-top: 12px;
-    margin-bottom: 12px;
-  }
-
-  .categories-header{
-    display: inline;
-  }
-
-  .category{
-    padding: 10px;
-    display: inline;
-    width: max-content;
-    
-  }
-  .category input,label{
-    cursor: pointer;
-  }
-  
-
-  #title{
-    width: 100%;
-    margin-bottom: 12px;
-    border: none;
-    background-color: #110f24;
-    color: #8982ca;
-    padding: 10px;
-    border-radius: 10px;
-  }
- .form-text{
-    width: 100%;
-    height: 170px;
-    outline: none;
-    border: none;
-    border-radius: 10px;
-    background-color: #110f24;
-    color: #8982ca;
-    padding: 10px;
-    resize: none;
- }
-
- #submit-button{
-    width: 100%;
-    margin-top: 15px;
-    color: white;
-    background-color: green;
-    padding: 10px;
-    outline: none;
-    border:none;
-    border-radius: 10px;
- }
- 
-
-*{
-    box-sizing: border-box;
 }
 
+
+#post-form {
+  margin: auto;
+  position: relative;
+  background-color: rgb(27, 28, 49);
+  width: 450px;
+  min-height: 400px;
+  padding: 0 20px 20px 20px;
+  color: #fff;
+  border-radius: 10px;
+}
+
+.form-header {
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 2px solid whitesmoke;
+
+}
+
+#close-button {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 30px;
+  height: 30px;
+  background-color: green;
+  text-align: center;
+  line-height: 30px;
+  cursor: pointer;
+  border-top-right-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+
+.categories {
+  margin-top: 12px;
+  margin-bottom: 12px;
+}
+
+.categories-header {
+  display: inline;
+}
+
+.category {
+  padding: 10px;
+  display: inline;
+  width: max-content;
+
+}
+
+.category input,
+label {
+  cursor: pointer;
+}
+
+
+#title {
+  width: 100%;
+  margin-bottom: 12px;
+  border: none;
+  background-color: #110f24;
+  color: #8982ca;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.form-text {
+  width: 100%;
+  height: 170px;
+  outline: none;
+  border: none;
+  border-radius: 10px;
+  background-color: #110f24;
+  color: #8982ca;
+  padding: 10px;
+  resize: none;
+}
+
+#submit-button {
+  width: 100%;
+  margin-top: 15px;
+  color: white;
+  background-color: green;
+  padding: 10px;
+  outline: none;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+#error-message {
+  text-align: center;
+  padding: 10px;
+}
+
+
+* {
+  box-sizing: border-box;
+}
