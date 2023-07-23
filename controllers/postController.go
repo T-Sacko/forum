@@ -34,6 +34,7 @@ func CheckSession(w http.ResponseWriter, r *http.Request) {
 	response := SessionStatusResponse{
 		LoggedIn: loggedIn,
 	}
+	fmt.Println(response, "this is the response u nkeoeoffffffffffffffffffffffeoeo")
 
 	w.Header().Set("content-type", "application/json")
 

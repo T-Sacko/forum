@@ -234,12 +234,19 @@ const signInModal = document.getElementById('signInModal')
 
 const overlay = document.getElementById('overlay')
 
+const signInCloseButton = document.getElementById('signInCloseButton')
+
 signIn.addEventListener('click', () => {
   signInModal.style.display = 'block'
   overlay.style.display = 'block'
 })
 
 overlay.addEventListener('click', () => {
+  signInModal.style.display = 'none';
+  overlay.style.display = 'none';
+});
+
+signInCloseButton.addEventListener('click', () => {
   signInModal.style.display = 'none';
   overlay.style.display = 'none';
 });

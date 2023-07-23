@@ -13,71 +13,100 @@
 </head>
 
 <body>
+    <div class="hidden" id="overlay"></div>
     <header>
         <nav class="navbar">
             <a href="/" class="brand">Forum</a>
-
+            <div class="filter">home<i>&blacktriangledown;</i></div>
             <a class="account" id="account-link"> <i class="fa fa-user-circle"></i></a>
-            <a class="sign-in" id="sign-in">Sign In <i class="fa fa-sign-in" ></i></a>
+            <a class="sign-in" id="sign-in">Sign In <i class="fa fa-sign-in"></i></a>
             <div id="signInModal" class="hidden">
+                <form method="POST" action="/sign-up">
+                    <div class="signInHeader">
+                        <h3 class="title"> Login to Forum</h3>
+                        <span id="signInCloseButton" class="closeButton">&times</span>
+                    </div>
+                    <!--  ////-->
+                    <div class="input-box">
+                        <input type="text" name="username" onblur="checkUsername(this.value)" placeholder="Username"
+                            required>
+                        <i class="fa fa-user-circle" aria-hidden="true"></i>
 
+                    </div>
+                    <!-- //// -->
+                    <div class="input-box">
+                        <input type="email" name="email" onblur="checkEmail(this.value)" placeholder="Email" required>
+                        <i class="fa fa-envelope" aria-hidden="true"></i>
+                    </div>
+
+                    <div class="input-box">
+                        <input type="password" name="password" placeholder="Password" required>
+                        <i class="fa fa-lock" aria-hidden="true"></i>
+                    </div>
+                    <span class="error-message" id="username-error"></span>
+                    <button class="sign-in button" type="submit">Sign up</button>
+                </form>
             </div>
         </nav>
     </header>
-    <button id="create-post-button">Create Post</button>
-    <div class="hidden" id="overlay"></div>
+    <div class="seperate">
+        <button id="create-post-button">Create Post</button>
 
-    <!-- Hidden until create post button is clicked -->
-    <div id="modal-container">
-        <div id="post-form">
-            <div class="form-header">
-                <span id="close-button">&times;</span>
-                <h2 style="color: #b3b9ff ;">Create post</h2>
-            </div>
-
-            <form action="/create-post" id="create-post-form" method="post">
-                <div class="categories">
-                    <h3 class="categories-header">Categories:</h3>
-                    <div class="category">
-                        <label for="etymology">etymology</label>
-                        <input type="checkbox" id="etymology" name="category" value="etymology">
-                    </div>
-                    <div class="category">
-                        <label for="biology">biology</label>
-                        <input type="checkbox" id="biology" name="category" value="biology">
-                    </div>
+        <!-- Hidden until create post button is clicked -->
+        <div id="modal-container">
+            <div id="post-form">
+                <div class="form-header">
+                    <span id="close-button">&times;</span>
+                    <h2 style="color: #b3b9ff ;">Create post</h2>
                 </div>
 
-                <input id="title" type="text" name="title" placeholder="Title" required>
+                <form action="/create-post" id="create-post-form" method="post">
+                    <div class="categories">
+                        <h3 class="categories-header">Categories:</h3>
+                        <div class="category">
+                            <label for="etymology">etymology</label>
+                            <input type="checkbox" id="etymology" name="category" value="etymology">
+                        </div>
+                        <div class="category">
+                            <label for="biology">biology</label>
+                            <input type="checkbox" id="biology" name="category" value="biology">
+                        </div>
+                    </div>
+
+                    <input id="title" type="text" name="title" placeholder="Title" required>
 
 
-                <textarea class="form-text" name="content" placeholder="Content" required></textarea>
+                    <textarea class="form-text" name="content" placeholder="Content" required></textarea>
 
-                <button id="submit-button" type="submit">Submit</button>
-            </form>
+                    <button id="submit-button" type="submit">Submit</button>
+                </form>
 
 
-            <div id="error-message" style="display: none;"></div>
-        </div>
-    </div>
-    <main>
-        {{ range .Posts}}
-        <div class="post">
-            <div class="post-header">
-                <span class="post-user">posted by {{ .Username }}</span>
-                <span class="post-categories">Categories: {{ range .Categories }}{{ . }} {{ end }}</span>
+                <div id="error-message" style="display: none;"></div>
             </div>
-            <h3 class="post-title">{{.Title}}</h3>
-            <p class="post-content" style="font-weight:100; ">{{ .Content }}</p>
-            <span><i class="fa fa-thumbs-o-up likes" id="{{.ID}}-like" style="cursor: pointer;"></i><span
-                    id="{{.ID}}-1">{{.Likes }}</span></span>
-            <span><i class="fa fa-thumbs-o-down dislikes" id="{{.ID}}-dislike" style="cursor: pointer;"></i> <span
-                    id="{{.ID}}-2">{{ .Dislikes }}</span></span>
-
-            <span><i class="fa fa-comment"></i> comment</span>
         </div>
-        {{end}}
-    </main>
+        <main>
+            {{ range .Posts}}
+            <div class="post">
+                <div class="post-header">
+                    <span class="post-user"><i class="fa fa-user-circle" aria-hidden="true"></i>
+                        {{ .Username }}</span>
+                    <span class="post-categories">Categories: {{ range .Categories }}{{ . }} {{ end }}</span>
+                </div>
+                <h3 class="post-title">{{.Title}}</h3>
+                <p class="post-content" style="font-weight:100; ">{{ .Content }}</p>
+                <div class="footer">
+                    <span><i class="fa fa-thumbs-o-up likes" id="{{.ID}}-like" style="cursor: pointer;"></i><span
+                            id="{{.ID}}-1">{{.Likes }}</span></span>
+                    <span><i class="fa fa-thumbs-o-down dislikes" id="{{.ID}}-dislike" style="cursor: pointer;"></i>
+                        <span id="{{.ID}}-2">{{ .Dislikes }}</span></span>
+
+                    <span><i class="fa fa-comment"></i> comment</span>
+                </div>
+            </div>
+            {{end}}
+        </main>
+    </div>
 
 
     <script src="../static/js/post.js"></script>

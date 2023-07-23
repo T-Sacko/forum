@@ -30,8 +30,7 @@ function checkSession() {
   console.log("OPened", xhr.status)
 
   xhr.onreadystatechange = function () {
-    console.log("ready state is: ", xhr.readyState)
-    if (xhr.readyState == 4 ) {
+    if (xhr.readyState == 4) {
       console.log("response received")
       var response = JSON.parse(xhr.responseText);
       if (response.loggedIn) {
@@ -39,29 +38,29 @@ function checkSession() {
         console.log("User is authorized to post");
         // Continue with posting the form data or other actions
         document.getElementById("create-post-form").submit();
-      } 
-    } else {
-      console.log("User is not authorized to post");
-      var errorMessage = document.getElementById("error-message");
-      errorMessage.style.color = "red"
-      errorMessage.textContent = "You are not logged in";
-      errorMessage.style.display = "block";
-      // Handle the request error
-      console.log("Request failed with status: " + xhr.status);
-    }
+      } else {
+        console.log("User is not authorized to post");
+        var errorMessage = document.getElementById("error-message");
+        errorMessage.style.color = "red"
+        errorMessage.textContent = "You are not logged in";
+        errorMessage.style.display = "block";
+        // Handle the request error
+        console.log("Request failed with status: " + xhr.status);
 
-  };
+      }
+
+    };
+  }
   xhr.send();
 }
-
-// Add event listener to the submit button
-var submitButton = document.getElementById("submit-button");
-submitButton.addEventListener("click", function (event) {
-  event.preventDefault(); // Prevent the form from submitting
-  console.log("Cliked submit button")
-  // Check if the user is logged in
-  checkSession();
-});
+  // Add event listener to the submit button
+  var submitButton = document.getElementById("submit-button");
+  submitButton.addEventListener("click", function (event) {
+    event.preventDefault(); // Prevent the form from submitting
+    console.log("Cliked submit button")
+    // Check if the user is logged in
+    checkSession();
+  });
 
 // const likes = document.querySelectorAll('.likes')
 
