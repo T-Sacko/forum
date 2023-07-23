@@ -14,34 +14,16 @@
 
 <body>
     <header>
-        <!--NavBar Section-->
-        <div class="navbar">
-            <h1 class="brand">Forum</h1>
-            <ul class="nav-list">
-                <li class="nav-item"><a href="/">Posts<i class="fa fa-home"></i></a></li>
-                <li class="nav-item"><a href="/posts">Users</a></li>
-                <li class="nav-item user"><a href="/sign-in">Sign In</i><i class="fa fa-sign-in"></i></a></li>
-            </ul>
-        </div>
-        <!--SearchBox Section-->
-        <div class="search-box">
-            <div>
-                <select name="categories" id="categories">
-                    <option value="Everything">Everything</option>
-                    <option value="Titles">Titles</option>
-                    <option value="Descriptions">Descriptions</option>
-                </select>
-                <input type="text" name="q" placeholder="search ...">
-                <button>Search <i class="fa fa-search"></i></button>
-            </div>
-        </div>
+        <nav class="navbar">
+            <a href="/" class="brand">Forum</a>
 
-        <h4>
-            <p>Welcome to Forum <u></u>!</p>
-        </h4>
+            <a class="account" id="account-link"> <i class="fa fa-user-circle"></i></a>
 
+            <a class="sign-in" id="sign-in">Sign In <i class="fa fa-sign-in" id="sign-in"></i></a>
+        </nav>
     </header>
     <button id="create-post-button">Create Post</button>
+    <!-- <div class="overlay"></div> -->
 
     <!-- Hidden until create post button is clicked -->
     <div id="modal-container">
@@ -85,8 +67,10 @@
             </div>
             <h3 class="post-title">{{.Title}}</h3>
             <p class="post-content" style="font-weight:100; ">{{ .Content }}</p>
-            <span><i class="fa fa-thumbs-o-up likes" id="{{.ID}}-like" style="cursor: pointer;"></i><span id="{{.ID}}-1">{{.Likes }}</span></span>
-            <span><i class="fa fa-thumbs-o-down dislikes" id="{{.ID}}-dislike" style="cursor: pointer;"></i> <span id="{{.ID}}-2">{{ .Dislikes }}</span></span>
+            <span><i class="fa fa-thumbs-o-up likes" id="{{.ID}}-like" style="cursor: pointer;"></i><span
+                    id="{{.ID}}-1">{{.Likes }}</span></span>
+            <span><i class="fa fa-thumbs-o-down dislikes" id="{{.ID}}-dislike" style="cursor: pointer;"></i> <span
+                    id="{{.ID}}-2">{{ .Dislikes }}</span></span>
 
             <span><i class="fa fa-comment"></i> comment</span>
         </div>

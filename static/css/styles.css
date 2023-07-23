@@ -9,66 +9,8 @@
 
 // ------------------------------------------------header
 
-html {
-  height: 100%;
-  width: 100%;
-  font-size: 14px;
-  position: absolute;
-  font-family: monospace;
-  background: linear-gradient(rgb(89, 113, 179), azure);
-  background-repeat: no-repeat;
-  background-color: azure;
-  color: black;
-}
 
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1em;
-  background: inherit;
-  overflow: hidden;
-  background-color: white;
-}
 
-.navbar a {
-  text-align: center;
-  cursor: pointer;
-  padding: 0.3em 0.4em;
-  font-size: 1em;
-  color: white;
-}
-
-.navbar .sign-in:hover {
-  /* margin-left: auto; */
-  text-decoration: underline;
-}
-
-.navbar .brand {
-  font-weight: bolder;
-  font-size: 1.5em;
-  top: 0;
-  left: 0;
-}
-
-.navbar .sign-in {
-  right: 0;
-}
-
-.navbar .account {
-  margin-left: 75%;
-  font-size: larger;
-  display: none;
-}
-
-.navbar .account:hover {
-  background-color: rgb(103, 131, 192);
-  padding: 0.35em;
-}
-
-.sign-in i {
-  font-size: 1.35em;
-}
 
 
 
@@ -241,4 +183,63 @@ label {
 
 * {
   box-sizing: border-box;
+}
+
+html {
+  height: 100%;
+  width: 100%;
+  font-size: 14px;
+  position: absolute;
+  font-family: monospace;
+  background: linear-gradient(rgb(89, 113, 179), azure);
+  background-repeat: no-repeat;
+  background-color: azure;
+  color: black;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1em;
+  background: inherit;
+  overflow: hidden;
+}
+
+.navbar a {
+  text-align: center;
+  cursor: pointer;
+  padding: 0.3em 0.4em;
+  font-size: 1em;
+  color: white;
+}
+
+.navbar .sign-in:hover {
+  /* margin-left: auto; */
+  text-decoration: underline;
+}
+
+.navbar .brand {
+  font-weight: bolder;
+  font-size: 1.5em;
+ 
+}
+
+.navbar .sign-in {
+  right: 0;
+}
+
+.navbar .account {
+  margin-left: 75%;
+  font-size: larger;
+  display: none;
+}
+
+.navbar .account:hover {
+  background-color: rgb(103, 131, 192);
+  padding: 0.35em;
+}
+
+.sign-in i {
+  font-size: 1.35em;
 }

@@ -73,12 +73,12 @@ type LikeReq struct {
 	PostId string `json:"postId"`
 }
 
-func checkCookie(w http.ResponseWriter, r *http.Request) (string, bool){
+func checkCookie(w http.ResponseWriter, r *http.Request) (string, error){
 	cookie, err := r.Cookie("session")
 	if err != nil {
-		return "", false
+		return "", err
 	}
-	return cookie.Value, true
+	return cookie.Value, nil
 
 }
 

@@ -31,7 +31,7 @@ function checkSession() {
 
   xhr.onreadystatechange = function () {
     console.log("ready state is: ", xhr.readyState)
-    if (xhr.readyState == 4 && xhr.status == 200) {
+    if (xhr.readyState == 4 ) {
       console.log("response received")
       var response = JSON.parse(xhr.responseText);
       if (response.loggedIn) {
@@ -39,18 +39,13 @@ function checkSession() {
         console.log("User is authorized to post");
         // Continue with posting the form data or other actions
         document.getElementById("create-post-form").submit();
-      } else {
-        // User is not logged in
-        console.log("User is not authorized to post");
-        var errorMessage = document.getElementById("error-message");
-        errorMessage.style.color = "red"
-        errorMessage.textContent = "You are not logged in";
-        errorMessage.style.display = "block";
-
-        // Hide the error message after 3 seconds
-
-      }
+      } 
     } else {
+      console.log("User is not authorized to post");
+      var errorMessage = document.getElementById("error-message");
+      errorMessage.style.color = "red"
+      errorMessage.textContent = "You are not logged in";
+      errorMessage.style.display = "block";
       // Handle the request error
       console.log("Request failed with status: " + xhr.status);
     }

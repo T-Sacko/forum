@@ -13,7 +13,7 @@ import (
 )
 
 var err error
-var Tpl = template.Must(template.ParseGlob("templates/*.html"))
+var Tpl = template.Must(template.ParseGlob("/home/titi/forum/templates/*.html"))
 
 
 func Login(w http.ResponseWriter, r *http.Request) {

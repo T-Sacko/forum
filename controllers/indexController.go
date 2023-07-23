@@ -9,6 +9,8 @@ import (
 
 func Index(w http.ResponseWriter, r *http.Request) {
 
+	// var category string
+
 	posts, err := m.GetPostsFromDB()
 	if err != nil {
 		// Handle the error (e.g., show an error page)
@@ -37,8 +39,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetPostLikes(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("a post ting working still")
-	fmt.Println(r.Method, "the ,ethod is <<")
+	
 	userId, err := m.GetUserByCookie(r)
 	if err != nil {
 		fmt.Println("no cookie tring to get user liked posts",err)
