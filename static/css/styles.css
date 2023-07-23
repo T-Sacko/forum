@@ -243,3 +243,31 @@ html {
 .sign-in i {
   font-size: 1.35em;
 }
+
+.hidden{
+  display: none;
+}
+
+
+#overlay {
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right:0;
+  height: 100vh;
+  background-color: rgba(0,0,0,0.5);
+}
+
+#signInModal{
+ left: 50%;
+ top: 50%;
+ transform: translate(-50%,-50%);
+ max-width: 80%;
+ width: 500px;
+ height: 500px;
+ background-color: white;
+ position: fixed;
+ z-index: 12;
+ border-radius: 3%;
+}

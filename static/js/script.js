@@ -228,24 +228,18 @@ function IconBar() {
   }
 }
 
-function incrementLikes() {
-  var likeCountElement = document.getElementById("likeCount");
-  var likeCount = parseInt(likeCountElement.innerHTML);
-  likeCount++;
-  likeCountElement.innerHTML = likeCount;
-}
-function incrementDislikes() {
-  var dislikeCountElement = document.getElementById("dislikeCount");
-  var dislikeCount = parseInt(dislikeCountElement.innerHTML);
-  dislikeCount++;
-  dislikeCountElement.innerHTML = dislikeCount;
-}
-function showComment() {
-  var commentArea = document.getElementById("comment-area");
-  if (commentArea.classList.contains("hide")) {
-    commentArea.classList.remove("hide");
-  } else {
-    commentArea.classList.add("hide");
-  }
+const signIn = document.getElementById('sign-in')
 
-}
+const signInModal = document.getElementById('signInModal')
+
+const overlay = document.getElementById('overlay')
+
+signIn.addEventListener('click', () => {
+  signInModal.style.display = 'block'
+  overlay.style.display = 'block'
+})
+
+overlay.addEventListener('click', () => {
+  signInModal.style.display = 'none';
+  overlay.style.display = 'none';
+});
