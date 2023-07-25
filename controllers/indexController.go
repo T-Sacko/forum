@@ -8,6 +8,11 @@ import (
 )
 
 func Index(w http.ResponseWriter, r *http.Request) {
+		// category := r.URL.Query().Get("category")
+		// switch category{
+		// case "liked-posts":
+		// 	GetPostLike
+		// }
 
 	// var category string
 
@@ -18,19 +23,20 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Failed to retrieve posts", http.StatusInternalServerError)
 		return
 	}
-
+fmt.Println("yhhhhhhhhhhh")
 	for i, j := 0, len(posts)-1; i < j; i, j = i+1, j-1 {
 		posts[i], posts[j] = posts[j], posts[i]
 	}
-
+	categories := []string{"biology","etymology","sociology"}
 	data := struct {
 		Posts []m.Post
+		Categories []string
 	}{
 		Posts: posts,
+		Categories: categories,
 	}
 
 	errs := Tpl.ExecuteTemplate(w, "home.html", data)
-	fmt.Println("no sirr")
 	if errs != nil {
 		fmt.Println("no sir", errs)
 		http.Error(w, "Failed to render template", http.StatusInternalServerError)
@@ -40,17 +46,15 @@ func Index(w http.ResponseWriter, r *http.Request) {
 
 func GetPostLikes(w http.ResponseWriter, r *http.Request) {
 	
-	userId, err := m.GetUserByCookie(r)
+	user, err := m.GetUserByCookie(r)
 	if err != nil {
 		fmt.Println("no cookie tring to get user liked posts",err)
 		return
 	}
-	fmt.Println("getting user post likes for user ", userId, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-	likesData, err := m.GetLikedPosts(userId)
+	likesData, err := m.GetLikedPosts(user.ID)
 	if err!= nil{
 		fmt.Println("error with suttin")
 	}
-	fmt.Println(likesData, "likes data is here u know")
 	err1 := json.NewEncoder(w).Encode(likesData)
 	if err1 != nil {
 		fmt.Println("cant encode suttin")

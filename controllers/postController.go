@@ -13,7 +13,6 @@ type SessionStatusResponse struct {
 }
 
 func CheckSession(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("ajax active session request received")
 	cookie, err := r.Cookie("session")
 	if err != nil {
 		http.Error(w, "unathorized to post", http.StatusUnauthorized)
@@ -49,7 +48,7 @@ func CheckSession(w http.ResponseWriter, r *http.Request) {
 
 func CreatePost(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("making post began")
-	userId, err := m.GetUserByCookie(r)
+	user, err := m.GetUserByCookie(r)
 	if err != nil {
 		http.Error(w, "user has no cookie", http.StatusUnauthorized)
 		fmt.Println(err)
@@ -61,7 +60,7 @@ func CreatePost(w http.ResponseWriter, r *http.Request) {
 	categories := r.Form["category"]
 	fmt.Println(categories)
 	ids := m.GetCategoriesID(categories)
-	postId, err := m.SavePost(title, content, userId)
+	postId, err := m.SavePost(title, content, user.ID)
 	if err!=nil{
 		fmt.Println("couldnt save post", err)
 		return

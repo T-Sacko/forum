@@ -1,7 +1,6 @@
 package models
 
 import (
-	"database/sql"
 	"fmt"
 	"net/http"
 
@@ -15,6 +14,7 @@ type UserCheckResponse struct {
 }
 
 type User struct {
+	Status    bool
 	ID        int    `json:"id"`
 	Email     string `json:"email"`
 	Username  string `json:"username"`
@@ -26,21 +26,21 @@ type User struct {
 	Comments  string
 }
 
-func GetUserByCookie(r *http.Request) (int, error) {
+func GetUserByCookie(r *http.Request) (*User, error) {
 	cookie, errs := r.Cookie("session")
-	if errs!= nil{
-		return 0, errs
+	if errs != nil {
+		return nil, errs
 	}
 	sessionId := cookie.Value
-	var userId int
-	err := db.QueryRow("SELECT id FROM users WHERE sessionId = ?", sessionId).Scan(&userId)
+	var user User
+	err := db.QueryRow("SELECT id, username, email FROM users WHERE sessionId = ?", sessionId).Scan(&user.ID, &user.Username, &user.Email)
 	if err != nil {
 		// Handle the database query error accordingly
 		fmt.Println("user has no sesh id rn")
-		return 0, err
+		return nil, err
 	}
-	fmt.Printf("the user id is: %v\n", userId)
-	return userId, nil
+	user.Status = true
+	return &user, nil
 }
 
 func (newUser User) Register() error {
@@ -142,11 +142,9 @@ func Check4User(email, password string) (bool, error) {
 	var hashedPassword string
 	err := db.QueryRow("SELECT password FROM users WHERE email = ?", email).Scan(&hashedPassword)
 	if err != nil {
-		if err == sql.ErrNoRows {
-			return false, err
-		} else {
-			return false, err
-		}
+
+		return false, err
+
 	}
 	return ComparePasswords(hashedPassword, password), nil
 }

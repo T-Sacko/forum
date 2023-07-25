@@ -13,16 +13,35 @@ import (
 )
 
 var err error
-var Tpl = template.Must(template.ParseGlob("/home/titi/forum/templates/*.html"))
+var Tpl = template.Must(template.ParseGlob("templates/*.html"))
 
+
+type loggedIn struct{
+	LoggedIn bool `json:"loggedIn"`
+}
 
 func Login(w http.ResponseWriter, r *http.Request) {
 
-	user := getUser(r)
+	var user struct {
+		Email    string `json:"email"`
+		Password string `json:"password"`
+	}
+	err := json.NewDecoder(r.Body).Decode(&user)
+	if err != nil {
+		http.Error(w, "Bad request", http.StatusBadRequest)
+		return
+	}
+
+	// user1 := getUser(r)
 	isUser, err := m.Check4User(user.Email, user.Password)
 	fmt.Println(isUser, user.Password)
 	if err != nil {
-		http.Error(w, "Invalid username or password", http.StatusUnauthorized)
+		data := loggedIn{LoggedIn: isUser}
+
+		err := json.NewEncoder(w).Encode(data)
+		if err != nil{
+			fmt.Println("Error, couldn't encode user creds on login: ", err)
+		}
 		return
 	}
 	// Set the session ID and create a cookie
@@ -43,6 +62,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 }
 
 func SignUp(w http.ResponseWriter, r *http.Request) {
+	
 	fmt.Println("signup req received")
 	SessionId, err := uuid.NewV1()
 	if err != nil {
@@ -84,6 +104,7 @@ func UsersHandler(w http.ResponseWriter, r *http.Request) {
 func UsernameCheck(w http.ResponseWriter, r *http.Request) {
 	username := r.URL.Query().Get("username")
 	available, err := m.IsUsernameAvailable(username)
+	fmt.Println("the username", username, "is available", available)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)

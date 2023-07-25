@@ -17,25 +17,38 @@
     <header>
         <nav class="navbar">
             <a href="/" class="brand">Forum</a>
-            <div class="filter">home<i>&blacktriangledown;</i></div>
+            <div class="filter">
+                <button class="filter-button">home<i class="fa fa-caret-down"></i></button>
+                <div class="hidden dropdown-content">
+                    {{if .User.Status}}
+                    <a href="/?category=liked-posts"></a>
+                    {{end}}
+                    {{ range .Categories}}
+                       <a href="/?category={{.}}">{{.}}</a> 
+                    {{end}}
+                </div>
+            </div>
             <a class="account" id="account-link"> <i class="fa fa-user-circle"></i></a>
             <a class="sign-in" id="sign-in">Sign In <i class="fa fa-sign-in"></i></a>
-            <div id="signInModal" class="hidden">
-                <form method="POST" action="/sign-up">
+
+            <!-- SignForm------------------------- -->
+            <div class="signupForm hidden" id="signupForm">
+                <form id="signupForm" method="POST" action="/sign-up">
                     <div class="signInHeader">
-                        <h3 class="title"> Login to Forum</h3>
+                        <h3 class="title"> register to Forum</h3>
                         <span id="signInCloseButton" class="closeButton">&times</span>
                     </div>
                     <!--  ////-->
                     <div class="input-box">
-                        <input type="text" name="username" onblur="checkUsername(this.value)" placeholder="Username"
-                            required>
+                        <input id="signupUsername" type="text" name="username" onblur="checkUsername(this.value)"
+                            placeholder="Username" required>
                         <i class="fa fa-user-circle" aria-hidden="true"></i>
 
                     </div>
                     <!-- //// -->
                     <div class="input-box">
-                        <input type="email" name="email" onblur="checkEmail(this.value)" placeholder="Email" required>
+                        <input id="sign-up-email" type="email" name="email" onblur="checkEmail(this.value)"
+                            placeholder="Email" required>
                         <i class="fa fa-envelope" aria-hidden="true"></i>
                     </div>
 
@@ -43,8 +56,39 @@
                         <input type="password" name="password" placeholder="Password" required>
                         <i class="fa fa-lock" aria-hidden="true"></i>
                     </div>
-                    <span class="error-message" id="username-error"></span>
+                    <div class="error-message username-error" id="username-error"></div>
+                    <div class="error-message email-error" id="email-error"></div>
                     <button class="sign-in button" type="submit">Sign up</button>
+                    <div class="register">
+                        Already have an account? <a id="loginButton">Login</a>
+                    </div>
+                </form>
+            </div>
+
+            <!-- loginForm -->
+
+            <div class="signupForm hidden" id="loginForm">
+                <form id="loginForm" method="POST" action="/login">
+                    <div class="signInHeader">
+                        <h3 class="title"> Login to Forum</h3>
+                        <span id="loginCloseButton" class="closeButton">&times</span>
+                    </div>
+
+
+                    <div class="input-box">
+                        <input type="email" name="email" placeholder="Email" required>
+                        <i class="fa fa-envelope" aria-hidden="true"></i>
+                    </div>
+
+                    <div class="input-box">
+                        <input type="password" name="password" placeholder="Password" required>
+                        <i class="fa fa-lock" aria-hidden="true"></i>
+                    </div>
+                    <div class="error-message login-email-error"></div>
+                    <button class="sign-in button" type="submit">login</button>
+                    <div class="register">
+                        Don't have an account? <a id="signupButton">Register</a>
+                    </div>
                 </form>
             </div>
         </nav>

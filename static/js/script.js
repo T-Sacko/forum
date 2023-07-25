@@ -143,76 +143,146 @@ function handleLikeAction(postId, action) {
 
 
 
+var usernameAvailable = false
+var emailAvailable = false
 //////////////////////////////////////////////////////////////////
 function checkUsername(username) {
-  var xhr = new XMLHttpRequest();
-  xhr.open("GET", "/api/check-username?username=" + encodeURIComponent(username), true);
-  xhr.onreadystatechange = function () {
-    if (xhr.readyState === XMLHttpRequest.DONE) {
-      if (xhr.status === 200) {
-        var response = JSON.parse(xhr.responseText);
-        var errorElement = document.getElementById("username-error");
-        if (response.available) {
-          errorElement.textContent = ""; // Clear any previous error message
+  return new Promise((resolve, reject) => {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "/api/check-username?username=" + encodeURIComponent(username), true);
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === XMLHttpRequest.DONE) {
+        if (xhr.status === 200) {
+          var response = JSON.parse(xhr.responseText);
+          var errorElement = document.querySelector(".username-error");
+          if (response.available) {
+            usernameAvailable = true
+            errorElement.style.display='none'; // Clear any previous error message
+            resolve(true); // Username is available
+          } else {
+            usernameAvailable = false
+            errorElement.setAttribute("style", "display:block;");
+            errorElement.textContent = "Error: Username Already Exists";
+            resolve(false); // Username is not available
+          }
         } else {
-          errorElement.setAttribute("style", "display:block;")
-          errorElement.textContent = "Error:Username Already Exists";
+          console.error("Error:", xhr.status);
+          reject(new Error("An error occurred while checking username availability."));
         }
-      } else {
-        console.error("Error:", xhr.status);
       }
-    }
-  };
-  xhr.send();
+    };
+    xhr.send();
+  });
 }
+
+
 function checkEmail(email) {
-  var xhr = new XMLHttpRequest();
-  xhr.open("GET", "/api/check-email?email=" + encodeURIComponent(email), true);
-  xhr.onreadystatechange = function () {
-    if (xhr.readyState === XMLHttpRequest.DONE) {
-      if (xhr.status === 200) {
-        var response = JSON.parse(xhr.responseText);
-        var errorElement = document.getElementById("username-error");
-        if (response.available) {
-          errorElement.textContent = ""; // Clear any previous error message
+  return new Promise((resolve, reject) => {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "/api/check-email?email=" + encodeURIComponent(email), true);
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === XMLHttpRequest.DONE) {
+        if (xhr.status === 200) {
+          var response = JSON.parse(xhr.responseText);
+          var errorElement = document.querySelector(".email-error");
+          if (response.available) {
+            emailAvailable = true
+            errorElement.style.display='none'; // Clear any previous error message
+            resolve(true); // Email is available
+          } else {
+            emailAvailable = false
+            errorElement.setAttribute("style", "display:block;");
+            errorElement.textContent = "Error: Email Already In Use";
+            resolve(false); // Email is not available
+          }
         } else {
-          errorElement.setAttribute("style", "display:block;")
-          errorElement.textContent = "Error:Email Already In Use";
+          console.error("Error:", xhr.status);
+          reject(new Error("An error occurred while checking email availability."));
         }
-      } else {
-        console.error("Error:", xhr.status);
       }
-    }
-  };
-  xhr.send();
+    };
+    xhr.send();
+  });
 }
 
 
-// document.getElementById('signupForm').addEventListener('submit', function(e) {
-//     /*This function should check with Go as to whether or not the input is valid through the DB Check*/
-//     e.preventDefault(); // Prevent the form from submitting normally
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// ------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// login authentication
 
-//     var userId = 123; // Replace with the actual user ID
+document.getElementById('loginForm').addEventListener('submit', function (event) {
+  event.preventDefault(); // Prevent the form from submitting normally
 
-//     // Build the URL with the user ID and set it as the form's action
-//     this.action = 'https://example.com/user/' + userId;
+  const formData = new FormData(event.target); // Get form data
+  const email = formData.get('email');
+  const password = formData.get('password');
 
-//     // Submit the form
-//     this.submit();
-// });
+  // Create the payload to send in the AJAX request
+  const payload = {
+    email: email,
+    password: password
+  };
 
-// document.getElementById('loginForm').addEventListener('submit', function(e) {
-//     /*This function should check with Go as to whether or not the input is valid through the DB Check*/
-//     e.preventDefault(); // Prevent the form from submitting normally
 
-//     var userId = 123; // The ID will come from the Go backend
 
-//     // Build the URL with the user ID and set it as the form's action
-//     this.action = 'https://example.com/user/' + userId;
+  // Make the AJAX request to the server
+  fetch('/login', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(payload)
+  })
+    .then(response => response.json())
+    .then(data => {
+      // Handle the response from the server
+      if (data.loggedIn) {
+        // If the login is successful, redirect the user to a new page or perform other actions
+        console.log('Login successful!');
+        window.location.href = '/'; // Redirect to the dashboard page after successful login
+      } else {
+        // If the login fails, display an error message
+        console.log('Login failed:', data);
+        const errorElement = document.querySelector('.login-email-error');
+        errorElement.setAttribute('style', 'display:block;');
+        errorElement.textContent = 'Error: Invalid email or password';
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+});
 
-//     // Submit the form
-//     this.submit();
-// });
+// --------------------------------------------------------------------------
+
+//signup authentication
+
+document.getElementById('signupForm').addEventListener('submit', (event) => {
+  event.preventDefault()
+  console.log('trying to signup una',usernameAvailable, 'thats username and this', emailAvailable,' is email')
+ if (usernameAvailable&&emailAvailable){
+  event.target.submit()
+ 
+  }  if (!usernameAvailable){
+  const usernameError = document.getElementById('username-error')
+  usernameError.style.display='block'
+  usernameError.textContent='Username is already taken'
+ } if (!emailAvailable){
+  const emailError = document.getElementById('email-error')
+  emailError.style.display='block'
+  emailError.textContent='Email is already taken'
+ }
+
+  
+
+})
+
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// ------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 
 //NavBar
@@ -230,23 +300,47 @@ function IconBar() {
 
 const signIn = document.getElementById('sign-in')
 
-const signInModal = document.getElementById('signInModal')
+const loginButton = document.getElementById('loginButton')
+
+const signupButton = document.getElementById('signupButton')
+
+const signupForm = document.getElementById('signupForm')
+
+const loginForm = document.getElementById('loginForm')
 
 const overlay = document.getElementById('overlay')
 
-const signInCloseButton = document.getElementById('signInCloseButton')
+const signupCloseButton = document.getElementById('signInCloseButton')
+const loginCloseButton = document.getElementById('loginCloseButton')
 
 signIn.addEventListener('click', () => {
-  signInModal.style.display = 'block'
+  loginForm.style.display = 'block'
   overlay.style.display = 'block'
+  signupForm.style.display = 'none'
 })
 
 overlay.addEventListener('click', () => {
-  signInModal.style.display = 'none';
+  signupForm.style.display = 'none';
+  overlay.style.display = 'none';
+  loginForm.style.display = 'none'
+});
+
+signupCloseButton.addEventListener('click', () => {
+  signupForm.style.display = 'none';
   overlay.style.display = 'none';
 });
 
-signInCloseButton.addEventListener('click', () => {
-  signInModal.style.display = 'none';
+loginCloseButton.addEventListener('click', () => {
+  loginForm.style.display = 'none';
   overlay.style.display = 'none';
 });
+
+loginButton.addEventListener('click', () => {
+  signupForm.style.display = 'none'
+  loginForm.style.display = 'block'
+})
+
+signupButton.addEventListener('click', () => {
+  signupForm.style.display = 'block'
+  loginForm.style.display = 'none'
+})
