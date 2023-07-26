@@ -30,6 +30,10 @@ func LinkPostCategories(postId int, categoryIds []int){
 	}
 }
 
+func FilterByCategory(category string){
+	db.Query("")
+}
+
 
 // func SaveCategory(category string) {
 // 	//db.Exec("SELECT FROM CATEGOR")

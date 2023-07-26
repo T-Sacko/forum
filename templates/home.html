@@ -21,7 +21,7 @@
                 <button class="filter-button">home<i class="fa fa-caret-down"></i></button>
                 <div class="hidden dropdown-content">
                     {{if .User.Status}}
-                    <a href="/?category=liked-posts"></a>
+                    <a href="/?category=liked-posts">Liked Posts <i class="fa fa-heart"></i></a>
                     {{end}}
                     {{ range .Categories}}
                        <a href="/?category={{.}}">{{.}}</a> 

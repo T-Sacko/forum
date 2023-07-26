@@ -28,7 +28,7 @@ func main() {
 	mux := http.NewServeMux()
 	r.SetUpRoutes(mux)
 	posts, _ := models.GetPostsFromDB()
-	fmt.Println(posts[0])
+	fmt.Println(posts)
 
 	// openBrowser("http://0.0.0.0:8888")
 	fmt.Println("Serving on Port ->:8888")
