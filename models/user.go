@@ -29,6 +29,7 @@ type User struct {
 func GetUserByCookie(r *http.Request) (*User, error) {
 	cookie, errs := r.Cookie("session")
 	if errs != nil {
+		fmt.Println("idk man")
 		return nil, errs
 	}
 	sessionId := cookie.Value

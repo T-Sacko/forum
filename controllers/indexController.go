@@ -25,13 +25,13 @@ func Index(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	} else if category != "" {
-		// posts, err = m.FilterByCategory(category)
-		// if err != nil {
-		// 	// Handle the error (e.g., show an error page)
-		// 	fmt.Println("error with getposts")
-		// 	http.Error(w, "Failed to retrieve posts", http.StatusInternalServerError)
-		// 	return
-		// }
+		posts, err = m.FilterByCategory(category)
+		if err != nil {
+			// Handle the error (e.g., show an error page)
+			fmt.Println("error with getposts")
+			http.Error(w, "Failed to retrieve posts", http.StatusInternalServerError)
+			return
+		}
 	} else {
 
 		posts, err = m.GetPostsFromDB()
@@ -69,7 +69,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetPostLikes(w http.ResponseWriter, r *http.Request) {
-
+	
 	user, err := m.GetUserByCookie(r)
 	if err != nil {
 		fmt.Println("no cookie tring to get user liked posts", err)
