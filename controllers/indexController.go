@@ -45,9 +45,9 @@ func Index(w http.ResponseWriter, r *http.Request) {
 
 	// var category string
 
-	for i, j := 0, len(posts)-1; i < j; i, j = i+1, j-1 {
-		posts[i], posts[j] = posts[j], posts[i]
-	}
+	// for i, j := 0, len(posts)-1; i < j; i, j = i+1, j-1 {
+	// 	posts[i], posts[j] = posts[j], posts[i]
+	// }
 	categories := []string{"biology", "etymology", "sociology"}
 	data := struct {
 		Posts      []m.Post

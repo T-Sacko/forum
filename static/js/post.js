@@ -27,32 +27,36 @@ window.onclick = function (event) {
 function checkSession() {
   var xhr = new XMLHttpRequest();
   xhr.open("GET", "/api/create-post");
-  console.log("OPened", xhr.status)
 
   xhr.onreadystatechange = function () {
-    if (xhr.readyState == 4) {
-      console.log("response received")
-      var response = JSON.parse(xhr.responseText);
-      if (response.loggedIn) {
-        // User is logged in
-        console.log("User is authorized to post");
-        // Continue with posting the form data or other actions
-        document.getElementById("create-post-form").submit();
-      } else {
-        console.log("User is not authorized to post");
-        var errorMessage = document.getElementById("error-message");
-        errorMessage.style.color = "red"
-        errorMessage.textContent = "You are not logged in";
-        errorMessage.style.display = "block";
-        // Handle the request error
-        console.log("Request failed with status: " + xhr.status);
-
+    if (xhr.readyState == 4 && xhr.status == 200) {
+      console.log("response received");
+      try {
+        var response = JSON.parse(xhr.responseText);
+        if (response.loggedIn) {
+          // User is logged in
+          console.log("User is authorized to post");
+          // Continue with posting the form data or other actions
+          document.getElementById("create-post-form").submit();
+        } else {
+          // User is not logged in
+          console.log("User is not authorized to post");
+          var errorMessage = document.getElementById("error-message");
+          errorMessage.style.color = "red";
+          errorMessage.textContent = "You are not logged in";
+          errorMessage.style.display = "block";
+        }
+      } catch (e) {
+        console.error("Parsing error: ", e);
       }
-
-    };
-  }
+    } else if (xhr.readyState == 4) {
+      // Handle the request error
+      console.log("Request failed with status: " + xhr.status);
+    }
+  };
   xhr.send();
 }
+
   // Add event listener to the submit button
   var submitButton = document.getElementById("submit-button");
   submitButton.addEventListener("click", function (event) {

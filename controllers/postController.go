@@ -15,8 +15,15 @@ type SessionStatusResponse struct {
 func CheckSession(w http.ResponseWriter, r *http.Request) {
 	cookie, err := r.Cookie("session")
 	if err != nil {
-		http.Error(w, "unathorized to post", http.StatusUnauthorized)
-		fmt.Println("There is no cookie")
+		response := SessionStatusResponse{
+			LoggedIn: false,
+		}
+		err = json.NewEncoder(w).Encode(response)
+		if err != nil {
+			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+			fmt.Println("cant marshal the response into json")
+
+		}
 		return
 	}
 
@@ -61,11 +68,11 @@ func CreatePost(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(categories)
 	ids := m.GetCategoriesID(categories)
 	postId, err := m.SavePost(title, content, user.ID)
-	if err!=nil{
+	if err != nil {
 		fmt.Println("couldnt save post", err)
 		return
 	}
-	http.Redirect(w,r,"/",http.StatusFound)
+	http.Redirect(w, r, "/", http.StatusFound)
 	m.LinkPostCategories(postId, ids)
 }
 
@@ -73,7 +80,7 @@ type LikeReq struct {
 	PostId string `json:"postId"`
 }
 
-func checkCookie(w http.ResponseWriter, r *http.Request) (string, error){
+func checkCookie(w http.ResponseWriter, r *http.Request) (string, error) {
 	cookie, err := r.Cookie("session")
 	if err != nil {
 		return "", err
@@ -94,10 +101,10 @@ func LikePost(w http.ResponseWriter, r *http.Request) {
 	if session {
 		LikeReqData := new(LikeReq)
 		json.NewDecoder(r.Body).Decode(&LikeReqData)
-		postIdStr:= LikeReqData.PostId
-		fmt.Println("Liked post id is: ",postIdStr)
+		postIdStr := LikeReqData.PostId
+		fmt.Println("Liked post id is: ", postIdStr)
 		postId, _ := strconv.Atoi(postIdStr)
-		
+
 		m.SaveLike(postId, userId)
 
 	}

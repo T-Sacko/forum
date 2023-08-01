@@ -24,7 +24,9 @@ func InitDB() {
 			email TEXT UNIQUE,
 			username TEXT UNIQUE,
 			password TEXT,
-			sessionId TEXT UNIQUE
+			sessionId TEXT UNIQUE,
+			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+			updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 		);
 
 		CREATE TABLE IF NOT EXISTS categories (

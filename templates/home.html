@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital@1&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/static/css/styles.css">
+    <link rel="stylesheet" href="../static/css/styles.css">
 
 </head>
 
@@ -19,7 +19,7 @@
             <a href="/" class="brand">Forum</a>
             <div class="filter">
                 <button class="filter-button">home<i class="fa fa-caret-down"></i></button>
-                <div class="hidden dropdown-content">
+                <div class="dropdown-content">
                     {{if .User.Status}}
                     <a href="/?category=liked-posts">Liked Posts <i class="fa fa-heart"></i></a>
                     {{end}}
@@ -29,7 +29,11 @@
                 </div>
             </div>
             <a class="account" id="account-link"> <i class="fa fa-user-circle"></i></a>
+            {{if not .User.Status}}
             <a class="sign-in" id="sign-in">Sign In <i class="fa fa-sign-in"></i></a>
+            {{else}}
+            <a class="sign-in" id="sign-in">Sign Out <i class="fa fa-sign-out"></i></a>
+            {{end}}
 
             <!-- SignForm------------------------- -->
             <div class="signupForm hidden" id="signupForm">

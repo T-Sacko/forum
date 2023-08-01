@@ -61,8 +61,7 @@
 
 
 .filter-button{
-  width: 100%;
-  height: 100%;
+  
   background: none;
   border: none;
   text-align: left;
@@ -71,6 +70,8 @@
   padding: 0.6rem;
   font-size: 1.1rem;
   font-weight: 300;
+  width: 100%;
+  height: 100%;
 }
 
 .dropdown-content a {
@@ -83,6 +84,7 @@
 
 .dropdown-content a:hover {
   background-color: rgb(138, 162, 230);
+  
 }
 *{
   font-family: monospace;
@@ -95,7 +97,7 @@
   margin-left: 2rem;
   cursor: pointer;
   color: white;
-  font-size: 1.2rem;
+  font-size: 1.rem;
   position: relative;
   border-radius: 4px;
   
@@ -107,21 +109,34 @@
   border-width: 2px;
 }
 
-.filter:hover .dropdown-content{
-  display: block;
+.filter > .filter-button:focus + .dropdown-content{
+  opacity: 1;
   border-right:2px solid #384e8e;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.filter:hover .filter i{
+  rotate: 180 deg;
 }
 
 .filter .dropdown-content{
   position: absolute;
-  background: rgb(27, 28, 49);
-  width: 100%;
+  background: rgb(31, 35, 109);
   z-index: 16;
-  top: 100%;
+  opacity: 0;
+  pointer-events: none;
   max-height: 480px;
+  min-width: 100%;
   overflow-y: scroll;
   overflow-x: hidden;
-  
+  border: 2px solid black;
+  border-radius: 2px;
+  top: calc(100% + .5rem);
+  transform: translateY(-10px);
+  transition: transform 150ms ease-in-out, opacity 150ms ease-in-out;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .1);
+
   
 }
 
