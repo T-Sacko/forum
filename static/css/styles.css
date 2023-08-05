@@ -13,7 +13,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 1em;
-  background: rgb(46, 64, 114);
+  background: rgb(31, 35, 109);
   position: fixed;
   top: 0;
   width: 100%;
@@ -332,9 +332,9 @@ html {
   width: 100%;
   font-size: 14px;
   font-family: monospace;
-  background: linear-gradient(rgb(89, 113, 179), azure);
+  /* background: linear-gradient(rgb(89, 113, 179), azure); */
   background-repeat: no-repeat;
-  background-color: azure;
+  background-color: rgb(20, 21, 21);
   color: black;
 }
 
