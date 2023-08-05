@@ -57,8 +57,8 @@ func InitDB() {
 		CREATE TABLE IF NOT EXISTS comments (
 			id INTEGER PRIMARY KEY,
 			content TEXT,
-			postId INTEGER,
-			userId INTEGER,
+			post_id INTEGER,
+			user_id INTEGER,
 			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 			updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 			FOREIGN KEY(postId) REFERENCES posts(id),

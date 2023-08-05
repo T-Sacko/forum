@@ -27,7 +27,14 @@
 
 
 
-
+ <!-- {{range .comments}}
+                <div class="comment" style="background-color: rgb(133, 129, 129); margin-top: 15px; display:none ;">
+                    <span><i class="fa fa-user-circle" aria-hidden="true"></i> {{.Username}}</span>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae dolorum eum saepe perferendis eligendi voluptas nesciunt quod perspiciatis tempora provident, labore debitis, consequatur, similique nemo praesentium ratione. Voluptas, expedita nesciunt!
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatem earum voluptate cumque blanditiis totam nostrum esse minima laborum magnam, laudantium suscipit vitae cum ab doloribus quo harum! Cupiditate, rem voluptates.
+                    
+                </div>
+                {{end}} -->
 
 
         fetch("/get-post-likes", {

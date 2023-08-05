@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"strings"
+	"time"
 )
 
 type Post struct {
@@ -14,6 +15,9 @@ type Post struct {
 	Categories []string
 	Likes      int
 	Dislikes   int
+	Comments   []Comment
+	CreatedAt  time.Time
+	UpdatedAt  time.Time
 }
 
 func SessionIsActive(sessionId string) (int, bool, error) {
@@ -203,3 +207,57 @@ func FilterByLiked(userID int) ([]Post, error) {
 
 	return posts, nil
 }
+
+func FilterByUserPosts(userID int) ([]Post, error) {
+	query := `
+		SELECT posts.id, posts.title, posts.content, users.username,
+			GROUP_CONCAT(DISTINCT categories.name) AS categoryNames,
+			COALESCE(SUM(CASE WHEN likes.value = 1 THEN 1 ELSE 0 END), 0) AS likes,
+			COALESCE(SUM(CASE WHEN likes.value = -1 THEN 1 ELSE 0 END), 0) AS dislikes
+		FROM posts
+		INNER JOIN users ON posts.userId = users.id
+		INNER JOIN post_categories ON posts.id = post_categories.post_id
+		INNER JOIN categories ON post_categories.category_id = categories.id
+		LEFT JOIN likes ON likes.postId = posts.id
+		WHERE users.id = ?
+		GROUP BY posts.id
+		ORDER BY posts.id DESC
+	`
+
+	rows, err := db.Query(query, userID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var posts []Post
+	for rows.Next() {
+		var postID int
+		var title, content, username, categoryNames string
+		var likes, dislikes int
+		err := rows.Scan(&postID, &title, &content, &username, &categoryNames, &likes, &dislikes)
+		if err != nil {
+			return nil, err
+		}
+
+		categories := strings.Split(categoryNames, ",")
+		post := Post{
+			ID:         postID,
+			Title:      title,
+			Content:    content,
+			Username:   username,
+			Categories: categories,
+			Likes:      likes,
+			Dislikes:   dislikes,
+		}
+
+		posts = append(posts, post)
+	}
+
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return posts, nil
+}
+

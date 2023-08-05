@@ -18,16 +18,20 @@
         <nav class="navbar">
             <a href="/" class="brand">Forum</a>
             <div class="filter">
-                <button class="filter-button">home<i class="fa fa-caret-down"></i></button>
+                <button class="filter-button">{{.Filter}}<i class="fa fa-caret-down arrow"></i></button>
                 <div class="dropdown-content">
+                    {{if .User.Status}}
+                    <a href="/?category=my-posts">my Posts <i class="fa fa-user"></i></a>
+                    {{end}}
                     {{if .User.Status}}
                     <a href="/?category=liked-posts">Liked Posts <i class="fa fa-heart"></i></a>
                     {{end}}
                     {{ range .Categories}}
-                       <a href="/?category={{.}}">{{.}}</a> 
+                    <a href="/?category={{.}}">{{.}}</a>
                     {{end}}
                 </div>
             </div>
+
             <a class="account" id="account-link"> <i class="fa fa-user-circle"></i></a>
             {{if not .User.Status}}
             <a class="sign-in" id="sign-in">Sign In <i class="fa fa-sign-in"></i></a>
@@ -98,8 +102,9 @@
         </nav>
     </header>
     <div class="seperate">
+        {{if .User.Status}}
         <button id="create-post-button">Create Post</button>
-
+        {{end}}
         <!-- Hidden until create post button is clicked -->
         <div id="modal-container">
             <div id="post-form">
@@ -135,7 +140,7 @@
         </div>
         <main>
             {{ range .Posts}}
-            <div class="post">
+            <div class="post post{{.ID}}">
                 <div class="post-header">
                     <span class="post-user"><i class="fa fa-user-circle" aria-hidden="true"></i>
                         {{ .Username }}</span>
@@ -143,14 +148,24 @@
                 </div>
                 <h3 class="post-title">{{.Title}}</h3>
                 <p class="post-content" style="font-weight:100; ">{{ .Content }}</p>
-                <div class="footer">
-                    <span><i class="fa fa-thumbs-o-up likes" id="{{.ID}}-like" style="cursor: pointer;"></i><span
-                            id="{{.ID}}-1">{{.Likes }}</span></span>
-                    <span><i class="fa fa-thumbs-o-down dislikes" id="{{.ID}}-dislike" style="cursor: pointer;"></i>
+                <div class="post-footer">
+                    <span><i class="fa fa-thumbs-o-up {{if $.User.Status}}likes{{end}}" id="{{.ID}}-like"
+                            style="cursor: pointer;"></i><span id="{{.ID}}-1">{{.Likes }}</span></span>
+                    <span><i class="fa fa-thumbs-o-down {{if $.User.Status}}dislikes{{end}}" id="{{.ID}}-dislike"
+                            style="cursor: pointer;"></i>
                         <span id="{{.ID}}-2">{{ .Dislikes }}</span></span>
 
-                    <span><i class="fa fa-comment"></i> comment</span>
+                    <span class="comments" id="comment{{.ID}}"><i class="fa fa-comment"></i> comment</span>
                 </div>
+                <div class="comments">
+                    {{range .Comments}}
+                    <div class="comment">
+                        {{.content}}
+                    </div>
+                    {{end}}
+                </div>
+
+
             </div>
             {{end}}
         </main>

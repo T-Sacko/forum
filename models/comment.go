@@ -1,34 +1,22 @@
 package models
 
-// import "time"
+import "time"
 
-// func getComments(ID int) (string, error) {
-// 	stmt, err := db.Prepare("SELECT content FROM comments WHERE id = ?")
-// 	if err != nil {
-// 		return "", err
-// 	}
-// 	defer stmt.Close()
-
-// 	var comments string
-// 	// Assuming "idValue" is the ID of the comment you want to retrieve
-// 	err = stmt.QueryRow(ID).Scan(&comments)
-// 	if err != nil {
-// 		return "", err
-// 	}
-// 	return comments, nil
-// }
-
-// type Comment struct {
-//     ID          int       `json:"id"`
-//     Content     string    `json:"content"`
-//     PostID      int       `json:"post_id"`
-//     UserID      int       `json:"user_id"`
-//     CreatedAt   time.Time `json:"created_at"`
-//     UpdatedAt   time.Time `json:"updated_at"`
-// }
+type Comment struct {
+	ID        int       `json:"id"`
+	Content   string    `json:"content"`
+	PostID    int       `json:"post_id"`
+	UserID    int       `json:"user_id"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
+	Likes      int		`json:"likes"`
+	Dislikes   int		`json:"dislikes"`
+}
 
 // func (c *Comment) Save() error {
-//     // save the comment to the database
+//	query := `insert into comments (content, post_id, user_id, created_at, updated_at) VALUES (?,?,?,?,?)`
+//   _, err :=  db.exec(query, c.content, c.post_id, user_id, created_at, updated_at)
+//   return err
 // }
 
 // func GetCommentByID(id int) (*Comment, error) {

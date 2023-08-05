@@ -70,7 +70,9 @@
   font-size: 1.1rem;
   font-weight: 300;
   width: 17rem;
-  height: 100%;
+  border-radius: 4px;
+  
+  border: 1px solid rgb(89, 113, 179);
 }
 
 .filter {
@@ -78,14 +80,12 @@
   
   margin-right: auto;
   margin-left: 2rem;
-  cursor: pointer;
   color: white;
   font-size: 1.rem;
   position: relative;
-  border-radius: 4px;
   
-  border: 1px solid rgb(89, 113, 179);
   position: relative;
+  padding-bottom: .5rem;
 }
 
 .dropdown-content a {
@@ -109,16 +109,21 @@
   border-width: 2px;
 }
 
-.filter > .filter-button:focus + .dropdown-content{
+.filter:hover .arrow {
+  transform: rotate(180deg);
+}
+
+
+.filter:hover >  .dropdown-content{
   opacity: 1;
   border-right:2px solid #384e8e;
   pointer-events: auto;
   transform: translateY(0);
 }
 
-.filter:hover .filter i{
+/* .filter:hover .filter i{
   rotate: 180 deg;
-}
+} */
 
 .filter .dropdown-content{
   position: absolute;
@@ -128,11 +133,11 @@
   pointer-events: none;
   max-height: 480px;
   min-width: 100%;
-  overflow-y: scroll;
+  overflow-y: auto;
   overflow-x: hidden;
   border: 2px solid black;
   border-radius: 2px;
-  top: calc(100% + .5rem);
+  top: calc(100%);
   transform: translateY(-10px);
   transition: transform 150ms ease-in-out, opacity 150ms ease-in-out;
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .1);
@@ -140,18 +145,19 @@
   
 }
 
-.filter i {
+.filter .arrow {
   position: absolute;
   right: 0.5rem;
+  transition: transform 150ms ease-in-out;
 }
 
 
 /*-------------------------------------------posts*/
 .liked {
-  color: blue;
+  color: rgb(233, 233, 234);
 }
 
-.post .footer {
+.post .post-footer {
   margin-top: 1rem;
 }
 
@@ -335,7 +341,7 @@ html {
 
 
 .seperate {
-  margin-top: 5rem;
+  margin-top: 6rem;
 }
 
 

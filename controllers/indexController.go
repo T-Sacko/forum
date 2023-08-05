@@ -9,14 +9,17 @@ import (
 
 func Index(w http.ResponseWriter, r *http.Request) {
 	var user m.User
+	filter := "home"
 	user1, _ := m.GetUserByCookie(r)
-	if user1!=nil{
+	if user1 != nil {
 		user = *user1
 	}
 	var posts []m.Post
 	var err error
 	category := r.URL.Query().Get("category")
+	fmt.Println(category, "the categor is here uni")
 	if category == "liked-posts" {
+		filter = category
 		posts, err = m.FilterByLiked(user.ID)
 		if err != nil {
 			// Handle the error (e.g., show an error page)
@@ -24,7 +27,17 @@ func Index(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "Failed to retrieve posts", http.StatusInternalServerError)
 			return
 		}
+	} else if category == "my-posts" {
+		filter = category
+		posts, err = m.FilterByUserPosts(user.ID)
+		if err != nil {
+			// Handle the error (e.g., show an error page)
+			fmt.Println("error with getposts")
+			http.Error(w, "Failed to retrieve posts", http.StatusInternalServerError)
+			return
+		}
 	} else if category != "" {
+		filter = category
 		posts, err = m.FilterByCategory(category)
 		if err != nil {
 			// Handle the error (e.g., show an error page)
@@ -48,15 +61,17 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	// for i, j := 0, len(posts)-1; i < j; i, j = i+1, j-1 {
 	// 	posts[i], posts[j] = posts[j], posts[i]
 	// }
-	categories := []string{"biology", "etymology", "sociology"}
+	categories := []string{"biology", "etymology"}
 	data := struct {
 		Posts      []m.Post
 		Categories []string
 		User       m.User
+		Filter     string
 	}{
 		Posts:      posts,
 		Categories: categories,
 		User:       user,
+		Filter:     filter,
 	}
 
 	errs := Tpl.ExecuteTemplate(w, "home.html", data)
@@ -69,7 +84,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetPostLikes(w http.ResponseWriter, r *http.Request) {
-	
+
 	user, err := m.GetUserByCookie(r)
 	if err != nil {
 		fmt.Println("no cookie tring to get user liked posts", err)
