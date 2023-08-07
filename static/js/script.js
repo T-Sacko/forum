@@ -64,12 +64,9 @@ function decrement(postId, id) {
 const likes = document.querySelectorAll('.likes')
 
 likes.forEach(likeButton => {
-  console.log("a post")
   const likeStr = likeButton.getAttribute('id');
   const postId = likeStr.split('-')[0]; // This will split the likeId string at the '-' character
   const dislikeButton = document.getElementById(`${postId}-dislike`)
-
-  console.log(postId, "mans up inna da ting uno"); // Outputs: [part1, part2, ...]
 
 
   likeButton.addEventListener('click', () => {
@@ -286,17 +283,51 @@ document.getElementById('signupForm').addEventListener('submit', (event) => {
 
 
 //NavBar
-function IconBar() {
-  var iconBar = document.getElementById("iconBar");
-  var navigation = document.getElementById("navigation");
-  if (navigation.classList.contains("hide")) {
-    iconBar.setAttribute("style", "display:none;");
-    navigation.classList.remove("hide");
-  } else {
-    iconBar.setAttribute("style", "display:block;");
-    navigation.classList.add("hide");
-  }
-}
+// function IconBar() {
+//   var iconBar = document.getElementById("iconBar");
+//   var navigation = document.getElementById("navigation");
+//   if (navigation.classList.contains("hide")) {
+//     iconBar.setAttribute("style", "display:none;");
+//     navigation.classList.remove("hide");
+//   } else {
+//     iconBar.setAttribute("style", "display:block;");
+//     navigation.classList.add("hide");
+//   }
+// }
+document.addEventListener("DOMContentLoaded", function() {
+  const commentInputs = document.querySelectorAll('.comment-input');
+
+  commentInputs.forEach(input => {
+    input.addEventListener('input', function() {
+        this.style.height = 'auto';           // Reset height
+        this.style.height = (this.scrollHeight) + 'px';  // Set to scrollHeight
+    });
+  });
+
+  const commentForms = document.querySelectorAll(".comment-form")
+
+  commentForms.forEach(commentForm => {
+    
+    console.log("form in a it")
+    commentForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      let formData = new FormData(commentForm);
+
+      fetch('/comment', {
+        method: 'POST',
+        body:   formData
+      })
+      .then(response => response.json()) 
+      .then(data => {
+          console.log(data);
+      })
+      .catch(error => {
+          console.log("Error:", error);
+      });
+    })
+
+  })
+})
 
 const signIn = document.getElementById('sign-in')
 
@@ -344,3 +375,4 @@ signupButton.addEventListener('click', () => {
   signupForm.style.display = 'block'
   loginForm.style.display = 'none'
 })
+

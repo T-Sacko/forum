@@ -17,7 +17,6 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	var posts []m.Post
 	var err error
 	category := r.URL.Query().Get("category")
-	fmt.Println(category, "the categor is here uni")
 	if category == "liked-posts" {
 		filter = category
 		posts, err = m.FilterByLiked(user.ID)

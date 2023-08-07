@@ -5,7 +5,6 @@
   margin: 0;
 }
 
-
 /* ----------------------------------------header */
 
 .navbar {
@@ -17,9 +16,7 @@
   position: fixed;
   top: 0;
   width: 100%;
-
 }
-
 
 .navbar a {
   text-align: center;
@@ -37,7 +34,6 @@
 .navbar .brand {
   font-weight: bolder;
   font-size: 1.5em;
-
 }
 
 .navbar .sign-in {
@@ -59,37 +55,36 @@
   font-size: 1.35em;
 }
 
-
-.filter-button  {
+.filter-button {
   background: none;
   border: none;
   text-align: left;
   color: white;
-  cursor:pointer;
+  cursor: pointer;
   padding: 0.6rem;
   font-size: 1.1rem;
   font-weight: 300;
   width: 17rem;
   border-radius: 4px;
-  
+
   border: 1px solid rgb(89, 113, 179);
 }
 
 .filter {
   /* display:; */
-  
+
   margin-right: auto;
   margin-left: 2rem;
   color: white;
-  font-size: 1.rem;
+  font-size: 1rem;
   position: relative;
-  
+
   position: relative;
-  padding-bottom: .5rem;
+  padding-bottom: 0.5rem;
 }
 
 .dropdown-content a {
-  padding-inline:  16px;
+  padding-inline: 16px;
   padding-block: 12px;
   text-decoration: none;
   display: block;
@@ -98,12 +93,10 @@
 
 .dropdown-content a:hover {
   background-color: rgb(138, 162, 230);
-  
 }
-*{
+* {
   font-family: monospace;
 }
-
 
 .filter:hover {
   border-width: 2px;
@@ -113,10 +106,9 @@
   transform: rotate(180deg);
 }
 
-
-.filter:hover >  .dropdown-content{
+.filter:hover > .dropdown-content {
   opacity: 1;
-  border-right:2px solid #384e8e;
+  border-right: 2px solid #384e8e;
   pointer-events: auto;
   transform: translateY(0);
 }
@@ -125,7 +117,7 @@
   rotate: 180 deg;
 } */
 
-.filter .dropdown-content{
+.filter .dropdown-content {
   position: absolute;
   background: rgb(31, 35, 109);
   z-index: 16;
@@ -140,9 +132,7 @@
   top: calc(100%);
   transform: translateY(-10px);
   transition: transform 150ms ease-in-out, opacity 150ms ease-in-out;
-  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .1);
-
-  
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.1);
 }
 
 .filter .arrow {
@@ -150,7 +140,6 @@
   right: 0.5rem;
   transition: transform 150ms ease-in-out;
 }
-
 
 /*-------------------------------------------posts*/
 .liked {
@@ -169,7 +158,7 @@ main {
 }
 
 .post {
-  max-height: 50vh;
+  /* max-height: 50vh; */
   width: 100%;
   margin-bottom: 15px;
   background-color: #9792cc;
@@ -183,9 +172,7 @@ main {
 
 .post-user {
   display: inline;
-
 }
-
 
 .post-title {
   margin-bottom: 0.4rem;
@@ -195,23 +182,41 @@ main {
   margin-bottom: 0.3rem;
 }
 
-
 .post-categories {
-
   width: 50%;
 }
 
 .post-header {
-
-
-
-  margin-bottom: .3rem;
-
+  margin-bottom: 0.3rem;
 }
 
 /* .post-header {
      display: inline;
  } */
+
+.comment-input-container {
+  display: flex;
+  align-items: center;
+}
+
+.comment-input {
+  width: 90%; /* Adjust this value as needed */
+  resize: none; /* Removes the default resize handle */
+  border-radius: 15px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  outline: none;
+  overflow: hidden;
+}
+
+.comment-send {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #333;
+  font-size: 1.2em;
+  margin-left: 10px;
+}
 
 /*--------------------------------------create post modal*/
 #modal-container {
@@ -222,10 +227,7 @@ main {
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.6);
-
-
 }
-
 
 #post-form {
   margin: auto;
@@ -244,7 +246,6 @@ main {
   align-items: center;
   justify-content: center;
   border-bottom: 2px solid whitesmoke;
-
 }
 
 #close-button {
@@ -274,14 +275,12 @@ main {
   padding: 10px;
   display: inline;
   width: max-content;
-
 }
 
 .category input,
 label {
   cursor: pointer;
 }
-
 
 #title {
   width: 100%;
@@ -322,13 +321,11 @@ label {
   padding: 10px;
 }
 
-
 * {
   box-sizing: border-box;
 }
 
 html {
-
   width: 100%;
   font-size: 14px;
   font-family: monospace;
@@ -338,17 +335,13 @@ html {
   color: black;
 }
 
-
-
 .seperate {
   margin-top: 6rem;
 }
 
-
 .hidden {
   display: none;
 }
-
 
 #overlay {
   position: fixed;
@@ -373,8 +366,6 @@ html {
   padding: 1.2rem;
 }
 
-
-
 .signInHeader .title {
   /* // flex-grow: 1;
    // text-align: center; Center the text inside the title */
@@ -389,8 +380,7 @@ html {
   color: #fff;
   position: absolute;
   right: 1rem;
-  top: .3rem;
-
+  top: 0.3rem;
 }
 
 .input-box {
@@ -408,9 +398,7 @@ html {
   color: white;
   background: none;
   padding-left: 3rem;
-
 }
-
 
 .input-box i {
   position: absolute;
@@ -427,7 +415,6 @@ html {
   margin-top: 1rem;
 }
 
-
 .signupForm .button {
   background: #5e6fa3;
   margin-top: 1rem;
@@ -439,17 +426,17 @@ html {
   border-radius: 3px;
 }
 
-.signupForm .register{
+.signupForm .register {
   text-align: center;
   margin-top: 1rem;
   color: white;
 }
 
-.register a{
+.register a {
   text-decoration: none;
 }
 
-.register a:hover{
+.register a:hover {
   text-decoration: underline;
   font-weight: 500;
 }

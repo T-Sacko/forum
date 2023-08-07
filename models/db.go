@@ -61,8 +61,8 @@ func InitDB() {
 			user_id INTEGER,
 			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 			updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-			FOREIGN KEY(postId) REFERENCES posts(id),
-			FOREIGN KEY(userId) REFERENCES users(id)
+			FOREIGN KEY(post_id) REFERENCES posts(id),
+			FOREIGN KEY(user_id) REFERENCES users(id)
 		);
 
 		CREATE TABLE IF NOT EXISTS likes (
@@ -89,6 +89,8 @@ func InitDB() {
             FOREIGN KEY (comment_id) REFERENCES comments (id) ON DELETE CASCADE,
             FOREIGN KEY (userId) REFERENCES users (id) ON DELETE CASCADE
         );
+
+		
         
 	`)
 	if err != nil {
