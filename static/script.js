@@ -12,22 +12,52 @@ const closeButton = document.getElementById("close-button");
 const errorElement = document.getElementById("error");
 const accountLink = document.getElementById("account-link")
 const signOut = document.getElementById("sign_out")
-const commentBtn = document.getElementById("comment-btn")
+const commentBtns = document.getElementsByClassName("btns")
+const commentContainer = document.getElementsByClassName("comment")
 
+function showComments(commentId) {
+  commentId = commentId.replace("comment-btn", "comment-section")
+  let commentSection = document.getElementById(commentId)
+  commentSection.innerHTML = '';
+  let postId = commentId.replace("comment-section-", "")
 
-function comment() {
-  const postId = document.getElementsByClassName("posts").id
-  const comment = document.querySelector(".comment-box").value;
+  fetch (`/get-comments?postID=${postId}`, {
+    method: 'GET'
+  }).then(response => response.json())
+  .then(data => {
+    for (const comment of data) {
+      const CommentDiv = document.createElement('div')
+      CommentDiv.id = comment.id
+      CommentDiv.className = 'comments'
+      commentSection.appendChild(CommentDiv);
+      console.log(CommentDiv)
 
-  console.log("Here is the id",comment.id)
+      let h4 = document.createElement("h4")
+      h4.textContent = comment.username
+      CommentDiv.appendChild(h4);
+
+      let p = document.createElement("p")
+      p.textContent = comment.comment
+      CommentDiv.appendChild(p)
+
+    }
+  })
+  if (commentSection.style.display === "none" || commentSection.style.display === "") {
+    commentSection.style.display = "block"
+    return
+  } else {
+    commentSection.style.display = "none"
+  }
+};
+
+function comment(postId) {
+  const comment = document.getElementById(postId + "-comment").value
 
   const requestBody = {
     postId: postId,
     comment: comment
   };
-  console.log(postId)
 
-  console.log(requestBody)
   fetch('/comment', {
     method: 'POST',
     headers: {
@@ -86,12 +116,17 @@ function SignOut() {
   }).then(response=> {
     if (response.ok) {
       let signIncode = `<a class="sign-in" id="sign-in">Sign In<i class="fa fa-sign-in" id="sign-i"></i></a>`
+      let close = document.getElementById("close")
       document.getElementById("sign-in").innerHTML = signIncode
       accountLink.style.display = 'none'
       createPostButton.style.display = 'none'
       popupContainer.style.display = 'none';
       signOut.style.display = "none"
       close.style.display = "block"
+      for (let i = 0; i < commentContainer.length; i++) {
+        commentContainer[i].style.display = "block";
+      }
+      location.reload();
     } else {
       console.log("failed to execute deletion")
     }})
@@ -129,7 +164,9 @@ function checkSession() {
       document.getElementById("sign-in").innerHTML = signOutcode
       accountLink.style.display = 'block'
       createPostButton.style.display = 'block'
-      //commentSesh.style.display = 'block'
+      for (let i = 0; i < commentContainer.length; i++) {
+        commentContainer[i].style.display = "block";
+      }
       console.log('User session is valid');
     } else {
       console.log('User session is invalid or expired');

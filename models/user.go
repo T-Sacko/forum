@@ -2,7 +2,7 @@ package models
 
 import (
 	"database/sql"
-	"fmt"
+	"log"
 
 	"golang.org/x/crypto/bcrypt"
 )
@@ -18,18 +18,26 @@ type User struct {
 	Username  string `json:"username"`
 	Password  string `json:"-"`
 	SessionId string `json:"sessionid"`
-	Post     []Post
+	Post      []Post
+}
+
+func getUsernameByID(Id int) string {
+	var username string
+	err := db.QueryRow("SELECT username FROM users WHERE id = ?", Id).Scan(&username)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return username
 }
 
 func (newUser User) Register() error {
 	Password, err := bcrypt.GenerateFromPassword([]byte(newUser.Password), bcrypt.DefaultCost)
 	if err != nil {
-		fmt.Println("its whre")
 		return err
 	}
+
 	err = InsertDB(newUser.Username, newUser.Email, string(Password), newUser.SessionId)
 	if err != nil {
-		fmt.Println("cant sign up user alredy exists")
 		return err
 	}
 	return nil
@@ -38,7 +46,6 @@ func (newUser User) Register() error {
 func SetSessionId(email, sessionId string) error {
 	_, err := db.Exec("UPDATE users SET sessionId = ? WHERE email = ?", sessionId, email)
 	if err != nil {
-		fmt.Println("failed to update session ID:", err)
 		return err
 	}
 	return nil
@@ -61,7 +68,6 @@ func IsEmailAvailable(email string) (bool, error) {
 	}
 	return count == 0, nil
 }
-
 
 func ComparePasswords(hashedPassword, userPassword string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(userPassword))

@@ -21,13 +21,11 @@
             <a class="sign-in" id="sign-in">Sign In<i class="fa fa-sign-in" id="sign-i"></i></a>
         </nav>
     </header>
-    {{if .Available}}
     <script>
     window.addEventListener("DOMContentLoaded", function () {
         checkSession();
     });
     </script>
-    {{end}}
     <div class="everything">
         <button class="post_btn" id="create-post-button">Create Post <span class="plus-sign">&plus;</span></button>
         <div id="modal-container">
@@ -100,7 +98,7 @@
         {{if .UserInfo}}
         {{if .UserInfo.Post}}
         {{range .UserInfo.Post}}
-        <div class="posts" id="{{.ID}}">
+        <div class="posts">
             <pre class="author" ><i class="fa fa-user-circle"></i> {{.Username}}</pre>
             <br>
             <br>
@@ -110,19 +108,27 @@
                 <div class="written-content" >{{.Content}}</div>
             </div>
             <br>
-            <p>Comment Section</p>
-            <div class="comment-section">
-            {{range .Comments}}
-            <div class="comments" id="{{.UserID}}"> 
-                <p>{{.Comment}}</p>
+            <div class="comment-page"> 
+            <div class="comment" >
+                <textarea class="comment-box" name="comment" id="{{.ID}}-comment" rows="2" cols="40" placeholder="Write your comment..." required></textarea>
+                <button id="{{.ID}}" class="submit-button" type="submit" onclick="comment(this.id)">Comment</button>
             </div>
-            <br>
-            {{end}}
+            <div class="interaction-container">
+                <div class="likes-container">
+                    <button class="like-button" id="{{.ID}}-like">
+                    <i class="fa fa-thumbs-up"></i>
+                    <span class="like-count" id="{{.ID}}-1">{{.Likes }}</span>
+                    </button>
+                    <button class="dislike-button" id="{{.ID}}-dislike">
+                        <i class="fa fa-thumbs-down"></i>
+                        <span class="dislike-count" id="{{.ID}}-2">{{.Dislikes }}</span>
+                    </button>
+                </div>
+                <span id="comment-btn-{{.ID}}" class="btns" onclick="showComments(this.id)">{{.NumOfComms}} <i class="fa fa-comment"></i> comments</span>
+            </div>
+            <div class="comment-section" id="comment-section-{{.ID}}">
         </div>
-            <div class="comment" id="comment">
-                <textarea class="comment-box" id="comment {{.ID}}" name="comment" rows="2" cols="40" placeholder="Write your comment..." required></textarea>
-                <button class="submit-button" type="submit" onclick="comment()">Comment</button>
-            </div>
+        </div>
         </div>
         <br>
         <br>

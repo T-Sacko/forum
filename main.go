@@ -2,10 +2,8 @@ package main
 
 import (
 	"fmt"
-	c "forum/controllers"
 	"forum/models"
 	r "forum/routes"
-	"html/template"
 	"log"
 	"net/http"
 	"os"
@@ -14,10 +12,6 @@ import (
 
 	_ "github.com/mattn/go-sqlite3"
 )
-
-func init() {
-	c.Tpl = template.Must(template.ParseGlob("templates/*.html"))
-}
 
 func openBrowser(url string) error {
 	var cmd *exec.Cmd

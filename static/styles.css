@@ -425,36 +425,127 @@ h1{
     font-size: 70%;
 }
 
+.interaction-container{
+    display: flex;
+    align-items: center;
+    margin-bottom:0.3em;
+}
+
+/* Likes and Dislikes */
+/* Styling for the like and dislike buttons */
+.likes-container {
+    display: flex;
+    background-color: rgb(214, 211, 211);
+    border-radius: 2em;
+    max-width: 40%;
+    width: auto;
+    align-items: center;
+    margin-right: 10px;
+}
+
+.like-button,
+.dislike-button {
+    float: left;
+    display: flex;
+    align-items: center;
+    border: none;
+    padding: 0.5em 0.8em;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+.like-button{
+    border-radius: 2em 0 0 2em;
+}
+.dislike-button{
+    border-radius: 0 2em 2em 0;
+}
+
+.like-button:focus,
+.dislike-button:focus {
+    outline: none;
+}
+
+.like-button:hover,
+.dislike-button:hover{
+    background: rgb(182, 181, 181);
+} 
+
+.like-count,
+.dislike-count {
+    margin-left: 5px;
+    font-size: 0.84em;
+}
+
+/* Set the color of the like and dislike buttons based on their state */
+.like-button.active i,
+.dislike-button.active i {
+  color: blue; /* You can use any color you like */
+}
+
+/* Set the color of the count based on the button state */
+.like-button.active .like-count,
+.dislike-button.active .dislike-count {
+  color: grey; /* You can use any color you like */
+}
 
 /* Comment Section */
 
+.btns{
+    cursor: pointer;
+    margin-left: auto;
+    margin-right: 1em;
+}
+
+.btns:hover{
+    text-decoration: underline;   
+}
+
 .comment-section{
+    display: none;
     overflow: auto;
-    max-height: 5em;
+    max-height: 8em;
     margin: auto;
-    border-radius: 15%;
+    border-radius: 5%;
 }
 
 .comments{
-    padding: 1.25em;
+    padding: 0.2em;
     overflow: hidden;
+    border-radius: 1em;
+    margin: 1em;
     box-sizing: content-box;
+    background: #b4adad;
 }
+
+.comments h4{
+    float: left;
+    color: black;
+    margin: auto;
+}
+
+.comments p{
+    padding: 0.5em;
+    background: grey;
+}
+
 
 .comment{
     padding: 2em 2em;
     overflow: hidden;
-    /* display: none; */
+    display: none;
 }
 .comment-box {
-    resize: vertical;
+    resize: none;
     overflow: hidden;
+    padding: 0.5em;
+    border-radius: 1.5em 1.5em 1em 1em;
     outline-color: rgb(194, 194, 194);
 }
 
 .submit-button {
     background-color: white;
-    border-radius: 2em;
+    border-radius: 0.5em 0.5em 2em 2em;
     padding: 0.2em 1em;
     float: right;
     border-width: 0.1em;
@@ -465,6 +556,7 @@ h1{
     float: left;
     color:  rgb(63, 89, 146);
     font-weight: bold;
+    margin-left: 1em;
     font-size: 1.25em;
 }
 

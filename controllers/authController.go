@@ -13,7 +13,7 @@ import (
 )
 
 var err error
-var Tpl = template.Must(template.ParseGlob("/home/student/forum/templates/*.html"))
+var Tpl = template.Must(template.ParseFiles("templates/home.html"))
 
 func StaticHandler(w http.ResponseWriter, r *http.Request) {
 	http.ServeFile(w, r, r.URL.Path[1:])

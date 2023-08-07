@@ -5,6 +5,7 @@ import (
 	"fmt"
 	m "forum/models"
 	"net/http"
+	"strconv"
 )
 
 func CheckSession(w http.ResponseWriter, r *http.Request) {
@@ -78,5 +79,27 @@ func CommentHandler(w http.ResponseWriter, r *http.Request) {
 
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte("Comment received"))
+	} else {
+		http.Error(w, "404 Page Not Found", http.StatusInternalServerError)
+	}
+}
+
+func GetComments(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "GET" {
+
+		var postID = r.URL.Query().Get("postID")
+
+		ID, err := strconv.Atoi(postID)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+
+		comments, err := m.GetCommentsForPost(ID)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		JSsender(w, comments)
 	}
 }

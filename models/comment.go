@@ -3,13 +3,14 @@ package models
 // import "time"
 
 type Comment struct {
-	UserID 	int	`json:"userId"`
-	PostID  string `json:"postId"`
-	Comment string `json:"comment"`
+	ID int `json:"id"`
+	Username string `json:"username"`
+	UserID   int    `json:"userId"`
+	PostID   string `json:"postId"`
+	Comment  string `json:"comment"`
 }
 
-
-func (comment Comment) SaveComment() (error){
+func (comment Comment) SaveComment() error {
 	stmt, err := db.Prepare("INSERT INTO comments (content, postId, userId) VALUES (?, ?, ?)")
 	if err != nil {
 		return err
@@ -23,8 +24,6 @@ func (comment Comment) SaveComment() (error){
 
 	return nil
 }
-	
-
 
 // func getComments(ID int) (string, error) {
 // 	stmt, err := db.Prepare("SELECT content FROM comments WHERE id = ?")

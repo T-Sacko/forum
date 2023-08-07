@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"database/sql"
-	"fmt"
 	m "forum/models"
 	"log"
 	"net/http"
@@ -11,16 +10,6 @@ import (
 
 func Index(w http.ResponseWriter, r *http.Request) {
 	var user *m.User
-
-	posts, err := m.GetPostsFromDB()
-	if err != nil {
-		if err != sql.ErrNoRows {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-	} else {
-		user = &m.User{Post: posts}
-	}
 
 	var data *m.UserCheckResponse
 
@@ -31,7 +20,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 			isUser, err := m.Check4User(user.Email, user.Password)
 			user.Password = ""
 			if err != nil || !isUser {
-				http.Error(w, "Invalid username or password", http.StatusUnauthorized)
+				http.Error(w, "Invalid email or password", http.StatusUnauthorized)
 				return
 			}
 			cookie, err := CookieSetter(user)
@@ -44,22 +33,22 @@ func Index(w http.ResponseWriter, r *http.Request) {
 			http.Redirect(w, r, "/", http.StatusFound)
 		case "/sign-up":
 			user = getUser(r)
-			err = user.Register()
-			user.Password = ""
-			if err != nil {
-				http.Error(w, "CANT SAVE USER", http.StatusBadRequest)
-				return
-			}
+
 			cookie, err := CookieSetter(user)
 			if err != nil {
 				http.Error(w, "500", http.StatusInternalServerError)
 				return
 			}
 
+			err = user.Register()
+			user.Password = ""
+			if err != nil {
+				http.Error(w, "CANT SAVE USER", http.StatusBadRequest)
+				return
+			}
 			http.SetCookie(w, cookie)
 			http.Redirect(w, r, "/", http.StatusAccepted)
 		case "/post":
-			fmt.Println("post being created")
 			err := CreatePost(r)
 			if err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -77,6 +66,17 @@ func Index(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusOK)
 		}
 	}
+
+	posts, err := m.GetPostsFromDB()
+	if err != nil {
+		if err != sql.ErrNoRows {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	} else {
+		user = &m.User{Post: posts}
+	}
+
 	_, err = r.Cookie("session")
 	if err != http.ErrNoCookie {
 		user, err = m.GetUserByCookie(r)
@@ -95,8 +95,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	}
 
 	data = &m.UserCheckResponse{
-		UserInfo:  user,
-		Available: true,
+		UserInfo: user,
 	}
 
 	err = Tpl.ExecuteTemplate(w, "home.html", data)

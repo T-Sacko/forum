@@ -12,6 +12,7 @@ type Post struct {
 	Content    string
 	Username   string
 	Categories []string
+	NumOfComms int
 	Comments   []Comment
 	Likes      int
 	Dislikes   int
@@ -70,7 +71,7 @@ func GetPostsFromDB() ([]Post, error) {
 		INNER JOIN categories ON post_categories.category_id = categories.id
 		LEFT JOIN likes ON likes.postId = posts.id
 		GROUP BY posts.id, users.username
-		ORDER BY posts.id
+		ORDER BY posts.id DESC
 	`
 
 	rows, err := db.Query(query)
@@ -99,11 +100,12 @@ func GetPostsFromDB() ([]Post, error) {
 			Dislikes:   dislikes,
 		}
 
-		comments, err := getCommentsForPost(postID)
+		comments, err := GetCommentsForPost(postID)
 		if err != nil {
 			return nil, err
 		}
-		post.Comments = comments
+
+		post.NumOfComms = len(comments)
 
 		posts = append(posts, post)
 	}
@@ -112,17 +114,15 @@ func GetPostsFromDB() ([]Post, error) {
 		return nil, err
 	}
 
-	posts = reversePosts(posts)
-
 	return posts, nil
 }
 
-func getCommentsForPost(postID int) ([]Comment, error) {
+func GetCommentsForPost(postID int) ([]Comment, error) {
 	query := `
-		SELECT comments.content, comments.userId
+		SELECT id, content, userId
 		FROM comments
-		WHERE comments.postId = ?
-		ORDER BY comments.id
+		WHERE postId = ?
+		ORDER BY id DESC
 	`
 
 	rows, err := db.Query(query, postID)
@@ -133,17 +133,21 @@ func getCommentsForPost(postID int) ([]Comment, error) {
 
 	comments := []Comment{}
 	for rows.Next() {
+		var commentID int
 		var content string
 		var userID int
-		err := rows.Scan(&content, &userID)
+		err := rows.Scan(&commentID, &content, &userID)
 		if err != nil {
 			return nil, err
 		}
 		comment := Comment{
-			UserID:  userID,
-			PostID:  strconv.Itoa(postID),
-			Comment: content,
+			ID:       commentID,
+			UserID:   userID,
+			Username: getUsernameByID(userID),
+			PostID:   strconv.Itoa(postID),
+			Comment:  content,
 		}
+
 		comments = append(comments, comment)
 	}
 
@@ -152,12 +156,4 @@ func getCommentsForPost(postID int) ([]Comment, error) {
 	}
 
 	return comments, nil
-}
-
-func reversePosts(posts []Post) []Post {
-	var reversedPosts []Post
-	for i := len(posts) - 1; i >= 0; i-- {
-		reversedPosts = append(reversedPosts, posts[i])
-	}
-	return reversedPosts
 }
