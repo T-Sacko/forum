@@ -525,6 +525,7 @@ h1{
 }
 
 .comments p{
+    text-align: left;
     padding: 0.5em;
     background: grey;
 }
