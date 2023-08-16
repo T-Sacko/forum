@@ -25,10 +25,18 @@ func CreateComment(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "couldnt conv postID to int", http.StatusBadRequest)
 	}
 
-	fmt.Println("commentddddddddddddddddd", r.FormValue("comment"))
+	content := r.FormValue("comment")
+	runes := []rune(content) // Convert string to slice of runes
+
+	// Check if the last character is not an ASCII character, and if not, remove it
+	for len(runes) > 0 && (runes[len(runes)-1] < 32 || runes[len(runes)-1] > 127) {
+		runes = runes[:len(runes)-1]
+	}
+	content = string(runes)
+	fmt.Println(content, "reee")
 	comment := &m.Comment{
 		Username: user.Username,
-		Content:  r.FormValue("comment"),
+		Content:  content,
 		PostID:   postID,
 		UserID:   user.ID,
 	}
@@ -45,4 +53,23 @@ func CreateComment(w http.ResponseWriter, r *http.Request) {
 
 	json.NewEncoder(w).Encode(comment)
 
+}
+
+func GetComments(w http.ResponseWriter, r *http.Request) {
+	ID := r.URL.Query().Get("postID")
+	postID, err := strconv.Atoi(ID)
+	if err != nil {
+		fmt.Println("postID is invalid to get comments")
+	}
+	user, err := m.GetUserByCookie(r)
+	if err != nil {
+		user = nil
+	}
+	comments, err := m.GetComments(user.ID, postID)
+	fmt.Println(comments)
+	if err != nil {
+		fmt.Println("couldnt get comments")
+	}
+	fmt.Println("comments length is: ", len(comments))
+	json.NewEncoder(w).Encode(comments)
 }

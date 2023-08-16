@@ -12,10 +12,11 @@
   justify-content: space-between;
   align-items: center;
   padding: 1em;
-  background: rgb(31, 35, 109);
+  background: rgb(89, 90, 114);
   position: fixed;
   top: 0;
   width: 100%;
+  z-index: 1;
 }
 
 .navbar a {
@@ -161,9 +162,11 @@ main {
   /* max-height: 50vh; */
   width: 100%;
   margin-bottom: 15px;
-  background-color: #9792cc;
+  background-color: #4d4949;
   padding: 6px;
   border-radius: 4px;
+  max-height: 80vh;
+  color: #fff;
 }
 
 .post span {
@@ -194,13 +197,81 @@ main {
      display: inline;
  } */
 
+/* c-------------------------------------------------comment section start */
+.comment{
+  border-radius: .9em;
+  padding: 8px 12px;
+  color: #fff;
+  background-color: #333;
+  margin-bottom: .3rem;
+}
+
+
+
+.comment-form{
+  max-height:30vh;
+  background-color: #ccc;
+  overflow-y: auto;
+}
+
+/* .comment .username{
+  
+} */
+
+.comment .content{
+  font-weight: 400;
+  margin-top: .2rem;
+}
+
+.comment-footer{
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: .2rem;
+}
+
+/* .comment-likes{
+  background-color: #5f5e5e;
+  padding:.5rem 0;
+ 
+} */
+
+.comment-button{
+  cursor: pointer;
+  background-color: #525050;
+  padding: .5rem;
+}
+
+.comment-button:hover{
+  background-color: #5f5e5e;
+}
+
+.comment-like-button{
+border-right:1px solid white;
+border-radius: 1rem 0 0 1rem;
+}
+
+.comment-dislike-button{
+  /* border-top-right-radius: 1rem; */
+  /* padding:.5rem .5rem .5rem 0; */
+  border-radius:0 1rem 1rem 0;
+
+}
+
+
+/* c-------------------------------------------------comment section end */
+
+.btn{
+  cursor: pointer;
+}
+
 .comment-input-container {
   display: flex;
-  align-items: center;
+  align-items: end;
+  position: relative;
 }
 
 .comment-input {
-  width: 90%; /* Adjust this value as needed */
+  width: 100%; /* Adjust this value as needed */
   resize: none; /* Removes the default resize handle */
   border-radius: 15px;
   padding: 10px;
@@ -227,6 +298,7 @@ main {
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.6);
+  z-index: 99;
 }
 
 #post-form {
@@ -238,6 +310,7 @@ main {
   padding: 0 20px 20px 20px;
   color: #fff;
   border-radius: 10px;
+  z-index: 100;
 }
 
 .form-header {
@@ -331,7 +404,7 @@ html {
   font-family: monospace;
   /* background: linear-gradient(rgb(89, 113, 179), azure); */
   background-repeat: no-repeat;
-  background-color: rgb(20, 21, 21);
+  background-color: rgb(8, 8, 8);
   color: black;
 }
 

@@ -15,11 +15,49 @@ import (
 var err error
 var Tpl = template.Must(template.ParseGlob("templates/*.html"))
 
+// type loggedIn struct {
+// 	LoggedIn bool `json:"loggedIn"`
+// }
 
-type loggedIn struct{
-	LoggedIn bool `json:"loggedIn"`
+func Session(w http.ResponseWriter, r *http.Request) {
+	var seshData struct {
+		Status bool `json:"status"`
+	}
+	_, err := m.GetUserByCookie(r)
+	if err != nil {
+		json.NewEncoder(w).Encode(seshData)
+		return
+	}
+	seshData.Status = true
+	json.NewEncoder(w).Encode(seshData)
+
 }
 
+func cookie(r *http.Request) (string, error) {
+	cookie, err := r.Cookie("session")
+	if err != nil {
+		return "", err
+	}
+	seshID := cookie.Value
+	return seshID, nil
+
+}
+
+//////////////////////////////////////////////////
+func SignOut(w http.ResponseWriter, r *http.Request) {
+	seshID, err := cookie(r)
+	if err != nil {
+		fmt.Println("next tings on signout:",err)
+	}
+
+	fmt.Println("log out req received")
+	err = m.DeleteCookie(seshID)
+	if err != nil {
+		fmt.Println("cant log out:", err)
+	}
+	http.Redirect(w, r, "/", http.StatusMovedPermanently)
+}
+//////////////////////////////////////////////////////
 func Login(w http.ResponseWriter, r *http.Request) {
 
 	var user struct {
@@ -36,18 +74,15 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	isUser, err := m.Check4User(user.Email, user.Password)
 	fmt.Println(isUser, user.Password)
 	if err != nil {
-		data := loggedIn{LoggedIn: isUser}
+		fmt.Println(isUser, user.Password, "not nil")
 
-		err := json.NewEncoder(w).Encode(data)
-		if err != nil{
-			fmt.Println("Error, couldn't encode user creds on login: ", err)
-		}
+		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 	// Set the session ID and create a cookie
 	SessionId, err := uuid.NewV1()
 	if err != nil {
-		http.Error(w, "ERROR 500", http.StatusInternalServerError)
+		http.Error(w, "Couldn't create sesh id", http.StatusInternalServerError)
 		return
 	}
 	m.SetSessionId(user.Email, SessionId.String())
@@ -56,13 +91,13 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		Value: SessionId.String(),
 		// Session cookie (valid until browser is closed)
 	}
+
 	http.SetCookie(w, cookie)
-	// Redirect to the home page or a dashboard page
-	http.Redirect(w, r, "/", http.StatusFound)
+	fmt.Println("yessssss")
 }
 
 func SignUp(w http.ResponseWriter, r *http.Request) {
-	
+
 	fmt.Println("signup req received")
 	SessionId, err := uuid.NewV1()
 	if err != nil {
@@ -86,7 +121,6 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/", http.StatusFound)
 
 }
-
 
 func getUser(r *http.Request) *m.User {
 	return &m.User{Email: r.FormValue("email"), Username: r.FormValue("username"), Password: r.FormValue("password")}

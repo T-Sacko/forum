@@ -47,6 +47,8 @@ func GetLikedPosts(userId int) ([]LikeData, error) {
 
 }
 
+//------------------------------------------post likes
+
 func SaveLike(postId, userId int) {
 	RemoveDislike(postId,userId)
 	_, err := db.Exec("INSERT INTO likes (postId, userId, value) Values (?, ?, ?)", postId, userId, 1)
@@ -75,4 +77,44 @@ func RemoveDislike(postId, userId int) {
 	if err != nil {
 		fmt.Println("like.go error removing dislike: ", err)
 	}
+}
+
+//----------------------------------------------comment likes
+
+func SaveCommentLike(commentID, userId int) error {
+	RemoveDislike(commentID,userId)
+	_, err := db.Exec("INSERT INTO comment_likes (comment_id, userId, value) Values (?, ?, ?)", commentID, userId, 1)
+	if err != nil {
+		fmt.Println("like.go error inserting like: ", err)
+		return err
+	}
+	return nil
+}
+
+func RemoveCommentLike(commentID, userId int) error {
+	_, err := db.Exec("DELETE FROM comment_likes WHERE comment_id = ? AND userId = ? AND value = 1", commentID, userId)
+	if err != nil {
+		fmt.Println("like.go error removing like: ", err)
+		return err
+	}
+	return nil
+}
+
+func DislikeComment(commentID, userId int) error {
+	RemoveLike(commentID,userId)
+	_, err := db.Exec("INSERT INTO comment_likes (comment_id, userId, value) VALUES (?, ?, ?)", commentID, userId, -1)
+	if err != nil {
+		fmt.Println("like.go error inserting dislike: ", err)
+		return err
+	}
+	return nil
+}
+
+func RemoveCommentDislike(commentID, userId int) error {
+	_, err := db.Exec("DELETE FROM comment_likes WHERE comment_id = ? AND userId = ? AND value = -1", commentID, userId)
+	if err != nil {
+		fmt.Println("like.go error removing cDislike: ", err)
+		return err
+	}
+	return nil
 }

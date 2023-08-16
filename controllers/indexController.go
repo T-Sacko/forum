@@ -36,8 +36,10 @@ func Index(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	} else if category != "" {
+		fmt.Println("category is:", category)
 		filter = category
 		posts, err = m.FilterByCategory(category)
+		fmt.Println("lenght is :",len(posts), posts)
 		if err != nil {
 			// Handle the error (e.g., show an error page)
 			fmt.Println("error with getposts")
@@ -86,7 +88,7 @@ func GetPostLikes(w http.ResponseWriter, r *http.Request) {
 
 	user, err := m.GetUserByCookie(r)
 	if err != nil {
-		fmt.Println("no cookie tring to get user liked posts", err)
+		fmt.Println("no liked posts", err)
 		return
 	}
 	likesData, err := m.GetLikedPosts(user.ID)

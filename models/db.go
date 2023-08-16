@@ -17,6 +17,12 @@ func InitDB() {
 		log.Fatal(err)
 	}
 
+	_, err = db.Exec("PRAGMA busy_timeout = 2000") // 2000 milliseconds = 2 seconds
+	if err != nil {
+		fmt.Println("nuff errs n ting inna it:", err)
+		db.Close()
+	}
+
 	// Create tables if they don't exist
 	_, err = db.Exec(`
 		CREATE TABLE IF NOT EXISTS users (
@@ -68,15 +74,25 @@ func InitDB() {
 		CREATE TABLE IF NOT EXISTS likes (
 			id INTEGER PRIMARY KEY,
 			postId INTEGER,
-			comment_id INTEGER,
 			userId INTEGER,
 			value INTEGER,
 			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 			updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 			FOREIGN KEY(postId) REFERENCES posts(id),
-			FOREIGN KEY(comment_id) REFERENCES comments(id),
 			FOREIGN KEY(userId) REFERENCES users(id)
 			UNIQUE(postId, userId)
+		);
+
+		CREATE TABLE IF NOT EXISTS comment_likes (
+			id INTEGER PRIMARY KEY,
+			comment_id INTEGER NOT NULL,
+			userId INTEGER NOT NULL,
+			value INTEGER,
+			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+			updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+			FOREIGN KEY(comment_id) REFERENCES comments(id),
+			FOREIGN KEY(userId) REFERENCES users(id),
+			UNIQUE(comment_id, userId)
 		);
 
         CREATE TABLE IF NOT EXISTS dislikes (

@@ -110,7 +110,7 @@ func FilterByCategory(category string) ([]Post, error) {
 		INNER JOIN users ON posts.userId = users.id
 		INNER JOIN post_categories ON posts.id = post_categories.post_id
 		INNER JOIN categories ON post_categories.category_id = categories.id
-		INNER JOIN likes ON posts.id = likes.postId
+		LEFT JOIN likes ON posts.id = likes.postId
 		WHERE categories.name = ?
 		GROUP BY posts.id
 		ORDER BY posts.id DESC
@@ -118,6 +118,7 @@ func FilterByCategory(category string) ([]Post, error) {
 
 	rows, err := db.Query(query, category)
 	if err != nil {
+		fmt.Println("error inna a ting")
 		return nil, err
 	}
 	defer rows.Close()

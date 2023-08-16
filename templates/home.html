@@ -36,7 +36,7 @@
             {{if not .User.Status}}
             <a class="sign-in" id="sign-in">Sign In <i class="fa fa-sign-in"></i></a>
             {{else}}
-            <a class="sign-in" id="sign-out">Sign Out <i class="fa fa-sign-out"></i></a>
+            <a href="/sign-out" class="sign-in" id="sign-out">Sign Out <i class="fa fa-sign-out"></i></a>
             {{end}}
 
             <!-- SignForm------------------------- -->
@@ -140,7 +140,7 @@
         </div>
         <main>
             {{ range .Posts}}
-            <div class="post post{{.ID}}">
+            <div class="post" id="post-{{.ID}}">
                 <div class="post-header">
                     <span class="post-user"><i class="fa fa-user-circle" aria-hidden="true"></i>
                         {{ .Username }}</span>
@@ -164,19 +164,29 @@
                         <span id="{{.ID}}-2">{{ .Dislikes }}</span>
                     </span>
 
-                    <span class="comments" id="comment{{.ID}}">
+                    <span class="btn comment-btn" id="comment{{.ID}}">
                         <i class="fa fa-comment"></i> comment
                     </span>
                 </div>
-                <div class="comments" style="margin-top: 1rem; overflow-y: auto; max-height: 60vh;">
-                    <div class="comment" style="height: 300px; background-color: aqua;">
+                <div class="comments hidden" id="comments-{{.ID}}"
+                    style="margin-top: 1rem; overflow-y: auto; max-height: 60vh; ">
+                    <!-- <div class="comment">
 
+                        <h4 class="username"><i class="fa fa-user"></i> titi</h4>
+                        <p class="content">i like this post still </p>
+                        <div class="comment-footer">
+                            <div class="comment-like-buttons">
+                                <span id="commentID-like" class="comment-like-button comment-button"><i
+                                        class="comment-like-icon fa fa-thumbs-o-up"></i> 20</span><span
+                                    id="commentID-dislike" class="comment-dislike-button comment-button"><i
+                                        class="comment-dislike-icon fa fa-thumbs-o-down"></i> 0</span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="comment" style="height: 300px; background-color: rgb(0, 255, 106);">
 
-                    </div>
-                </div>
-                <form class="comment-form">
+
+                </div> -->
+                <form class="comment-form" id="form-{{.ID}}">
                     <div class="comment-input-container">
                         <input type="hidden" name="postID" value="{{.ID}}">
                         <textarea name="comment" class="comment-input" placeholder="Write a comment..."></textarea>

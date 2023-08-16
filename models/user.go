@@ -26,6 +26,14 @@ type User struct {
 	Comments  string
 }
 
+func DeleteCookie(seshID string) error {
+	_, err := db.Exec("UPDATE users SET sessionID = NULL WHERE sessionId = ?", seshID)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func GetUserByCookie(r *http.Request) (*User, error) {
 	cookie, errs := r.Cookie("session")
 	if errs != nil {
@@ -37,7 +45,6 @@ func GetUserByCookie(r *http.Request) (*User, error) {
 	err := db.QueryRow("SELECT id, username, email FROM users WHERE sessionId = ?", sessionId).Scan(&user.ID, &user.Username, &user.Email)
 	if err != nil {
 		// Handle the database query error accordingly
-		fmt.Println("user has no sesh id rn")
 		return nil, err
 	}
 	user.Status = true
