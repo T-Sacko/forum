@@ -9,9 +9,16 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital@1&display=swap" rel="stylesheet">
 </head>
-
+<script src="../static/script.js" defer></script>
 <body>
     {{if .}}
+    {{if .Available}}
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            signIn();
+        })
+    </script>
+    {{end}}
     <header>
         <nav class="navbar">
             <a href="/" class="brand">Forum</a>
@@ -21,18 +28,13 @@
             <a class="sign-in" id="sign-in">Sign In<i class="fa fa-sign-in" id="sign-i"></i></a>
         </nav>
     </header>
-    <script>
-    window.addEventListener("DOMContentLoaded", function () {
-        checkSession();
-    });
-    </script>
     <div class="everything">
         <button class="post_btn" id="create-post-button">Create Post <span class="plus-sign">&plus;</span></button>
         <div id="modal-container">
             <div class="post-form" id="post-form">
                 <div class="form-header">
                     <span id="close-button" onclick="closePopup()" >&times;</span>
-                    <h2 style="color: #b3b9ff ;">Create post</h2>
+                    <h2>Create post</h2>
                 </div>
                     <form action="/post" id="create-post-form" method="post">
                         <div class="categories">
@@ -55,14 +57,17 @@
                     </form>
             </div>
         </div>
-        <!-- <div class="navigate">
-            <span> <a href="/account"><i class ="fa fa-user-circle"></i></a> > <a href="/">Forum</a> >> <a href="/posts">Users</a></span>
-        </div> -->
+        <div class="error-container" id="err">
+            <div class="error-popup">
+                <p>You are not logged in. Please log in to continue.</p>
+                <button onclick="closePopup()">Close</button>
+            </div>
+        </div>
         <div class="overlay" id="popup-container">
             <div class="popup-container" id="container-div">
                 <a class="close" onclick="closePopup()" id="close">&times;</a>
             <div class="signup cntr" id="signup">
-                <form method="POST" action="/sign-up">
+                <form id="sign-up-form" method="POST" action="/sign-up">
                 <label class="labels">Join <span class="forum">Forum</span></label>
                 <br>
                 <br>
@@ -78,11 +83,11 @@
             <div id="sign_out" class="sign-out cntr">
                 <label class="labels">Are you sure you want to sign out?</label>
         
-                <input type="button" onclick="SignOut()" value="Yes">
+                <input type="button" onclick="signOut()" value="Yes">
                 <input type="button" onclick="closePopup()" value="No">
             </div>
             <div class="login cntr" id="login">
-                <form method="POST" action="/log-in">
+                <form id="sign-in-form" method="POST" action="/log-in">
                 <label class="labels">Sign In to <span class="forum">Forum</span></label>
                 <br>
                 <br>
@@ -114,14 +119,14 @@
                 <button id="{{.ID}}" class="submit-button" type="submit" onclick="comment(this.id)">Comment</button>
             </div>
             <div class="interaction-container">
-                <div class="likes-container">
-                    <button class="like-button" id="{{.ID}}-like">
-                    <i class="fa fa-thumbs-up"></i>
-                    <span class="like-count" id="{{.ID}}-1">{{.Likes }}</span>
+                <div class="likes-container" id="likes-container-{{.ID}}">
+                    <button class="like-button" id="{{.ID}}-like" onclick="likeSender(this.id)">
+                    <i class="fa fa-thumbs-o-up"></i>
+                    <span class="like-count" id="{{.ID}}-1">{{.Likes}}</span>
                     </button>
-                    <button class="dislike-button" id="{{.ID}}-dislike">
-                        <i class="fa fa-thumbs-down"></i>
-                        <span class="dislike-count" id="{{.ID}}-2">{{.Dislikes }}</span>
+                    <button class="dislike-button" id="{{.ID}}-dislike" onclick="likeSender(this.id)">
+                        <i class="fa fa-thumbs-o-down"></i>
+                        <span class="dislike-count" id="{{.ID}}-2">{{.Dislikes}}</span>
                     </button>
                 </div>
                 <span id="comment-btn-{{.ID}}" class="btns" onclick="showComments(this.id)">{{.NumOfComms}} <i class="fa fa-comment"></i> comments</span>
@@ -138,7 +143,6 @@
         {{end}}
     </div>
 </body>
-<script src="../static/script.js"></script>
 <!-- <footer>
     <span>&copy;  Forum | All Rights Reserved</span> -->
 </html>

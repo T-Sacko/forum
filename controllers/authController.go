@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"encoding/json"
+	"fmt"
 	"time"
 
 	m "forum/models"
@@ -23,8 +24,10 @@ func getUser(r *http.Request) *m.User {
 }
 
 func CookieSetter(user *m.User) (*http.Cookie, error) {
+	fmt.Println("CookieSetter func being called", user.Email)
 	SessionId, err := uuid.NewV4()
 	if err != nil {
+		fmt.Println(err)
 		return nil, err
 	}
 

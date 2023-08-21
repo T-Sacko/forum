@@ -32,8 +32,11 @@ func main() {
 	models.InitDB()
 
 	defer models.CloseDB()
-	//models.Test()
+
+	// models.DeleteLikesTable()
+
 	mux := http.NewServeMux()
+
 	r.SetUpRoutes(mux)
 
 	openBrowser("http://0.0.0.0:8888")

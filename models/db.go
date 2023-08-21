@@ -139,6 +139,13 @@ func GetID(email string) (int, error) {
 	return userID, nil
 }
 
+// func DeleteLikesTable() {
+// 	_, err := db.Exec("DELETE FROM dislikes")
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
+// }
+
 func CloseDB() {
 	if db != nil {
 		db.Close()

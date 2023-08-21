@@ -15,4 +15,6 @@ func SetUpRoutes(mux *http.ServeMux) {
 	mux.HandleFunc("/check-session", c.CheckSession)
 	mux.HandleFunc("/comment", c.CommentHandler)
 	mux.HandleFunc("/get-comments", c.GetComments)
+	mux.HandleFunc("/like-post", c.LikeHandler)
+	mux.HandleFunc("/get-post-likes", c.GetPostLikes)
 }

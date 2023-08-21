@@ -1,6 +1,7 @@
 package models
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 	"strings"
@@ -45,12 +46,15 @@ func GetUserByCookie(r *http.Request) (*User, error) {
 
 	cookie, err := r.Cookie("session")
 	if err != nil {
+		fmt.Println("different error", err)
 		return &User{}, err
 	}
 	sessionId := cookie.Value
+	fmt.Println(sessionId)
 	var userId int
 	err = db.QueryRow("SELECT id, username FROM users WHERE sessionId = ?", sessionId).Scan(&userId, &username)
 	if err != nil {
+		fmt.Println("here", err)
 		return &User{}, err
 	}
 
@@ -64,12 +68,13 @@ func GetPostsFromDB() ([]Post, error) {
 		SELECT posts.id, posts.title, posts.content, users.username,
 			GROUP_CONCAT(DISTINCT categories.name) AS categoryNames,
 			COALESCE(SUM(CASE WHEN likes.value = 1 THEN 1 ELSE 0 END), 0) AS likes,
-			COALESCE(SUM(CASE WHEN likes.value = -1 THEN 1 ELSE 0 END), 0) AS dislikes
+			COALESCE(SUM(CASE WHEN dislikes.value = -1 THEN 1 ELSE 0 END), 0) AS dislikes
 		FROM posts
 		INNER JOIN users ON posts.userId = users.id
 		INNER JOIN post_categories ON posts.id = post_categories.post_id
 		INNER JOIN categories ON post_categories.category_id = categories.id
 		LEFT JOIN likes ON likes.postId = posts.id
+		LEFT JOIN dislikes ON dislikes.postId = posts.id
 		GROUP BY posts.id, users.username
 		ORDER BY posts.id DESC
 	`

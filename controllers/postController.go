@@ -10,6 +10,8 @@ import (
 
 func CheckSession(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("checking session")
+
+	fmt.Println("CheckSession func being called")
 	cookie, err := r.Cookie("session")
 	if err != nil {
 		http.Error(w, "unathorized to post", http.StatusUnauthorized)
@@ -84,8 +86,85 @@ func CommentHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func LikeHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("LikeHandler func being called")
+	user, err := m.GetUserByCookie(r)
+	if err != nil {
+		if user != nil {
+			fmt.Println("post.controller.go Error func HandlePostAction: ", err)
+			return
+		}
+		http.Error(w, "No active Cookie", 404)
+	}
+	if user != nil {
+		var postActionReqData m.PostActionReq
+		err = json.NewDecoder(r.Body).Decode(&postActionReqData)
+		if err != nil {
+			fmt.Println(err)
+			http.Error(w, "500", 500)
+			return
+		}
+		fmt.Println("likeActionData una", postActionReqData)
+		postId, _ := strconv.Atoi(postActionReqData.PostId)
+		commentId, _ := strconv.Atoi(postActionReqData.CommentId)
+		action := postActionReqData.Action
+		switch action {
+		case "like":
+			m.SaveLike(commentId, postId, user.ID)
+		case "unlike":
+			m.RemoveLike(commentId, postId, user.ID)
+		case "dislike":
+			m.SaveDislike(commentId, postId, user.ID)
+		case "removeDislike":
+			m.RemoveDislike(commentId, postId, user.ID)
+		}
+	}
+}
+
+func GetPostLikes(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("GetPostLikes func being called")
+	_, err := r.Cookie("session")
+	if err != nil {
+		if err == http.ErrNoCookie {
+			var postID = r.URL.Query().Get("postID")
+			ID, err := strconv.Atoi(postID)
+			if err != nil {
+				fmt.Println(err)
+				return
+			}
+			likesData, err := m.GetLikedPosts(ID)
+			if err != nil {
+				fmt.Println("error with suttin", err)
+			}
+
+			fmt.Println(likesData)
+
+			JSsender(w, likesData)
+			return
+		} else {
+			http.Error(w, err.Error(), 500)
+		}
+	}
+	fmt.Println("GetPostLikes func being called")
+	user, err := m.GetUserByCookie(r)
+	if err != nil {
+		fmt.Println("no cookie tring to get user liked posts", err)
+		return
+	}
+	likesData, err := m.GetUserLikedPosts(user.ID)
+	if err != nil {
+		fmt.Println("error with suttin")
+	}
+
+	fmt.Println(likesData)
+
+	JSsender(w, likesData)
+}
+
 func GetComments(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
+
+		fmt.Println("GetComments func being called")
 
 		var postID = r.URL.Query().Get("postID")
 
