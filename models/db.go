@@ -17,11 +17,11 @@ func InitDB() {
 		log.Fatal(err)
 	}
 
-	_, err = db.Exec("PRAGMA busy_timeout = 2000") // 2000 milliseconds = 2 seconds
-	if err != nil {
-		fmt.Println("nuff errs n ting inna it:", err)
-		db.Close()
-	}
+	// _, err = db.Exec("PRAGMA busy_timeout = 2000") // 2000 milliseconds = 2 seconds
+	// if err != nil {
+	// 	fmt.Println("nuff errs n ting inna it:", err)
+	// 	db.Close()
+	// }
 
 	// Create tables if they don't exist
 	_, err = db.Exec(`
@@ -122,9 +122,9 @@ func InitDB() {
 	}
 
 	// Set database connection pool limits
-	db.SetMaxOpenConns(25)
-	db.SetMaxIdleConns(25)
-	db.SetConnMaxLifetime(5 * 60 * 1000)
+	// db.SetMaxOpenConns(25)
+	// db.SetMaxIdleConns(25)
+	// db.SetConnMaxLifetime(5 * 60 * 1000)
 
 	fmt.Printf("Database initialized\n")
 }

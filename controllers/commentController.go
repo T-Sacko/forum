@@ -60,15 +60,18 @@ func GetComments(w http.ResponseWriter, r *http.Request) {
 	postID, err := strconv.Atoi(ID)
 	if err != nil {
 		fmt.Println("postID is invalid to get comments")
+		return
 	}
-	user, err := m.GetUserByCookie(r)
-	if err != nil {
-		user = nil
+	var userID int
+	user, _ := m.GetUserByCookie(r)
+	if user != nil {
+		userID = user.ID
 	}
-	comments, err := m.GetComments(user.ID, postID)
+	comments, err := m.GetComments(userID, postID)
 	fmt.Println(comments)
 	if err != nil {
 		fmt.Println("couldnt get comments")
+		return
 	}
 	fmt.Println("comments length is: ", len(comments))
 	json.NewEncoder(w).Encode(comments)

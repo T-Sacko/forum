@@ -3,6 +3,7 @@ package controllers
 import (
 	"encoding/json"
 	"fmt"
+	"time"
 
 	m "forum/models"
 	"html/template"
@@ -43,21 +44,29 @@ func cookie(r *http.Request) (string, error) {
 
 }
 
-//////////////////////////////////////////////////
+// ////////////////////////////////////////////////
 func SignOut(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("log out req received")
 	seshID, err := cookie(r)
 	if err != nil {
-		fmt.Println("next tings on signout:",err)
+		fmt.Println("next tings on signout:", err)
 	}
 
-	fmt.Println("log out req received")
 	err = m.DeleteCookie(seshID)
 	if err != nil {
 		fmt.Println("cant log out:", err)
 	}
-	http.Redirect(w, r, "/", http.StatusMovedPermanently)
+	http.SetCookie(w, &http.Cookie{
+		Name:    "session_cookie_name", // replace with the name of your session cookie
+		Value:   "",
+		Path:    "/",
+		Expires: time.Unix(0, 0), // Setting it to the zero value makes it expired
+		MaxAge:  -1,              // MaxAge<0 means delete cookie now
+	})
+	// http.Redirect(w, r, "/", http.StatusMovedPermanently)
 }
-//////////////////////////////////////////////////////
+
+// ////////////////////////////////////////////////////
 func Login(w http.ResponseWriter, r *http.Request) {
 
 	var user struct {

@@ -18,7 +18,7 @@
         <nav class="navbar">
             <a href="/" class="brand">Forum</a>
             <div class="filter">
-                <button class="filter-button">{{.Filter}}<i class="fa fa-caret-down arrow"></i></button>
+                <button class="filter-button" id="dropdown-toggle">{{.Filter}}<i class="fa fa-caret-down arrow"></i></button>
                 <div class="dropdown-content">
                     {{if .User.Status}}
                     <a href="/?category=my-posts">my Posts <i class="fa fa-user"></i></a>
@@ -32,11 +32,17 @@
                 </div>
             </div>
 
+
             <a class="account" id="account-link"> <i class="fa fa-user-circle"></i></a>
             {{if not .User.Status}}
             <a class="sign-in" id="sign-in">Sign In <i class="fa fa-sign-in"></i></a>
             {{else}}
-            <a href="/sign-out" class="sign-in" id="sign-out">Sign Out <i class="fa fa-sign-out"></i></a>
+            <span><i class="fa fa-user"></i> {{.User.Username}}</span>
+            <button class="create-post-button" id="create-post-button" style="">
+                Create Post <i class="fa fa-pencil" aria-hidden="true"></i>
+
+            </button>
+            <a href="/sign-out">Sign Out <i class="fa fa-sign-out"></i></a>
             {{end}}
 
             <!-- SignForm------------------------- -->
@@ -102,9 +108,7 @@
         </nav>
     </header>
     <div class="seperate">
-        {{if .User.Status}}
-        <button id="create-post-button">Create Post</button>
-        {{end}}
+
         <!-- Hidden until create post button is clicked -->
         <div id="modal-container">
             <div id="post-form">
@@ -148,56 +152,39 @@
                 </div>
                 <h3 class="post-title">{{.Title}}</h3>
                 <p class="post-content" style="font-weight:100; ">{{ .Content }}</p>
-                <div class="post-footer" style="border-top: 1px solid burlywood; padding-top: 1rem;">
+                <div class="post-footer" style="border-top: 2px solid white; padding-top: 1rem;">
                     <!-- //likes -->
-                    <span>
+                    <span class="ting1 ting">
                         <i class="fa fa-thumbs-o-up {{if $.User.Status}}likes{{end}}" id="{{.ID}}-like"
                             style="cursor: pointer;">
                         </i>
                         <span id="{{.ID}}-1">{{.Likes }}</span>
                     </span>
                     <!-- // dislikes -->
-                    <span>
+                    <span class="ting2 ting">
                         <i class="fa fa-thumbs-o-down {{if $.User.Status}}dislikes{{end}}" id="{{.ID}}-dislike"
                             style="cursor: pointer;">
                         </i>
                         <span id="{{.ID}}-2">{{ .Dislikes }}</span>
                     </span>
 
-                    <span class="btn comment-btn" id="comment{{.ID}}">
+                    <span class=" ting btn comment-btn" id="comment{{.ID}}">
                         <i class="fa fa-comment"></i> comment
                     </span>
                 </div>
                 <div class="comments hidden" id="comments-{{.ID}}"
                     style="margin-top: 1rem; overflow-y: auto; max-height: 60vh; ">
-                    <!-- <div class="comment">
 
-                        <h4 class="username"><i class="fa fa-user"></i> titi</h4>
-                        <p class="content">i like this post still </p>
-                        <div class="comment-footer">
-                            <div class="comment-like-buttons">
-                                <span id="commentID-like" class="comment-like-button comment-button"><i
-                                        class="comment-like-icon fa fa-thumbs-o-up"></i> 20</span><span
-                                    id="commentID-dislike" class="comment-dislike-button comment-button"><i
-                                        class="comment-dislike-icon fa fa-thumbs-o-down"></i> 0</span>
-                            </div>
-                        </div>
-                    </div>
-
-
-                </div> -->
+                </div>
                 <form class="comment-form" id="form-{{.ID}}">
                     <div class="comment-input-container">
                         <input type="hidden" name="postID" value="{{.ID}}">
                         <textarea name="comment" class="comment-input" placeholder="Write a comment..."></textarea>
-                        <button type="submit" class="comment-send"><i class="fa fa-send"></i></button>
                     </div>
+                    <button type="submit" class="comment-send"><i class="fa fa-send"></i></button>
                 </form>
-
-
-
-
             </div>
+
             {{end}}
         </main>
     </div>

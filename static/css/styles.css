@@ -5,6 +5,11 @@
   margin: 0;
 }
 
+button{
+  padding: 0;
+  border: none;
+}
+
 /* ----------------------------------------header */
 
 .navbar {
@@ -20,9 +25,7 @@
 }
 
 .navbar a {
-  text-align: center;
   cursor: pointer;
-  padding: 0.3em 0.4em;
   font-size: 1em;
   color: white;
 }
@@ -38,7 +41,7 @@
 }
 
 .navbar .sign-in {
-  right: 0;
+  /* right: 0; */
 }
 
 .navbar .account {
@@ -53,7 +56,7 @@
 }
 
 .sign-in i {
-  font-size: 1.35em;
+  /* font-size: 1.35em; */
 }
 
 .filter-button {
@@ -68,7 +71,7 @@
   width: 17rem;
   border-radius: 4px;
 
-  border: 1px solid rgb(89, 113, 179);
+  border: 3px solid rgb(200, 195, 195);
 }
 
 .filter {
@@ -81,7 +84,6 @@
   position: relative;
 
   position: relative;
-  padding-bottom: 0.5rem;
 }
 
 .dropdown-content a {
@@ -109,9 +111,11 @@
 
 .filter:hover > .dropdown-content {
   opacity: 1;
+  visibility: visible;
   border-right: 2px solid #384e8e;
   pointer-events: auto;
   transform: translateY(0);
+  
 }
 
 /* .filter:hover .filter i{
@@ -132,8 +136,9 @@
   border-radius: 2px;
   top: calc(100%);
   transform: translateY(-10px);
-  transition: transform 150ms ease-in-out, opacity 150ms ease-in-out;
+  transition: transform 150ms ease-in-out, opacity 150ms ease-in-out, visibility 150ms ease-in-out;
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.1);
+  visibility: hidden;
 }
 
 .filter .arrow {
@@ -142,12 +147,24 @@
   transition: transform 150ms ease-in-out;
 }
 
+.create-post-button{
+  margin-right: 1rem;
+  background: none;
+  cursor: pointer;
+  background-color: rgb(140, 140, 160);
+  padding: .2rem;
+}
+
+.create-post-button:hover{
+  background-color: rgb(166, 165, 165);
+}
+
 /*-------------------------------------------posts*/
 .liked {
   color: rgb(233, 233, 234);
 }
 
-.post .post-footer {
+.post-footer {
   margin-top: 1rem;
 }
 
@@ -158,20 +175,27 @@ main {
   margin: auto;
 }
 
+a{
+  text-decoration: none;
+}
+a:hover{
+  text-decoration: underline;
+}
+
 .post {
   /* max-height: 50vh; */
   width: 100%;
-  margin-bottom: 15px;
-  background-color: #4d4949;
+  margin-bottom: .3rem;
+  background-color: rgb(89, 90, 114);
   padding: 6px;
   border-radius: 4px;
-  max-height: 80vh;
+  /* max-height: 80vh; */
   color: #fff;
 }
 
-.post span {
+/* .post span {
   padding-right: 0.8rem;
-}
+} */
 
 .post-user {
   display: inline;
@@ -208,15 +232,7 @@ main {
 
 
 
-.comment-form{
-  max-height:30vh;
-  background-color: #ccc;
-  overflow-y: auto;
-}
 
-/* .comment .username{
-  
-} */
 
 .comment .content{
   font-weight: 400;
@@ -257,6 +273,37 @@ border-radius: 1rem 0 0 1rem;
 
 }
 
+.ting1{
+  border-radius: 1rem 0 0 1rem;
+  border-right:1px solid #f6f2f2;
+}
+
+
+.ting2{
+  border-radius: 0 1rem 1rem 0;
+}
+
+
+.ting{
+  padding: .3rem;
+  background-color: #5f5e5e;
+}
+
+.ting:hover{
+background-color: #757474;
+cursor: pointer;
+}
+
+.comment-btn{
+  margin-left: .5rem;
+  padding: .3rem .6rem .3rem .6rem;
+  border-radius: 1rem;
+}
+
+.comment-send:hover{
+  color: #757474;
+}
+
 
 /* c-------------------------------------------------comment section end */
 
@@ -264,29 +311,37 @@ border-radius: 1rem 0 0 1rem;
   cursor: pointer;
 }
 
-.comment-input-container {
-  display: flex;
-  align-items: end;
+.comment-form {
+  border-radius: 10px; /* Adjust this value as needed */
   position: relative;
+  background-color: #333;
+  margin-top: 1rem;
 }
-
+.comment-input-container {
+  width: 100%;
+  height: 100%;
+  margin-bottom: .5rem;
+}
 .comment-input {
-  width: 100%; /* Adjust this value as needed */
-  resize: none; /* Removes the default resize handle */
-  border-radius: 15px;
-  padding: 10px;
-  border: 1px solid #ccc;
+  width: 100%;
+  background: none;
+  resize: vertical; /* To allow vertical resize only */
   outline: none;
-  overflow: hidden;
+  border: none;
+  padding: 10px; /* Padding inside the textarea */
+  color: white;
 }
-
 .comment-send {
+  position: absolute;
+  bottom: 10px; /* Adjust this value to move the button up/down */
+  right: 10px; /* Adjust this value to move the button left/right */
   background: none;
   border: none;
+  color: #5f5e5e;
+}
+.fa-send{
   cursor: pointer;
-  color: #333;
-  font-size: 1.2em;
-  margin-left: 10px;
+
 }
 
 /*--------------------------------------create post modal*/
@@ -404,7 +459,7 @@ html {
   font-family: monospace;
   /* background: linear-gradient(rgb(89, 113, 179), azure); */
   background-repeat: no-repeat;
-  background-color: rgb(8, 8, 8);
+  background-color: rgb(15, 15, 20);
   color: black;
 }
 
@@ -423,7 +478,8 @@ html {
   bottom: 0;
   right: 0;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: rgba(0, 0, 0, 0.8);
+  z-index: 1;
 }
 /* ----------------------------------------------sign-in-modal */
 .signupForm {
@@ -434,7 +490,7 @@ html {
   width: 300px;
   background-color: #384e8e;
   position: fixed;
-  z-index: 12;
+  z-index: 122;
   border-radius: 3%;
   padding: 1.2rem;
 }

@@ -2,10 +2,10 @@ package main
 
 import (
 	"fmt"
-	"forum/models"
 	r "forum/routes"
 	"log"
 	"net/http"
+	"forum/models"
 
 	//"os/exec"
 
@@ -23,12 +23,13 @@ import (
 func main() {
 	models.InitDB()
 
-	//defer models.CloseDB()
+	//defer models.CloseDB()fmt
+	fmt.Println("yoyo")
 
 	mux := http.NewServeMux()
 	r.SetUpRoutes(mux)
-	posts, _ := models.GetPostsFromDB()
-	fmt.Println(posts)
+	// posts, _ := models.GetPostsFromDB()
+	// fmt.Println(posts)
 
 	// openBrowser("http://0.0.0.0:8888")
 	fmt.Println("Serving on Port ->:8888")

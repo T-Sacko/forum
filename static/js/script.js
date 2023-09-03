@@ -73,6 +73,18 @@ function decrement(postId, id) {
   dislikeCountElement.textContent = decrementedCount.toString();
 }
 
+// document.getElementById('dropdownToggle').addEventListener('click', function() {
+//   var menu = document.querySelector('.dropdown-menu');
+
+//   if (menu.style.opacity === "0" || menu.style.opacity === "") {
+//     menu.style.opacity = "1";
+//     menu.style.visibility = "visible";
+//   } else {Fsi
+//     menu.style.opacity = "0";
+//     menu.style.visibility = "hidden";
+//   }
+// });
+
 
 
 const likes = document.querySelectorAll('.likes')
@@ -185,6 +197,8 @@ function createCommentElement(comment) {
   return commentDiv;
 }
 
+//----------------------------------------display-comment-section
+
 const posts = document.querySelectorAll('.post')
 
 
@@ -193,6 +207,7 @@ posts.forEach(post => {
   const commentBtn = post.querySelector('.comment-btn')
   commentBtn.addEventListener('click', async () => {
     const commentSection = post.querySelector('.comments')
+    commentSection.innerHTML=''
     if (getComputedStyle(commentSection).display !== 'none') {
       commentSection.style.display = 'none';
       return; // Exit the function if the comment section is being hidden
@@ -201,7 +216,7 @@ posts.forEach(post => {
      
     }
 
-    if (commentsFetched) return;
+    if (commentsFetched) ;
     const postID = post.id.split('-')[1]
     const res = await fetch(`/get-comments?postID=${postID}`)
     const data = await res.json()
@@ -507,6 +522,9 @@ document.addEventListener("DOMContentLoaded", function() {
           console.log(comment);
           const id = comment.id
           const commentsDiv = document.getElementById(`comments-${id}`)
+          if (!commentsDiv) {
+            console.log("what are u thinking mate")
+          }
           const commentDiv = document.createElement('div')
           commentDiv.className = 'comment'
 
