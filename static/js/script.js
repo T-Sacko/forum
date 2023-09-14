@@ -7,40 +7,150 @@ async function checkSession(){
 let userStatus = false; // default value
 
 checkSession().then(data => {
-    userStatus = data.status;
-    console.log("User logged in:", userStatus);
+  userStatus = data.status;
+  console.log("User logged in:", userStatus);
+  if (!userStatus) {
+    const overlay = document.getElementById('overlay')
+    const signIn = document.getElementById('sign-in')
+  
+    const loginButton = document.getElementById('loginButton')
+  
+    const signupButton = document.getElementById('signupButton')
+  
+    const signupForm = document.getElementById('signupForm')
+  
+    const loginForm = document.getElementById('loginForm')
+  
+  
+    const signupCloseButton = document.getElementById('signInCloseButton')
+  
+    const loginCloseButton = document.getElementById('loginCloseButton')
+  
+    signIn.addEventListener('click', () => {
+      loginForm.style.display = 'block'
+      overlay.style.display = 'block'
+      signupForm.style.display = 'none'
+    })
+  
+    overlay.addEventListener('click', () => {
+      signupForm.style.display = 'none';
+      overlay.style.display = 'none';
+      loginForm.style.display = 'none'
+    });
+  
+    signupCloseButton.addEventListener('click', () => {
+      signupForm.style.display = 'none';
+      overlay.style.display = 'none';
+    });
+  
+    loginCloseButton.addEventListener('click', () => {
+      loginForm.style.display = 'none';
+      overlay.style.display = 'none';
+    });
+  
+    loginButton.addEventListener('click', () => {
+      signupForm.style.display = 'none'
+      loginForm.style.display = 'block'
+    })
+  
+    signupButton.addEventListener('click', () => {
+      signupForm.style.display = 'block'
+      loginForm.style.display = 'none'
+    })
+    
+    
+} else{
+  var createPostButton = document.getElementById("create-post-button");
+
+
+
+
+  var modalContainer = document.getElementById("modal-container");
+  var closeButton = modalContainer.querySelector("#close-button");
+
+  createPostButton.onclick = function () {
+    console.log("clicked create post button")
+    modalContainer.style.display = "flex";
+  };
+
+  closeButton.onclick = function () {
+    modalContainer.style.display = "none";
+  };
+
+  window.onclick = function (event) {
+    if (event.target == modalContainer) {
+      modalContainer.style.display = "none";
+    }
+  }
+
+
+
+  // Add event listener to the submit button
+  var postForm = modalContainer.querySelector("#create-post-form");
+  postForm.addEventListener("submit", async (event) => {
+    event.preventDefault(); // Prevent the form from submitting
+    resp = await fetch('/session')
+    data = await resp.json()
+    if (data.status) {
+      postForm.submit()
+      console.log("Cliked submit button")
+    }
+    // Check if the user is logged in
+  });
+
+  const postContent = postForm.querySelector('.form-text')
+  postContent.addEventListener('input', () => {
+    this.style.height = 'auto'
+    this.style.height = this.scrollHeight + 'px'
+  })
+
+
+
+
+  signOutBtn = document.querySelector('#sign-out-btn')
+  console.log(signOutBtn)
+  signOutBtn.addEventListener('click', () => {
+    // Clear local session first
+    let cookieValue = getCookie("session");
+    clearLocalAuthToken();
+  
+    // Check for internet connectivity
+    if (navigator.onLine) {
+      // If online, send logout request
+      fetch(`/signout?seshID=${cookieValue}`, {
+          method: 'POST',
+          // ... other necessary configurations
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }else{
+          window.location.href = '/';
+        }
+          
+      })
+      .catch(error => {
+        console.log('Failed to log out from server:', error);
+        alert('Logged out locally but there was an issue logging out from the server. You may need to logout again when connected to the internet.');
+      });
+    }else {
+      alert('You are offline. You have been logged out locally but may need to logout again when connected to the internet.');
+    }
+  });
+      
+}
 });
+  
+function clearLocalAuthToken() {
+  document.cookie = "session=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+}
 
+function getCookie(name) {
+  const value = "; " + document.cookie;
+  const parts = value.split("; " + name + "=");
+  if (parts.length == 2) return parts.pop().split(";").shift();
+}
 
-// fetch("/get-post-likes", {
-//   method: "GET"
-// })
-//   .then(response => response.json())
-//   .then(data => {
-//     // Handle the like data
-//     console.log(data, 'this is the data');
-
-//     for (const likeData of data) {
-//       const postId = likeData.postId;
-//       const value = likeData.value;
-//       const likeButton = document.getElementById(`${postId}-like`);
-//       if (value == 1) {
-//         if (likeButton) {
-//           toggleLiked(likeButton)
-//           console.log("toggleLiked it up still")
-//         }
-//       } else {
-//         const dislikeButton = document.getElementById(`${postId}-dislike`);
-//         toggleDisliked(dislikeButton)
-
-//       }
-
-//     }
-//   })
-//   .catch(error => {
-//     console.error("Error with the posts toggleLiked data is:", error);
-//     // Handle the error
-//   });
 
 function toggleLiked(likeButton) {
   likeButton.classList.toggle('liked')
@@ -57,104 +167,28 @@ function toggleDisliked(dislikeButton) {
 
 
 
-function increment(postId, id) {
-  const dislikeCountElement = document.getElementById(`${postId}-${id}`);
-  const dislikeCountText = dislikeCountElement.textContent;
-  const dislikeCountValue = parseInt(dislikeCountText);
-  const incrementedCount = dislikeCountValue + 1;
-  dislikeCountElement.textContent = incrementedCount.toString();
+function increment(button) {
+  const likeCountElement = button.querySelector('.like-count')
+  const likeCountText = likeCountElement.textContent;
+  const likeCountValue = parseInt(likeCountText);
+  const incrementedCount = likeCountValue + 1;
+  likeCountElement.textContent = incrementedCount.toString();
 }
 
-function decrement(postId, id) {
-  const dislikeCountElement = document.getElementById(`${postId}-${id}`);
+function decrement(dislikeBtn) {
+  const dislikeCountElement = dislikeBtn.querySelector('.like-count')
   const dislikeCountText = dislikeCountElement.textContent;
   const dislikeCountValue = parseInt(dislikeCountText);
   const decrementedCount = dislikeCountValue - 1;
   dislikeCountElement.textContent = decrementedCount.toString();
 }
 
-// document.getElementById('dropdownToggle').addEventListener('click', function() {
-//   var menu = document.querySelector('.dropdown-menu');
-
-//   if (menu.style.opacity === "0" || menu.style.opacity === "") {
-//     menu.style.opacity = "1";
-//     menu.style.visibility = "visible";
-//   } else {Fsi
-//     menu.style.opacity = "0";
-//     menu.style.visibility = "hidden";
-//   }
-// });
-
-
-
-const likes = document.querySelectorAll('.likes')
-
-likes.forEach(likeButton => {
-  const likeStr = likeButton.getAttribute('id');
-  const postId = likeStr.split('-')[0]; // This will split the likeId string at the '-' character
-  const dislikeButton = document.getElementById(`${postId}-dislike`)
-
-
-  likeButton.addEventListener('click', () => {
-    // toggle like button 
-    toggleLiked(likeButton)
-
-
-
-    if (likeButton.classList.contains('liked')) {
-      // send like req to server
-      console.log("we liking suttin")
-      increment(postId, 1)
-      if (dislikeButton.classList.contains('disliked')) {
-        toggleDisliked(dislikeButton)
-        decrement(postId, 2)
-        // send req to remove dislike
-        handleLikeAction(postId, "removeDislike")
-      }
-      handleLikeAction(postId, "like")
-    } else {
-      //send unlike req
-      console.log("we unliking suttin")
-      handleLikeAction(postId, "unlike")
-      decrement(postId, 1)
-    }
-
-
-
-  })
-
-  dislikeButton.addEventListener('click', () => {
-    // toggle like button 
-    toggleDisliked(dislikeButton)
-
-
-    if (dislikeButton.classList.contains('disliked')) {
-      // send dislike req to server
-      console.log("we disliking suttin")
-      increment(postId, 2)
-      if (likeButton.classList.contains('liked')) {
-        toggleLiked(likeButton)
-        decrement(postId, 1)
-        // send req to remove like
-        handleLikeAction(postId, "unlike")
-      }
-      handleLikeAction(postId, "dislike")
-    } else {
-      //send remove dislike req
-      decrement(postId, 2)
-      console.log("we removing dislike")
-      handleLikeAction(postId, "removeDislike")
-    }
-
-
-  })
-
-})
 
 //////////////////////////////////////////-commentRetrieval
 function createCommentElement(comment) {
   const commentDiv = document.createElement('div');
   commentDiv.classList.add('comment');
+  commentDiv.setAttribute('id',`${comment.id}`)
 
   const usernameH4 = document.createElement('h4');
   usernameH4.classList.add('username');
@@ -199,29 +233,213 @@ function createCommentElement(comment) {
 
 //----------------------------------------display-comment-section
 
+
+function addCommentListeners(comment) {
+  const commentLikeBtn = comment.querySelector(`#comment-${comment.id}-like`);
+  console.log(comment, 'whaaa', comment.id)
+  const commentDislikeBtn = comment.querySelector(`#comment-${comment.id}-dislike`);
+  const dislikeIcon =  comment.querySelector('.comment-dislike-icon');
+  const likeIcon = comment.querySelector('.comment-like-icon');
+  const likeCount = comment.querySelector('.comment-likes');
+  const dislikeCount = comment.querySelector('.comment-dislikes');
+
+  commentLikeBtn.addEventListener('click', () => {
+      handleLikeClick(comment, likeIcon, dislikeIcon, likeCount, dislikeCount);
+  });
+
+  commentDislikeBtn.addEventListener('click', () => {
+      handleDislikeClick(comment, likeIcon, dislikeIcon, likeCount, dislikeCount);
+  });
+}
+
+function handleLikeClick(comment, likeIcon, dislikeIcon, likeCount, dislikeCount) {
+  toggle(likeIcon);
+  if (likeIcon.classList.contains('liked')) {
+      incComment(likeCount);
+      if (dislikeIcon.classList.contains('disliked')) {
+          toggle(dislikeIcon);
+          decrComment(dislikeCount);
+          likeReq(comment.id, 'removeDislike');
+      }
+      likeReq(comment.id, 'like');
+  } else {
+      decrComment(likeCount);
+      likeReq(comment.id, 'removeLike');
+  }
+}
+
+function handleDislikeClick(comment, likeIcon, dislikeIcon, likeCount, dislikeCount) {
+  toggle(dislikeIcon);
+  if (dislikeIcon.classList.contains('disliked')) {
+      incComment(dislikeCount);
+      if (likeIcon.classList.contains('liked')) {
+          toggle(likeIcon);
+          decrComment(likeCount);
+          likeReq(comment.id, 'removeLike');
+      }
+      likeReq(comment.id, 'dislike');
+  } else {
+      decrComment(dislikeCount);
+      likeReq(comment.id, 'removeDislike');
+  }
+}
+
 const posts = document.querySelectorAll('.post')
 
+function setUpLike(likeButton, dislikeButton, postId) {
+  const likeIcon = likeButton.querySelector('.likes')
+  const dislikeIcon = dislikeButton.querySelector('.dislikes')
+  likeButton.addEventListener('click', () => {
+    // toggle like button 
+    toggleLiked(likeIcon)
+
+    if (likeIcon.classList.contains('liked')) {
+      // send like req to server
+      console.log("we liking suttin")
+      increment(likeButton)
+      if (dislikeIcon.classList.contains('disliked')) {
+        toggleDisliked(dislikeIcon)
+        decrement(dislikeButton)
+        // send req to remove dislike
+        handleLikeAction(postId, "removeDislike")
+      }
+      handleLikeAction(postId, "like")
+    } else {
+      //send unlike req
+      console.log("we unliking suttin")
+      handleLikeAction(postId, "unlike")
+      decrement(likeButton)
+    }
+
+
+
+  })
+
+  dislikeButton.addEventListener('click', () => {
+    // toggle like button 
+    toggleDisliked(dislikeIcon)
+
+
+    if (dislikeIcon.classList.contains('disliked')) {
+      // send dislike req to server
+      console.log("we disliking suttin")
+      increment(dislikeButton)
+      if (likeIcon.classList.contains('liked')) {
+        toggleLiked(likeIcon)
+        decrement(likeButton)
+        // send req to remove like
+        handleLikeAction(postId, "unlike")
+      }
+      handleLikeAction(postId, "dislike")
+    } else {
+      //send remove dislike req
+      decrement(dislikeButton)
+      console.log("we removing dislike")
+      handleLikeAction(postId, "removeDislike")
+    }
+
+
+  })
+}
+
+function setContent(content, seeMore) {
+  if (content.scrollHeight > content.clientHeight) {
+    seeMore.style.display = 'inline'
+  }else{
+    return
+  }
+
+  var isMore = false
+  seeMore.addEventListener('click', () => {
+    if (isMore) {
+      content.style.maxHeight = '197px'
+      seeMore.textContent = 'see more...'
+      isMore = false
+      return
+    }
+    console.log(content)
+    content.style.maxHeight = 'none';
+    seeMore.textContent = 'see less'
+    isMore = true
+  })
+
+}
 
 posts.forEach(post => {
-  let commentsFetched = false;
+  const seeMore = post.querySelector('.see-more')
+  console.log(seeMore, 'seeing more')
+  const content = post.querySelector('.post-content')
+  const postId = post.id.split('-')[1];
   const commentBtn = post.querySelector('.comment-btn')
+  const likebtn = post.querySelector('.post-l')
+  const dislikeBtn = post.querySelector('.post-d')
+  setUpLike(likebtn,dislikeBtn,postId)
+  const commentForm = post.querySelector('.comment-form')
+  const commentsDiv = post.querySelector('.comments')
+
+  setContent(content, seeMore)
+
+
+  commentForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    let formData = new FormData(commentForm);
+
+    const textarea = commentForm.querySelector('.comment-input');
+    // const commentErr = commentForm.querySelector('.comment-err')
+    if (textarea.value==''){
+      // commentErr.textContent='input required'
+      // setTimeout()
+      return
+    }
+   textarea.value = '';
+
+
+    fetch('/comment', {
+      method: 'POST',
+      body:   formData
+    })
+    .then(response => response.json()) 
+    .then(comment => {
+      console.log(comment);
+      // const id = comment.id
+      // if (!commentsDiv) {
+      //   console.log("what are u thinking mate")
+      //  }
+      const commentDiv = createCommentElement(comment)
+      addCommentListeners(commentDiv)
+
+      commentsDiv.prepend(commentDiv)
+      commentsDiv.style.display = 'block'
+
+        
+
+
+    })
+    .catch(error => {
+        console.log("Error:", error);
+    });
+  })
+
+
+  
   commentBtn.addEventListener('click', async () => {
     const commentSection = post.querySelector('.comments')
     commentSection.innerHTML=''
+   
+    
+    
+    const postID = post.id.split('-')[1]
+    const res = await fetch(`/get-comments?postID=${postID}`)
+    const data = await res.json()
+    if (data == null){
+      return
+    }
     if (getComputedStyle(commentSection).display !== 'none') {
       commentSection.style.display = 'none';
       return; // Exit the function if the comment section is being hidden
     } else {
       commentSection.style.display = 'block';
      
-    }
-
-    if (commentsFetched) ;
-    const postID = post.id.split('-')[1]
-    const res = await fetch(`/get-comments?postID=${postID}`)
-    const data = await res.json()
-    if (data == null){
-      return
     }
     data.forEach(comment => {
       console.log(comment)
@@ -269,7 +487,10 @@ posts.forEach(post => {
       })
 
     })
-    commentsFetched = true; 
+    const yOffset = -24; // 1.5rem = 24px, assuming the user's default font-size is 16px
+    const y = post.getBoundingClientRect().top + window.pageYOffset + yOffset;
+
+    window.scrollTo({ top: y, behavior: 'smooth' });
   })
 })
 
@@ -298,6 +519,8 @@ function decrComment(element) {
   element.textContent = ' ' + Count;
 
 }
+
+
 
 const likeReq = (commentID,action) => {
 fetch(`/like-comment?id=${commentID}&action=${action}`)
@@ -484,7 +707,6 @@ document.getElementById('signupForm').addEventListener('submit', (event) => {
 // -----------------------------------------------------------------------------
 
 
-document.addEventListener("DOMContentLoaded", function() {
   const commentInputs = document.querySelectorAll('.comment-input');
 
   commentInputs.forEach(input => {
@@ -494,135 +716,5 @@ document.addEventListener("DOMContentLoaded", function() {
     });
   });
 
-  const commentForms = document.querySelectorAll(".comment-form")
-
-  commentForms.forEach(commentForm => {
-    
-    console.log("form in a it")
-          commentForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      let formData = new FormData(commentForm);
-
-      const textarea = commentForm.querySelector('.comment-input');
-      const commentErr = commentForm.querySelector('.comment-err')
-      if (textarea.value==''){
-        // commentErr.textContent='input required'
-        // setTimeout()
-        return
-      }
-     textarea.value = '';
-
-
-      fetch('/comment', {
-        method: 'POST',
-        body:   formData
-      })
-      .then(response => response.json()) 
-      .then(comment => {
-          console.log(comment);
-          const id = comment.id
-          const commentsDiv = document.getElementById(`comments-${id}`)
-          if (!commentsDiv) {
-            console.log("what are u thinking mate")
-          }
-          const commentDiv = document.createElement('div')
-          commentDiv.className = 'comment'
-
-          commentDiv.innerHTML = `
-            <h4 class="username"><i class="fa fa-user"></i> ${comment.username}</h4>
-            <p class="content">${comment.content}</p>
-            <div class="comment-footer">
-                <div class="comment-like-buttons">
-                    <span id="comment${comment.id}-like" class="comment-like-button comment-button">
-                        <i class="comment-icon fa fa-thumbs-o-up"></i> ${comment.likes}
-                    </span>
-                    <span id="comment${comment.id}-dislike" class="comment-dislike-button comment-button">
-                        <i class="comment-icon fa fa-thumbs-o-down"></i> ${comment.dislikes}
-                    </span>
-                </div>
-            </div>
-          `;
-
-          commentsDiv.prepend(commentDiv)
-
-          // const usernameH4 = document.createElement('h4')
-          // usernameH4.className = 'username';
-          // usernameH4.innerHTML= `<i class=" fa fa-user"> ${comment.username}`
-
-          // const contentp = document.createElement('p')
-          // contentp.className='content'
-          // contentp.textContent= comment.content
-          
-          // const footerDiv = document.createElement('div')
-          // footerDiv.className = 'comment-footer'
-
-          // const likeButtonsDiv = document.createElement('div')
-          // likeButtonsDiv.className = 'comment-like-buttons'
-
-          // const likeSpan = document.createElement('span')
-          // likeSpan.id = `${comment.id}-like`
-          // likeSpan.className = 'comment-like-button comment-button'
-          // likeSpan.innerHTML = `<i class = `
-
-
-      })
-      .catch(error => {
-          console.log("Error:", error);
-      });
-    })
-
-  })
-})
-
-if (!userStatus){
-  console.log(userStatus, "wagwan wha u know bout debugging man, its ber long una, truss me, long like long like...")
-
-  const signIn = document.getElementById('sign-in')
-
-  const loginButton = document.getElementById('loginButton')
-
-  const signupButton = document.getElementById('signupButton')
-
-  const signupForm = document.getElementById('signupForm')
-
-  const loginForm = document.getElementById('loginForm')
-
-  const overlay = document.getElementById('overlay')
-
-  const signupCloseButton = document.getElementById('signInCloseButton')
-
-  const loginCloseButton = document.getElementById('loginCloseButton')
-
-  signIn.addEventListener('click', () => {
-    loginForm.style.display = 'block'
-    overlay.style.display = 'block'
-    signupForm.style.display = 'none'
-  })
-
-  overlay.addEventListener('click', () => {
-    signupForm.style.display = 'none';
-    overlay.style.display = 'none';
-    loginForm.style.display = 'none'
-  });
-
-  signupCloseButton.addEventListener('click', () => {
-    signupForm.style.display = 'none';
-    overlay.style.display = 'none';
-  });
-
-  loginCloseButton.addEventListener('click', () => {
-    loginForm.style.display = 'none';
-    overlay.style.display = 'none';
-  });
-
-  loginButton.addEventListener('click', () => {
-    signupForm.style.display = 'none'
-    loginForm.style.display = 'block'
-  })
-
-  signupButton.addEventListener('click', () => {
-    signupForm.style.display = 'block'
-    loginForm.style.display = 'none'
-  })
-
-}
+ 
+ 

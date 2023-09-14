@@ -38,7 +38,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	} else if category != "" {
 		fmt.Println("category is:", category)
 		filter = category
-		posts, err = m.FilterByCategory(category)
+		posts, err = m.FilterByCategory(user.ID,category)
 		fmt.Println("lenght is :",len(posts), posts)
 		if err != nil {
 			// Handle the error (e.g., show an error page)
@@ -48,7 +48,8 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		}
 	} else {
 
-		posts, err = m.GetPostsFromDB()
+		posts, err = m.GetPostsFromDB(user.ID)
+		fmt.Println(len(posts), "is len")
 		if err != nil {
 			// Handle the error (e.g., show an error page)
 			fmt.Println("error with getposts")

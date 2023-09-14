@@ -18,7 +18,8 @@
         <nav class="navbar">
             <a href="/" class="brand">Forum</a>
             <div class="filter">
-                <button class="filter-button" id="dropdown-toggle">{{.Filter}}<i class="fa fa-caret-down arrow"></i></button>
+                <button class="filter-button" id="dropdown-toggle">{{.Filter}}<i
+                        class="fa fa-caret-down arrow"></i></button>
                 <div class="dropdown-content">
                     {{if .User.Status}}
                     <a href="/?category=my-posts">my Posts <i class="fa fa-user"></i></a>
@@ -37,12 +38,12 @@
             {{if not .User.Status}}
             <a class="sign-in" id="sign-in">Sign In <i class="fa fa-sign-in"></i></a>
             {{else}}
-            <span><i class="fa fa-user"></i> {{.User.Username}}</span>
-            <button class="create-post-button" id="create-post-button" style="">
+            <span class="rightM"><i class="fa fa-user"></i> {{.User.Username}}</span>
+            <button class="create-post-button" id="create-post-button">
                 Create Post <i class="fa fa-pencil" aria-hidden="true"></i>
-
             </button>
-            <a href="/sign-out">Sign Out <i class="fa fa-sign-out"></i></a>
+            <button class="btn no-bg white" id="sign-out-btn">Sign Out <i class="fa fa-sign-out"></i></button>
+
             {{end}}
 
             <!-- SignForm------------------------- -->
@@ -132,10 +133,10 @@
 
                     <input id="title" type="text" name="title" placeholder="Title" required>
 
-
-                    <textarea class="form-text" name="content" placeholder="Content" required></textarea>
-
-                    <button id="submit-button" type="submit">Submit</button>
+                    <div class="post-box">
+                        <textarea class="form-text" name="content" placeholder="Content" required></textarea>
+                        <button class="p" id="submit-button" type="submit">Submit</button>
+                    </div>
                 </form>
 
 
@@ -149,33 +150,37 @@
                     <span class="post-user"><i class="fa fa-user-circle" aria-hidden="true"></i>
                         {{ .Username }}</span>
                     <span class="post-categories">Categories: {{ range .Categories }}{{ . }} {{ end }}</span>
+                    <button class="post-menu p">
+                        <i class="fa fa-ellipsis-h" aria-hidden="true"></i>
+                    </button>
+                        
                 </div>
                 <h3 class="post-title">{{.Title}}</h3>
                 <p class="post-content" style="font-weight:100; ">{{ .Content }}</p>
-                <div class="post-footer" style="border-top: 2px solid white; padding-top: 1rem;">
+                <button class="see-more no-bg white p" style="display: none;">See More...></button>
+                <div class="post-footer">
                     <!-- //likes -->
-                    <span class="ting1 ting">
-                        <i class="fa fa-thumbs-o-up {{if $.User.Status}}likes{{end}}" id="{{.ID}}-like"
-                            style="cursor: pointer;">
-                        </i>
-                        <span id="{{.ID}}-1">{{.Likes }}</span>
+                    <span class="ting1 ting post-l P">
+                        <i
+                            class="fa {{if eq .UserLikeStatus 1}}fa-thumbs-up liked{{else}}fa-thumbs-o-up{{end}} {{if $.User.Status}}likes{{end}}"></i>
+                        <span class="like-count">{{.Likes }}</span>
                     </span>
                     <!-- // dislikes -->
-                    <span class="ting2 ting">
-                        <i class="fa fa-thumbs-o-down {{if $.User.Status}}dislikes{{end}}" id="{{.ID}}-dislike"
-                            style="cursor: pointer;">
-                        </i>
-                        <span id="{{.ID}}-2">{{ .Dislikes }}</span>
+                    <span class="ting2 ting post-d" style="cursor: pointer;">
+                        <i
+                            class="fa {{ if eq .UserLikeStatus -1 }}fa-thumbs-down disliked{{ else }}fa-thumbs-o-down{{ end }} {{if $.User.Status}}dislikes{{end}}"></i>
+                        <span class="like-count">{{ .Dislikes }}</span>
                     </span>
-
+                    <!-- comment btn -->
                     <span class=" ting btn comment-btn" id="comment{{.ID}}">
-                        <i class="fa fa-comment"></i> comment
+                        <i class="fa fa-comment"></i> comments
                     </span>
+                    <!--  -->
                 </div>
-                <div class="comments hidden" id="comments-{{.ID}}"
-                    style="margin-top: 1rem; overflow-y: auto; max-height: 60vh; ">
-
+                <!-- comments section -->
+                <div class="comments hidden" id="comments-{{.ID}}" style=" overflow-y: auto; max-height: 60vh; ">
                 </div>
+                <!--  -->
                 <form class="comment-form" id="form-{{.ID}}">
                     <div class="comment-input-container">
                         <input type="hidden" name="postID" value="{{.ID}}">
@@ -190,7 +195,6 @@
     </div>
 
 
-    <script src="/static/js/post.js"></script>
     <script src="/static/js/script.js"></script>
     <!-- <script src="/static/js/script.js"></script> -->
 </body>

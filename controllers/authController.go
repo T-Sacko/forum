@@ -3,7 +3,6 @@ package controllers
 import (
 	"encoding/json"
 	"fmt"
-	"time"
 
 	m "forum/models"
 	"html/template"
@@ -34,36 +33,26 @@ func Session(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func cookie(r *http.Request) (string, error) {
-	cookie, err := r.Cookie("session")
-	if err != nil {
-		return "", err
-	}
-	seshID := cookie.Value
-	return seshID, nil
+// func cookie(r *http.Request) (string, error) {
+// 	cookie, err := r.Cookie("session")
+// 	if err != nil {
+// 		return "", err
+// 	}
+// 	seshID := cookie.Value
+// 	return seshID, nil
 
-}
+// }
 
 // ////////////////////////////////////////////////
 func SignOut(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("log out req received")
-	seshID, err := cookie(r)
-	if err != nil {
-		fmt.Println("next tings on signout:", err)
-	}
-
+	seshID := r.URL.Query().Get("seshID")
 	err = m.DeleteCookie(seshID)
 	if err != nil {
 		fmt.Println("cant log out:", err)
+		w.WriteHeader(http.StatusUnauthorized)
 	}
-	http.SetCookie(w, &http.Cookie{
-		Name:    "session_cookie_name", // replace with the name of your session cookie
-		Value:   "",
-		Path:    "/",
-		Expires: time.Unix(0, 0), // Setting it to the zero value makes it expired
-		MaxAge:  -1,              // MaxAge<0 means delete cookie now
-	})
-	// http.Redirect(w, r, "/", http.StatusMovedPermanently)
+
 }
 
 // ////////////////////////////////////////////////////

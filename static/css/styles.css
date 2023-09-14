@@ -5,7 +5,7 @@
   margin: 0;
 }
 
-button{
+button {
   padding: 0;
   border: none;
 }
@@ -95,7 +95,7 @@ button{
 }
 
 .dropdown-content a:hover {
-  background-color: rgb(138, 162, 230);
+  color: #5a7bdd;
 }
 * {
   font-family: monospace;
@@ -115,7 +115,6 @@ button{
   border-right: 2px solid #384e8e;
   pointer-events: auto;
   transform: translateY(0);
-  
 }
 
 /* .filter:hover .filter i{
@@ -124,7 +123,7 @@ button{
 
 .filter .dropdown-content {
   position: absolute;
-  background: rgb(31, 35, 109);
+  background: rgb(5, 5, 5);
   z-index: 16;
   opacity: 0;
   pointer-events: none;
@@ -136,7 +135,8 @@ button{
   border-radius: 2px;
   top: calc(100%);
   transform: translateY(-10px);
-  transition: transform 150ms ease-in-out, opacity 150ms ease-in-out, visibility 150ms ease-in-out;
+  transition: transform 150ms ease-in-out, opacity 150ms ease-in-out,
+    visibility 150ms ease-in-out;
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.1);
   visibility: hidden;
 }
@@ -147,15 +147,19 @@ button{
   transition: transform 150ms ease-in-out;
 }
 
-.create-post-button{
+.rightM {
+  margin-right: 1rem;
+}
+
+.create-post-button {
   margin-right: 1rem;
   background: none;
   cursor: pointer;
   background-color: rgb(140, 140, 160);
-  padding: .2rem;
+  padding: 0.2rem;
 }
 
-.create-post-button:hover{
+.create-post-button:hover {
   background-color: rgb(166, 165, 165);
 }
 
@@ -166,6 +170,7 @@ button{
 
 .post-footer {
   margin-top: 1rem;
+  margin-bottom: 1rem;
 }
 
 main {
@@ -175,22 +180,36 @@ main {
   margin: auto;
 }
 
-a{
+a {
   text-decoration: none;
 }
-a:hover{
+a:hover {
   text-decoration: underline;
+}
+
+.see-more {
+  color: rgb(130, 132, 224);
 }
 
 .post {
   /* max-height: 50vh; */
   width: 100%;
-  margin-bottom: .3rem;
-  background-color: rgb(89, 90, 114);
+  margin-bottom: 10px;
+  background-color: rgb(26, 26, 27);
   padding: 6px;
   border-radius: 4px;
   /* max-height: 80vh; */
   color: #fff;
+  border: 1px solid rgb(52, 53, 54);
+}
+
+.post-content {
+  max-height: 197px;
+  overflow: hidden;
+}
+
+.post:hover {
+  border-color: #5a5a5a;
 }
 
 /* .post span {
@@ -215,6 +234,21 @@ a:hover{
 
 .post-header {
   margin-bottom: 0.3rem;
+  display: flex;
+  gap: 1rem;
+}
+
+.post-menu {
+  margin-left: auto;
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center;
+  padding: .3rem;
+  border-radius: .3rem;
+}
+
+.post-menu:hover {
+  background-color: rgb(110, 113, 116);
 }
 
 /* .post-header {
@@ -222,27 +256,37 @@ a:hover{
  } */
 
 /* c-------------------------------------------------comment section start */
-.comment{
-  border-radius: .9em;
+.comment {
+  border-radius: 0.9em;
   padding: 8px 12px;
   color: #fff;
   background-color: #333;
-  margin-bottom: .3rem;
+
+  margin-bottom: 0.3rem;
 }
 
+::-webkit-scrollbar {
+  width: 8px; /* Set the width of the scrollbar */
+}
 
+::-webkit-scrollbar-thumb {
+  border-radius: 10px; /* Set the radius for the scrollbar handle */
+  background-color: rgb(167, 167, 167); /* Color of the scrollbar handle */
+}
 
+.comments {
+  padding-right: 15px; /* Adjust this value as needed */
+}
 
-
-.comment .content{
+.comment .content {
   font-weight: 400;
-  margin-top: .2rem;
+  margin-top: 0.2rem;
 }
 
-.comment-footer{
+.comment-footer {
   display: flex;
   justify-content: flex-end;
-  margin-bottom: .2rem;
+  margin-bottom: 0.2rem;
 }
 
 /* .comment-likes{
@@ -251,64 +295,107 @@ a:hover{
  
 } */
 
-.comment-button{
+.comment-button {
   cursor: pointer;
-  background-color: #525050;
-  padding: .5rem;
+  background-color: rgb(66, 66, 66);
+  padding: 0.5rem;
 }
 
-.comment-button:hover{
-  background-color: #5f5e5e;
+.comment-button:hover {
+  background-color: rgb(104, 104, 104);
 }
 
-.comment-like-button{
-border-right:1px solid white;
-border-radius: 1rem 0 0 1rem;
+.comment-like-button {
+  border-right: 1px solid white;
+  border-radius: 1rem 0 0 1rem;
 }
 
-.comment-dislike-button{
+.comment-dislike-button {
   /* border-top-right-radius: 1rem; */
   /* padding:.5rem .5rem .5rem 0; */
-  border-radius:0 1rem 1rem 0;
-
-}
-
-.ting1{
-  border-radius: 1rem 0 0 1rem;
-  border-right:1px solid #f6f2f2;
-}
-
-
-.ting2{
   border-radius: 0 1rem 1rem 0;
 }
 
-
-.ting{
-  padding: .3rem;
-  background-color: #5f5e5e;
+.ting1 {
+  border-radius: 1rem 0 0 1rem;
+  border-right: 1px solid #f6f2f2;
 }
 
-.ting:hover{
-background-color: #757474;
-cursor: pointer;
+.ting2 {
+  border-radius: 0 1rem 1rem 0;
 }
 
-.comment-btn{
-  margin-left: .5rem;
-  padding: .3rem .6rem .3rem .6rem;
+.ting {
+  padding: 0.3rem;
+  background-color: rgb(51, 51, 51);
+  margin: 0;
+}
+
+.ting:hover {
+  background-color: #757474;
+  cursor: pointer;
+}
+
+button {
+  background: none;
+  color: inherit;
+  /* 
+    border: none;
+    padding: 0;
+    margin: 0;
+    outline: none;
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    line-height: inherit;
+    text-align: left;  Default is center for buttons 
+    vertical-align: middle;
+    cursor: pointer;
+    -webkit-appearance: none; /* for older versions of Safari 
+    -moz-appearance: none; /* for older versions of Firefox 
+    appearance: none;
+    box-shadow: none;
+    text-shadow: none;
+    transition: none; 
+  */
+}
+
+/* Optional: You might also want to remove any focus rings, 
+   though be careful about accessibility implications */
+button:focus,
+input[type="button"]:focus,
+input[type="submit"]:focus,
+input[type="reset"]:focus {
+  box-shadow: none;
+}
+
+.comment-btn {
+  margin-left: 0.5rem;
+  padding: 0.3rem 0.6rem 0.3rem 0.6rem;
   border-radius: 1rem;
+  box-shadow: 1px snow;
 }
 
-.comment-send:hover{
+.comment-send:hover {
   color: #757474;
 }
 
+.p {
+  cursor: pointer;
+}
 
 /* c-------------------------------------------------comment section end */
 
-.btn{
+.btn {
   cursor: pointer;
+}
+
+.no-bg {
+  background: none;
+}
+
+.white {
+  color: white;
 }
 
 .comment-form {
@@ -320,7 +407,7 @@ cursor: pointer;
 .comment-input-container {
   width: 100%;
   height: 100%;
-  margin-bottom: .5rem;
+  margin-bottom: 0.5rem;
 }
 .comment-input {
   width: 100%;
@@ -330,6 +417,7 @@ cursor: pointer;
   border: none;
   padding: 10px; /* Padding inside the textarea */
   color: white;
+  min-height: 54px;
 }
 .comment-send {
   position: absolute;
@@ -339,9 +427,8 @@ cursor: pointer;
   border: none;
   color: #5f5e5e;
 }
-.fa-send{
+.fa-send {
   cursor: pointer;
-
 }
 
 /*--------------------------------------create post modal*/
@@ -359,13 +446,15 @@ cursor: pointer;
 #post-form {
   margin: auto;
   position: relative;
-  background-color: rgb(27, 28, 49);
+  background-color: rgb(8, 8, 8);
   width: 450px;
-  min-height: 400px;
+  max-height: 800px;
+  /* min-height: 400px; */
   padding: 0 20px 20px 20px;
   color: #fff;
   border-radius: 10px;
   z-index: 100;
+  border: 1px solid rgb(95, 95, 95);
 }
 
 .form-header {
@@ -382,7 +471,7 @@ cursor: pointer;
   top: 0;
   width: 30px;
   height: 30px;
-  background-color: green;
+  background-color: rgb(1, 36, 1);
   text-align: center;
   line-height: 30px;
   cursor: pointer;
@@ -414,30 +503,38 @@ label {
   width: 100%;
   margin-bottom: 12px;
   border: none;
-  background-color: #110f24;
-  color: #8982ca;
+  background-color: #363444;
+  color: #e8e8e9;
   padding: 10px;
   border-radius: 10px;
 }
 
 .form-text {
   width: 100%;
-  height: 170px;
-  outline: none;
+  min-height: 210px;
+  /* max-height: 250px; */
+  /* outline: none; */
   border: none;
   border-radius: 10px;
-  background-color: #110f24;
-  color: #8982ca;
+  background-color: #453e89;
+  color: #a9a9ad;
   padding: 10px;
-  resize: none;
+  padding-bottom: 40px;
+  resize: vertical;
+  overflow-y: auto;
+}
+
+.post-box {
+  position: relative;
+  /* padding-bottom: 40px; */
 }
 
 #submit-button {
-  width: 100%;
-  margin-top: 15px;
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
   color: white;
-  background-color: green;
-  padding: 10px;
+  background-color: rgb(1, 35, 1);
   outline: none;
   border: none;
   border-radius: 10px;
@@ -459,8 +556,7 @@ html {
   font-family: monospace;
   /* background: linear-gradient(rgb(89, 113, 179), azure); */
   background-repeat: no-repeat;
-  background-color: rgb(15, 15, 20);
-  color: black;
+  background-color: rgb(0, 0, 0);
 }
 
 .seperate {
@@ -488,7 +584,7 @@ html {
   transform: translate(-50%, -90%);
   max-width: 80%;
   width: 300px;
-  background-color: #384e8e;
+  background-color: rgb(51, 52, 53);
   position: fixed;
   z-index: 122;
   border-radius: 3%;

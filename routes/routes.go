@@ -25,6 +25,6 @@ func SetUpRoutes(mux *http.ServeMux) {
 	mux.HandleFunc("/session",c.Session)
 	mux.HandleFunc("/get-comments",c.GetComments)
 	mux.HandleFunc("/like-comment",c.HandleCommentLikes)
-	mux.HandleFunc("/sign-out",c.SignOut)
+	mux.HandleFunc("/signout",c.SignOut)
 
 }
