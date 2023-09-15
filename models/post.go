@@ -254,9 +254,9 @@ func FilterByLiked(userID int) ([]Post, error) {
 
 func FilterByUserPosts(userID int) ([]Post, error) {
 	query := `
-		SELECT 
+		SELECT
+			posts.id, posts.title, posts.content, users.username, 
 			COALESCE(GROUP_CONCAT(DISTINCT categories.name), '') AS categoryNames,
-			GROUP_CONCAT(DISTINCT categories.name) AS categoryNames,
 			COALESCE(SUM(CASE WHEN likes.value = 1 THEN 1 ELSE 0 END), 0) AS likes,
 			COALESCE(SUM(CASE WHEN likes.value = -1 THEN 1 ELSE 0 END), 0) AS dislikes,
 			COALESCE(likes_for_user.value, 0) AS userLikeStatus
@@ -282,6 +282,7 @@ func FilterByUserPosts(userID int) ([]Post, error) {
 
 	rows, err := db.Query(query, userID, userID)
 	if err != nil {
+		fmt.Println(err, "errhere")
 		return nil, err
 	}
 	defer rows.Close()
@@ -293,6 +294,8 @@ func FilterByUserPosts(userID int) ([]Post, error) {
 		var likes, dislikes, userLikeStatus int
 		err := rows.Scan(&postID, &title, &content, &username, &categoryNames, &likes, &dislikes, &userLikeStatus)
 		if err != nil {
+			fmt.Println(err, "errhere")
+
 			return nil, err
 		}
 
@@ -312,6 +315,8 @@ func FilterByUserPosts(userID int) ([]Post, error) {
 	}
 
 	if err = rows.Err(); err != nil {
+		fmt.Println(err, "errhere")
+
 		return nil, err
 	}
 

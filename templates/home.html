@@ -150,10 +150,15 @@
                     <span class="post-user"><i class="fa fa-user-circle" aria-hidden="true"></i>
                         {{ .Username }}</span>
                     <span class="post-categories">Categories: {{ range .Categories }}{{ . }} {{ end }}</span>
-                    <button class="post-menu p">
-                        <i class="fa fa-ellipsis-h" aria-hidden="true"></i>
-                    </button>
-                        
+                    <div class="dropdown">
+                        <button class="post-menu p">
+                            <i class="fa fa-ellipsis-h" aria-hidden="true"></i>
+                        </button>
+                        <div class="post-menuu">
+                            <span>delete post</span>
+                            <span>editpost</span>
+                        </div>
+                    </div>
                 </div>
                 <h3 class="post-title">{{.Title}}</h3>
                 <p class="post-content" style="font-weight:100; ">{{ .Content }}</p>

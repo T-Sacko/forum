@@ -251,6 +251,32 @@ a:hover {
   background-color: rgb(110, 113, 116);
 }
 
+.dropdown .post-menu:focus + .post-menuu{
+  opacity: 1;
+}
+
+.dropdown{
+  position: relative;
+  margin-left: auto;
+}
+
+.post-menuu{
+  position: absolute;
+  right: 50%;
+  opacity: 0;
+  transform: translateY();
+  background-color: #333;
+}
+
+.post-menuu span {
+  display: inline-block;
+  padding: .3rem;
+}
+
+.post-menuu span:hover{
+  background-color: #444444;
+  cursor: pointer;
+}
 /* .post-header {
      display: inline;
  } */
