@@ -64,17 +64,16 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	}
 	err := json.NewDecoder(r.Body).Decode(&user)
 	if err != nil {
-		http.Error(w, "Bad request", http.StatusBadRequest)
+		http.Error(w, "Bad request", http.StatusUnauthorized)
 		return
 	}
 
 	// user1 := getUser(r)
-	isUser, err := m.Check4User(user.Email, user.Password)
-	fmt.Println(isUser, user.Password)
-	if err != nil {
+	isUser, _ := m.Check4User(user.Email, user.Password)
+	if  !isUser  {
 		fmt.Println(isUser, user.Password, "not nil")
 
-		w.WriteHeader(http.StatusBadRequest)
+		http.Error(w, "unauth", http.StatusUnauthorized)
 		return
 	}
 	// Set the session ID and create a cookie
