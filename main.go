@@ -2,10 +2,10 @@ package main
 
 import (
 	"fmt"
+	"forum/models"
 	r "forum/routes"
 	"log"
 	"net/http"
-	"forum/models"
 
 	//"os/exec"
 

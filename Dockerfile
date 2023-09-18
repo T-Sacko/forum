@@ -8,4 +8,4 @@ RUN go build -o forum
 
 EXPOSE 8888
 
-CMD ["./forum"] & echo "Web application is running at http://localhost:8080/"
+CMD "./forum" 
