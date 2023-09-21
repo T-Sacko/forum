@@ -17,7 +17,7 @@ button {
   justify-content: space-between;
   align-items: center;
   padding: 1em;
-  background: rgba(45, 46, 62, 0.767);
+  background: rgba(45, 46, 62);
   /* background: rgb(89, 90, 114); */
   position: fixed;
   top: 0;
