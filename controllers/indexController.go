@@ -1,13 +1,17 @@
 package controllers
 
 import (
-	"encoding/json"
 	"fmt"
 	m "forum/models"
 	"net/http"
 )
 
 func Index(w http.ResponseWriter, r *http.Request) {
+
+	if r.URL.Path != "/" {
+		http.Error(w, "404 doesnt exist", http.StatusNotFound)
+		return
+	}
 	var user m.User
 	filter := "home"
 	user1, _ := m.GetUserByCookie(r)
@@ -38,8 +42,8 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	} else if category != "" {
 		fmt.Println("category is:", category)
 		filter = category
-		posts, err = m.FilterByCategory(user.ID,category)
-		fmt.Println("lenght is :",len(posts), posts)
+		posts, err = m.FilterByCategory(user.ID, category)
+		fmt.Println("lenght is :", len(posts), posts)
 		if err != nil {
 			// Handle the error (e.g., show an error page)
 			fmt.Println("error with getposts")
@@ -49,7 +53,6 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	} else {
 
 		posts, err = m.GetPostsFromDB(user.ID)
-		fmt.Println(len(posts), "is len")
 		if err != nil {
 			// Handle the error (e.g., show an error page)
 			fmt.Println("error with getposts")
@@ -85,19 +88,19 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func GetPostLikes(w http.ResponseWriter, r *http.Request) {
+// func GetPostLikes(w http.ResponseWriter, r *http.Request) {
 
-	user, err := m.GetUserByCookie(r)
-	if err != nil {
-		fmt.Println("no liked posts", err)
-		return
-	}
-	likesData, err := m.GetLikedPosts(user.ID)
-	if err != nil {
-		fmt.Println("error with suttin")
-	}
-	err1 := json.NewEncoder(w).Encode(likesData)
-	if err1 != nil {
-		fmt.Println("cant encode suttin")
-	}
-}
+// 	user, err := m.GetUserByCookie(r)
+// 	if err != nil {
+// 		fmt.Println("no liked posts", err)
+// 		return
+// 	}
+// 	likesData, err := m.GetLikedPosts(user.ID)
+// 	if err != nil {
+// 		fmt.Println("error with suttin")
+// 	}
+// 	err1 := json.NewEncoder(w).Encode(likesData)
+// 	if err1 != nil {
+// 		fmt.Println("cant encode suttin")
+// 	}
+// }

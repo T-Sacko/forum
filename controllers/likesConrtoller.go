@@ -9,7 +9,6 @@ import (
 )
 
 func HandlePostLikes(w http.ResponseWriter, r *http.Request) {
-
 	// sessionId, _ := checkCookie(w, r)
 	// userId, session, err1 := m.SessionIsActive(sessionId)
 	user, err := m.GetUserByCookie(r)
@@ -46,7 +45,7 @@ func HandlePostLikes(w http.ResponseWriter, r *http.Request) {
 // var CommentQueue []CommentLike
 
 func HandleCommentLikes(w http.ResponseWriter, r *http.Request) {
-
+	fmt.Println("at least")
 	user, err := m.GetUserByCookie(r)
 	// if the user aint logged take them to the home page
 	if err != nil {

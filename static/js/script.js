@@ -98,11 +98,11 @@ checkSession().then(data => {
     // Check if the user is logged in
   });
 
-  const postContent = postForm.querySelector('.form-text')
-  postContent.addEventListener('input', () => {
-    this.style.height = 'auto'
-    this.style.height = this.scrollHeight + 'px'
-  })
+  // const postContent = postForm.querySelector('.form-text')
+  // postContent.addEventListener('input', () => {
+  //   this.style.height = 'auto'
+  //   this.style.height = this.scrollHeight + 'px'
+  // })
 
 
 
@@ -242,14 +242,16 @@ function addCommentListeners(comment) {
   const likeIcon = comment.querySelector('.comment-like-icon');
   const likeCount = comment.querySelector('.comment-likes');
   const dislikeCount = comment.querySelector('.comment-dislikes');
-
+  
   commentLikeBtn.addEventListener('click', () => {
-      handleLikeClick(comment, likeIcon, dislikeIcon, likeCount, dislikeCount);
+    handleLikeClick(comment, likeIcon, dislikeIcon, likeCount, dislikeCount);
   });
+
 
   commentDislikeBtn.addEventListener('click', () => {
-      handleDislikeClick(comment, likeIcon, dislikeIcon, likeCount, dislikeCount);
+    handleDislikeClick(comment, likeIcon, dislikeIcon, likeCount, dislikeCount);
   });
+  
 }
 
 function handleLikeClick(comment, likeIcon, dislikeIcon, likeCount, dislikeCount) {
@@ -367,7 +369,6 @@ function setContent(content, seeMore) {
 
 posts.forEach(post => {
   const seeMore = post.querySelector('.see-more')
-  console.log(seeMore, 'seeing more')
   const content = post.querySelector('.post-content')
   const postId = post.id.split('-')[1];
   const commentBtn = post.querySelector('.comment-btn')
@@ -451,39 +452,47 @@ posts.forEach(post => {
       const likeIcon = commentLikeBtn.querySelector('.comment-like-icon')
       const likeCount = commentLikeBtn.querySelector('.comment-likes')
       const dislikeCount = commentDislikeBtn.querySelector('.comment-dislikes')
-      commentLikeBtn.addEventListener('click', () => {
-        toggle(likeIcon)
-        if (likeIcon.classList.contains('liked')) {
-          incComment(likeCount)
-          if (dislikeIcon.classList.contains('disliked')){
-            toggle(dislikeIcon)
-            decrComment(dislikeCount)
-            likeReq(comment.id,'removeDislike')
-          }
-          likeReq(comment.id,'like')
-        }else{
-          decrComment(likeCount)
-          likeReq(comment.id,'removeLike')
-        }
+      let yo = false
+      checkSession().then(data => {
         
-      })
-
-      commentDislikeBtn.addEventListener('click', () => {
-        toggle(dislikeIcon)
-        if (dislikeIcon.classList.contains('disliked')) {
-          incComment(dislikeCount)
-          if (likeIcon.classList.contains('liked')) {
-            likeReq(comment.id,'removeLike')
+        yo = data.status
+        console.log('yo =', yo)
+        if (yo){
+          commentLikeBtn.addEventListener('click', () => {
             toggle(likeIcon)
-            decrComment(likeCount)
-          }
-          likeReq(comment.id,'dislike')
-        }else{
-          decrComment(dislikeCount)
-          likeReq(comment.id,'removeDislike')
-        }
-      
+            if (likeIcon.classList.contains('liked')) {
+              incComment(likeCount)
+              if (dislikeIcon.classList.contains('disliked')){
+                toggle(dislikeIcon)
+                decrComment(dislikeCount)
+                likeReq(comment.id,'removeDislike')
+              }
+              likeReq(comment.id,'like')
+            }else{
+              decrComment(likeCount)
+              likeReq(comment.id,'removeLike')
+            }
+            
+          })
+  
+          commentDislikeBtn.addEventListener('click', () => {
+            toggle(dislikeIcon)
+            if (dislikeIcon.classList.contains('disliked')) {
+              incComment(dislikeCount)
+              if (likeIcon.classList.contains('liked')) {
+                likeReq(comment.id,'removeLike')
+                toggle(likeIcon)
+                decrComment(likeCount)
+              }
+              likeReq(comment.id,'dislike')
+            }else{
+              decrComment(dislikeCount)
+              likeReq(comment.id,'removeDislike')
+            }
         
+          
+          })
+        }
       })
 
     })
@@ -523,7 +532,8 @@ function decrComment(element) {
 
 
 const likeReq = (commentID,action) => {
-fetch(`/like-comment?id=${commentID}&action=${action}`)
+  console.log(action,'action is previous word')
+  fetch(`/like-comment?id=${commentID}&action=${action}`, {method: 'POST'})
 }
 
 function toggleCount(element) {
@@ -574,7 +584,7 @@ function checkUsername(username) {
           } else {
             usernameAvailable = false
             errorElement.setAttribute("style", "display:block;");
-            errorElement.textContent = "Error: Username Already Exists";
+            errorElement.textContent = "Username is taken";
             resolve(false); // Username is not available
           }
         } else {
@@ -604,7 +614,7 @@ function checkEmail(email) {
           } else {
             emailAvailable = false
             errorElement.setAttribute("style", "display:block;");
-            errorElement.textContent = "Error: Email Already In Use";
+            errorElement.textContent = "Email Already In Use";
             resolve(false); // Email is not available
           }
         } else {

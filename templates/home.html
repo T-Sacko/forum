@@ -165,21 +165,21 @@
                 <button class="see-more no-bg white p" style="display: none;">See More...></button>
                 <div class="post-footer">
                     <!-- //likes -->
-                    <span class="ting1 ting post-l P">
-                        <i
-                            class="fa {{if eq .UserLikeStatus 1}}fa-thumbs-up liked{{else}}fa-thumbs-o-up{{end}} {{if $.User.Status}}likes{{end}}"></i>
-                        <span class="like-count">{{.Likes }}</span>
-                    </span>
-                    <!-- // dislikes -->
-                    <span class="ting2 ting post-d" style="cursor: pointer;">
-                        <i
-                            class="fa {{ if eq .UserLikeStatus -1 }}fa-thumbs-down disliked{{ else }}fa-thumbs-o-down{{ end }} {{if $.User.Status}}dislikes{{end}}"></i>
-                        <span class="like-count">{{ .Dislikes }}</span>
-                    </span>
+                        <button class="ting1 ting post-l P">
+                            <i
+                                class="fa {{if eq .UserLikeStatus 1}}fa-thumbs-up liked{{else}}fa-thumbs-o-up{{end}} {{if $.User.Status}}likes{{end}}"></i>
+                            <span class="like-count">{{.Likes }}</span>
+                        </button><button class="ting2 ting post-d" style="cursor: pointer;">
+                            <i
+                                class="fa {{ if eq .UserLikeStatus -1 }}fa-thumbs-down disliked{{ else }}fa-thumbs-o-down{{ end }} {{if $.User.Status}}dislikes{{end}}"></i>
+                            <span class="like-count">{{ .Dislikes }}</span>
+                        </button>
+
                     <!-- comment btn -->
-                    <span class=" ting btn comment-btn" id="comment{{.ID}}">
-                        <i class="fa fa-comment"></i> comments
-                    </span>
+
+                        <button class=" ting btn comment-btn" id="comment{{.ID}}">
+                            <i class="fa fa-comment"></i> comments
+                        </button>
                     <!--  -->
                 </div>
                 <!-- comments section -->

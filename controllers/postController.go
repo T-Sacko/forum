@@ -54,6 +54,12 @@ func CheckSession(w http.ResponseWriter, r *http.Request) {
 }
 
 func CreatePost(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "bad req", http.StatusBadRequest)
+		return
+
+	}
+
 	fmt.Println("making post began")
 	user, err := m.GetUserByCookie(r)
 	if err != nil {
@@ -65,6 +71,9 @@ func CreatePost(w http.ResponseWriter, r *http.Request) {
 	title := r.FormValue("title")
 	content := r.FormValue("content")
 	categories := r.Form["category"]
+	if content == "" || title == "" {
+		http.Error(w, "can't create an empty post", http.StatusBadRequest)
+	}
 	fmt.Println(categories)
 	ids := m.GetCategoriesID(categories)
 	postId, err := m.SavePost(title, content, user.ID)

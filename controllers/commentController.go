@@ -12,21 +12,23 @@ func CreateComment(w http.ResponseWriter, r *http.Request) {
 
 	// get user details
 	user, err := m.GetUserByCookie(r)
-	fmt.Print("\nreceived comment\n\n")
 	if err != nil {
-		// http.Error(w, "error getting user info", http.StatusUnauthorized)
-		http.Redirect(w, r, "/", http.StatusMovedPermanently)
+		http.Error(w, "error getting user info", http.StatusUnauthorized)
+		// http.Redirect(w, r, "/", http.StatusMovedPermanently)
 		return
 	}
 	// make comment instance
+	content := r.FormValue("comment")
+	if content == "" {
+		http.Error(w, "can't create an empty comment", http.StatusBadRequest)
+	}
+
+	runes := []rune(content) // Convert string to slice of runes
 	postID, err := strconv.Atoi(r.FormValue("postID"))
 	if err != nil {
 		fmt.Println("couldnt convert comment postid to int, Error", err)
 		http.Error(w, "couldnt conv postID to int", http.StatusBadRequest)
 	}
-
-	content := r.FormValue("comment")
-	runes := []rune(content) // Convert string to slice of runes
 
 	// Check if the last character is not an ASCII character, and if not, remove it
 	for len(runes) > 0 && (runes[len(runes)-1] < 32 || runes[len(runes)-1] > 127) {
@@ -70,9 +72,14 @@ func GetComments(w http.ResponseWriter, r *http.Request) {
 	comments, err := m.GetComments(userID, postID)
 	fmt.Println(comments)
 	if err != nil {
+		http.Error(w,"couldnt rettieve the comments", http.StatusInternalServerError)
 		fmt.Println("couldnt get comments")
 		return
 	}
 	fmt.Println("comments length is: ", len(comments))
 	json.NewEncoder(w).Encode(comments)
 }
+
+// func err5(w http.ResponseWriter){
+// 	http.Error(w,"internal server err",http.StatusInternalServerError)
+// }

@@ -17,7 +17,8 @@ button {
   justify-content: space-between;
   align-items: center;
   padding: 1em;
-  background: rgb(89, 90, 114);
+  background: rgba(45, 46, 62, 0.767);
+  /* background: rgb(89, 90, 114); */
   position: fixed;
   top: 0;
   width: 100%;
@@ -40,9 +41,9 @@ button {
   font-size: 1.5em;
 }
 
-.navbar .sign-in {
-  /* right: 0; */
-}
+/* .navbar .sign-in {
+  right: 0;
+} */
 
 .navbar .account {
   margin-left: 75%;
@@ -55,9 +56,9 @@ button {
   padding: 0.35em;
 }
 
-.sign-in i {
-  /* font-size: 1.35em; */
-}
+/* .sign-in i {
+  font-size: 1.35em;
+} */
 
 .filter-button {
   background: none;
@@ -478,13 +479,14 @@ input[type="reset"]:focus {
   position: relative;
   background-color: rgb(8, 8, 8);
   width: 450px;
-  max-height: 800px;
+  max-height: 600px;
   /* min-height: 400px; */
   padding: 0 20px 20px 20px;
   color: #fff;
   border-radius: 10px;
   z-index: 100;
   border: 1px solid rgb(95, 95, 95);
+  overflow-y: hidden;
 }
 
 .form-header {
@@ -496,12 +498,14 @@ input[type="reset"]:focus {
 }
 
 #close-button {
+  font-size: 2rem;
   position: absolute;
+  color: #333;
   right: 0;
   top: 0;
   width: 30px;
   height: 30px;
-  background-color: rgb(1, 36, 1);
+  background-color: rgb(164, 171, 250);
   text-align: center;
   line-height: 30px;
   cursor: pointer;
@@ -543,6 +547,7 @@ label {
   width: 100%;
   min-height: 210px;
   /* max-height: 250px; */
+  outline: none;
   /* outline: none; */
   background: none;
   /* border: 1px solid rgb(180, 178, 178); */
@@ -550,13 +555,14 @@ label {
   color: #a9a9ad;
   padding: 10px;
   padding-bottom: 40px;
-  resize: vertical;
+  resize: none;
   overflow-y: auto;
 }
 
 .post-box {
   position: relative;
-  /* padding-bottom: 40px; */
+  padding-bottom: 40px;
+  /* border: 1px solid gray; */
 }
 
 #submit-button {
@@ -565,7 +571,7 @@ label {
   bottom: 10px;
   right: 10px;
   color: white;
-  background-color: rgb(1, 35, 1);
+  background-color: rgb(112, 119, 254);
   outline: none;
   border: none;
   border-radius: 10px;
@@ -657,7 +663,7 @@ html {
   height: 100%;
   outline: none;
   border: none;
-  border-bottom: 1.5px solid white;
+  border-bottom: 1px solid white;
   color: white;
   background: none;
   padding-left: 3rem;
