@@ -39,28 +39,32 @@ func GetComments(userID, postID int) ([]Comment, error) {
 	var comments []Comment
 
 	query := `
-        SELECT 
-            comments.id, 
-            users.username, 
-            comments.content, 
-            comments.post_id, 
-            comments.user_id, 
-            comments.created_at, 
-            comments.updated_at,
-            COALESCE(SUM(CASE WHEN comment_likes.value = 1 THEN 1 ELSE 0 END), 0) AS likes,
-            COALESCE(SUM(CASE WHEN comment_likes.value = -1 THEN 1 ELSE 0 END), 0) AS dislikes,
-            COALESCE(comment_likes.value, 0) AS user_like_status
-        FROM 
-            comments
-        INNER JOIN 
-            users ON comments.user_id = users.id
-        LEFT JOIN 
-            comment_likes ON comment_likes.comment_id = comments.id AND comment_likes.userId = ?
-        WHERE 
-            comments.post_id = ?
-        GROUP BY 
-            comments.id
-		ORDER BY comments.id DESC	
+	SELECT 
+    comments.id, 
+    users.username, 
+    comments.content, 
+    comments.post_id, 
+    comments.user_id, 
+    comments.created_at, 
+    comments.updated_at,
+    COALESCE(SUM(CASE WHEN comment_likes.value = 1 THEN 1 ELSE 0 END), 0) AS likes,
+    COALESCE(SUM(CASE WHEN comment_likes.value = -1 THEN 1 ELSE 0 END), 0) AS dislikes,
+    COALESCE(
+        (SELECT value FROM comment_likes 
+         WHERE comment_likes.comment_id = comments.id AND comment_likes.userId = ?), 
+    0) AS user_like_status
+FROM 
+    comments
+INNER JOIN 
+    users ON comments.user_id = users.id
+LEFT JOIN 
+    comment_likes ON comment_likes.comment_id = comments.id
+WHERE 
+    comments.post_id = ?
+GROUP BY 
+    comments.id
+ORDER BY 
+    comments.id DESC	
     `
 
 	rows, err := db.Query(query, userID, postID)
@@ -81,7 +85,7 @@ func GetComments(userID, postID int) ([]Comment, error) {
 	if err = rows.Err(); err != nil {
 		return nil, err
 	}
-
+	fmt.Println(comments,"dddddddddddddddddddddddddddddddddddddddddddddddddddffffffffffffffffffffffffffffff")
 	return comments, nil
 }
 

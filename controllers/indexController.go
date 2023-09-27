@@ -12,6 +12,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "404 doesnt exist", http.StatusNotFound)
 		return
 	}
+	var internal = "INTERNAL SERVER ERROR:"
 	var user m.User
 	filter := "home"
 	user1, _ := m.GetUserByCookie(r)
@@ -21,13 +22,14 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	var posts []m.Post
 	var err error
 	category := r.URL.Query().Get("category")
+	inErr := fmt.Sprintf("%s Failed to retrieve posts", internal)
 	if category == "liked-posts" {
 		filter = category
 		posts, err = m.FilterByLiked(user.ID)
 		if err != nil {
 			// Handle the error (e.g., show an error page)
 			fmt.Println("error with getposts")
-			http.Error(w, "Failed to retrieve posts", http.StatusInternalServerError)
+			http.Error(w, inErr, http.StatusInternalServerError)
 			return
 		}
 	} else if category == "my-posts" {
@@ -36,7 +38,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			// Handle the error (e.g., show an error page)
 			fmt.Println("error with getposts")
-			http.Error(w, "Failed to retrieve posts", http.StatusInternalServerError)
+			http.Error(w, inErr, http.StatusInternalServerError)
 			return
 		}
 	} else if category != "" {
@@ -46,17 +48,16 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("lenght is :", len(posts), posts)
 		if err != nil {
 			// Handle the error (e.g., show an error page)
-			fmt.Println("error with getposts")
-			http.Error(w, "Failed to retrieve posts", http.StatusInternalServerError)
+			fmt.Println("error with getpostsFilter")
+			http.Error(w, inErr, http.StatusInternalServerError)
 			return
 		}
 	} else {
-
 		posts, err = m.GetPostsFromDB(user.ID)
 		if err != nil {
 			// Handle the error (e.g., show an error page)
 			fmt.Println("error with getposts")
-			http.Error(w, "Failed to retrieve posts", http.StatusInternalServerError)
+			http.Error(w, inErr, http.StatusInternalServerError)
 			return
 		}
 	}

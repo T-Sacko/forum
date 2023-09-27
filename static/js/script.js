@@ -59,13 +59,13 @@ checkSession().then(data => {
     })
     
     
-} else{
+} else   {
   var createPostButton = document.getElementById("create-post-button");
 
 
 
 
-  var modalContainer = document.getElementById("modal-container");
+  var   modalContainer = document.getElementById("modal-container");
   var closeButton = modalContainer.querySelector("#close-button");
 
   createPostButton.onclick = function () {
@@ -433,6 +433,7 @@ posts.forEach(post => {
     const res = await fetch(`/get-comments?postID=${postID}`)
     const data = await res.json()
     if (data == null){
+      console.log('issue here')
       return
     }
     if (getComputedStyle(commentSection).display !== 'none') {
@@ -452,6 +453,7 @@ posts.forEach(post => {
       const likeIcon = commentLikeBtn.querySelector('.comment-like-icon')
       const likeCount = commentLikeBtn.querySelector('.comment-likes')
       const dislikeCount = commentDislikeBtn.querySelector('.comment-dislikes')
+      
       let yo = false
       checkSession().then(data => {
         
@@ -494,7 +496,6 @@ posts.forEach(post => {
           })
         }
       })
-
     })
     const yOffset = -24; // 1.5rem = 24px, assuming the user's default font-size is 16px
     const y = post.getBoundingClientRect().top + window.pageYOffset + yOffset;
