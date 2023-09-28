@@ -41,7 +41,7 @@ func SavePost(title, content string, userId int) (int, error) {
 		fmt.Println("Error inserting into posts: ", err)
 		return 0, err
 	}
-	fmt.Println("Successfully inserted into posts!!!!!!!")
+	// fmt.Println("Successfully inserted into posts!!!!!!!")
 	postId, err := result.LastInsertId()
 	if err != nil {
 		fmt.Println("error with getting postid from lastInserId")

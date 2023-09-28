@@ -5,12 +5,12 @@ async function checkSession(){
  return await resp.json()
 }
 let userStatus = false; // default value
+const overlay = document.getElementById('overlay')
 
 checkSession().then(data => {
   userStatus = data.status;
   console.log("User logged in:", userStatus);
   if (!userStatus) {
-    const overlay = document.getElementById('overlay')
     const signIn = document.getElementById('sign-in')
   
     const loginButton = document.getElementById('loginButton')
@@ -368,6 +368,7 @@ function setContent(content, seeMore) {
 }
 
 posts.forEach(post => {
+  const image = post.querySelector('.image')
   const seeMore = post.querySelector('.see-more')
   const content = post.querySelector('.post-content')
   const postId = post.id.split('-')[1];

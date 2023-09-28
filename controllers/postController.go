@@ -74,10 +74,29 @@ func CreatePost(w http.ResponseWriter, r *http.Request) {
 	if content == "" || title == "" {
 		http.Error(w, "can't create an empty post", http.StatusBadRequest)
 	}
-	fmt.Println(categories)
+
+	err1 := r.ParseMultipartForm(10 << 20) // Limit upload size, for instance 10MB
+	if err1 != nil {
+		fmt.Println(err1, ":suttin here man")
+		http.Error(w, "Unable to parse form", http.StatusBadRequest)
+		return
+	}
+	file, fileHeader, err := r.FormFile("postImage")
+	if err != nil {
+		http.Error(w, "Unable to get the uploaded file", http.StatusInternalServerError)
+		return
+	}
+	defer file.Close()
+
+	fmt.Printf("Uploaded file: %s\n", fileHeader.Filename)
+	fmt.Printf("File size: %d bytes\n", fileHeader.Size)
+	fmt.Printf("File MIME header: %v\n", fileHeader.Header.Get("Content-Type"))
+
+	// fmt.Println(categories)
 	ids := m.GetCategoriesID(categories)
 	postId, err := m.SavePost(title, content, user.ID)
 	if err != nil {
+
 		fmt.Println("couldnt save post", err)
 		return
 	}

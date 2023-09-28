@@ -3,21 +3,42 @@ package controllers
 import (
 	"encoding/json"
 	"fmt"
-
 	m "forum/models"
 	"html/template"
 	"log"
 	"net/http"
 
 	"github.com/gofrs/uuid"
+	"golang.org/x/oauth2"
+	"golang.org/x/oauth2/google"
 )
 
 var err error
 var Tpl = template.Must(template.ParseGlob("templates/*.html"))
 
+var googleOauthConfig = &oauth2.Config{
+	RedirectURL:  "http://localhost:8888/google",
+	ClientID:     "128618599322-8r8rlh7nqj32kgdt8napmiji1q8vei31.apps.googleusercontent.com",
+	ClientSecret: "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",
+	Scopes:       []string{"http://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email"},
+	Endpoint:     google.Endpoint,
+}
+
+func HandleGoogleAuth(w http.ResponseWriter, r *http.Request) {
+	url := googleOauthConfig.AuthCodeURL(oauthStateString)
+	http.Redirect(w, r, url, http.StatusTemporaryRedirect)
+}
+
 // type loggedIn struct {
 // 	LoggedIn bool `json:"loggedIn"`
 // }
+
+func GoogleAuth(w http.ResponseWriter, r *http.Request) {
+	// client id:
+	// 128618599322-8r8rlh7nqj32kgdt8napmiji1q8vei31.apps.googleusercontent.com
+	// client secret:
+	// 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
+}
 
 func Session(w http.ResponseWriter, r *http.Request) {
 	var seshData struct {
@@ -70,7 +91,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 	// user1 := getUser(r)
 	isUser, _ := m.Check4User(user.Email, user.Password)
-	if  !isUser  {
+	if !isUser {
 		fmt.Println(isUser, user.Password, "not nil")
 
 		http.Error(w, "unauth", http.StatusUnauthorized)

@@ -118,7 +118,7 @@
                     <h2 style="color: #b3b9ff ;">Create post</h2>
                 </div>
 
-                <form action="/create-post" id="create-post-form" method="post">
+                <form action="/create-post" id="create-post-form" method="post"  enctype="multipart/form-data">
                     <div class="categories">
                         <h3 class="categories-header">Categories:</h3>
                         <div class="category">
@@ -137,6 +137,8 @@
                         <textarea class="form-text" name="content" placeholder="Content..." required></textarea>
                         <button class="p" id="submit-button" type="submit">Submit</button>
                     </div>
+                    <input class="no-bg white" style="background: none;" type="file" name="postImage" accept="image/*,video/*,audio/*">
+
                 </form>
 
 
