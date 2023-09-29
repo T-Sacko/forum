@@ -18,6 +18,10 @@ This forum application allows users to engage in discussions and share their tho
 
 *you will need to have Docker installed and it runs on port 8888*
 
+## Collaborators
+
+ [7Sion7](https://github.com/7Sion7).
+
 <!--## Contributions 
 
 We welcome contributions! If you'd like to contribute, please create a pull request.
