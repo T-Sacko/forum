@@ -74,8 +74,13 @@
                     <div class="error-message username-error" id="username-error"></div>
                     <div class="error-message email-error" id="email-error"></div>
                     <button class="sign-in button" type="submit">Sign up</button>
+                    <h3 class="or">OR</h3>
+                    <a href="/auth/google" class="sign-in button" type="submit">Sign up with Google <i
+                            class="fa fa-google" aria-hidden="true"></i></a>
+                    <a href="#" class="sign-in button" type="submit">Sign up with Github <i class="fa fa-github"
+                            aria-hidden="true"></i></a>
                     <div class="register">
-                        Already have an account? <a id="loginButton">Login</a>
+                        Already have an account? <a href="#" id="loginButton">Login</a>
                     </div>
                 </form>
             </div>
@@ -83,7 +88,7 @@
             <!-- loginForm -->
 
             <div class="signupForm hidden" id="loginForm">
-                <form id="loginForm" method="POST" action="/login">
+                <form id="loginForm">
                     <div class="signInHeader">
                         <h3 class="title"> Login to Forum</h3>
                         <span id="loginCloseButton" class="closeButton">&times</span>
@@ -101,8 +106,13 @@
                     </div>
                     <div class="error-message login-email-error"></div>
                     <button class="sign-in button" type="submit">login</button>
+                    <h3 class="or">OR</h3>
+                    <a href="/auth/google" class="sign-in button" type="submit">login with Google <i
+                            class="fa fa-google" aria-hidden="true"></i></a>
+                    <a href="#" class="sign-in button" type="submit">login with Github <i class="fa fa-github"
+                            aria-hidden="true"></i></a>
                     <div class="register">
-                        Don't have an account? <a id="signupButton">Register</a>
+                        Don't have an account? <a href="#" id="signupButton">Register</a>
                     </div>
                 </form>
             </div>
@@ -118,7 +128,7 @@
                     <h2 style="color: #b3b9ff ;">Create post</h2>
                 </div>
 
-                <form action="/create-post" id="create-post-form" method="post"  enctype="multipart/form-data">
+                <form action="/create-post" id="create-post-form" method="post" enctype="multipart/form-data">
                     <div class="categories">
                         <h3 class="categories-header">Categories:</h3>
                         <div class="category">
@@ -137,7 +147,8 @@
                         <textarea class="form-text" name="content" placeholder="Content..." required></textarea>
                         <button class="p" id="submit-button" type="submit">Submit</button>
                     </div>
-                    <input class="no-bg white" style="background: none;" type="file" name="postImage" accept="image/*,video/*,audio/*">
+                    <input class="no-bg white" style="background: none;" type="file" name="postImage"
+                        accept="image/*,video/*,audio/*">
 
                 </form>
 
@@ -148,7 +159,7 @@
         <main>
             {{ range .Posts}}
             <div class="post" id="post-{{.ID}}">
-                <div class="post-header">
+                <div class="padding post-header">
                     <span class="post-user"><i class="fa fa-user-circle" aria-hidden="true"></i>
                         {{ .Username }}</span>
                     <span class="post-categories">Categories: {{ range .Categories }}{{ . }} {{ end }}</span>
@@ -162,48 +173,58 @@
                         </div>
                     </div>
                 </div>
-                <h3 class="post-title">{{.Title}}</h3>
-                <p class="post-content" style="font-weight:100; ">{{ .Content }}</p>
+                <div class="padding">
+                    <h3 class="post-title">{{.Title}}</h3>
+                    <p class="post-content" style="font-weight:100; ">{{ .Content }}</p>
+                </div>
+                {{if isPrefix .FileName "video"}}
+                <video class="post-video" src="../uploads/video/{{.FileName}}" style="width: 100%;" controls></video>
+                {{else if isPrefix .FileName "image"}}
+                <img class="post-image" src="../uploads/image/{{.FileName}}">
+                {{end}}
                 <button class="see-more no-bg white p" style="display: none;">See More...></button>
-                <div class="post-footer">
+                <div class="padding">
                     <!-- //likes -->
-                        <button class="ting1 ting post-l P">
-                            <i
-                                class="fa {{if eq .UserLikeStatus 1}}fa-thumbs-up liked{{else}}fa-thumbs-o-up{{end}} {{if $.User.Status}}likes{{end}}"></i>
-                            <span class="like-count">{{.Likes }}</span>
-                        </button><button class="ting2 ting post-d" style="cursor: pointer;">
-                            <i
-                                class="fa {{ if eq .UserLikeStatus -1 }}fa-thumbs-down disliked{{ else }}fa-thumbs-o-down{{ end }} {{if $.User.Status}}dislikes{{end}}"></i>
-                            <span class="like-count">{{ .Dislikes }}</span>
-                        </button>
+                    <button class="ting1 ting post-l P">
+                        <i
+                            class="fa {{if eq .UserLikeStatus 1}}fa-thumbs-up liked{{else}}fa-thumbs-o-up{{end}} {{if $.User.Status}}likes{{end}}"></i>
+                        <span class="like-count">{{.Likes }}</span>
+                    </button><button class="ting2 ting post-d" style="cursor: pointer;">
+                        <i
+                            class="fa {{ if eq .UserLikeStatus -1 }}fa-thumbs-down disliked{{ else }}fa-thumbs-o-down{{ end }} {{if $.User.Status}}dislikes{{end}}"></i>
+                        <span class="like-count">{{ .Dislikes }}</span>
+                    </button>
 
                     <!-- comment btn -->
 
-                        <button class=" ting btn comment-btn" id="comment{{.ID}}">
-                            <i class="fa fa-comment"></i> comments
-                        </button>
+                    <button class=" ting btn comment-btn" id="comment{{.ID}}">
+                        <i class="fa fa-comment"></i> comments
+                    </button>
                     <!--  -->
                 </div>
                 <!-- comments section -->
                 <div class="comments hidden" id="comments-{{.ID}}" style=" overflow-y: auto; max-height: 60vh; ">
                 </div>
                 <!--  -->
-                <form class="comment-form" id="form-{{.ID}}">
-                    <div class="comment-input-container">
-                        <input type="hidden" name="postID" value="{{.ID}}">
-                        <textarea name="comment" class="comment-input" placeholder="Write a comment..."></textarea>
-                    </div>
-                    <button type="submit" class="comment-send"><i class="fa fa-send"></i></button>
-                </form>
+                {{if $.User.Status}}
+                <div class="padding">
+                    <form class="comment-form" id="form-{{.ID}}">
+                        <div class="comment-input-container">
+                            <input type="hidden" name="postID" value="{{.ID}}">
+                            <textarea name="comment" class="comment-input" placeholder="Write a comment..."></textarea>
+                        </div>
+                        <button type="submit" class="comment-send"><i class="fa fa-send"></i></button>
+                    </form>
+                </div>
+                {{end}}
             </div>
 
             {{end}}
         </main>
     </div>
 
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.3.0/color-thief.min.js"></script>
     <script src="/static/js/script.js"></script>
-    <!-- <script src="/static/js/script.js"></script> -->
 </body>
 
 </html>

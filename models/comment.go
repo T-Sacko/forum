@@ -85,7 +85,6 @@ ORDER BY
 	if err = rows.Err(); err != nil {
 		return nil, err
 	}
-	fmt.Println(comments,"dddddddddddddddddddddddddddddddddddddddddddddddddddffffffffffffffffffffffffffffff")
 	return comments, nil
 }
 

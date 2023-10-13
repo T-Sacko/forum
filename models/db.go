@@ -3,18 +3,16 @@ package models
 import (
 	"database/sql"
 	"fmt"
-	"log"
-
 	_ "github.com/mattn/go-sqlite3"
 )
 
 var db *sql.DB
 
-func InitDB() {
+func InitDB() error {
 	var err error
 	db, err = sql.Open("sqlite3", "./blog.db")
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 
 	// _, err = db.Exec("PRAGMA busy_timeout = 2000") // 2000 milliseconds = 2 seconds
@@ -47,6 +45,7 @@ func InitDB() {
 			title TEXT,
 			content TEXT,
 			userId INTEGER,
+			fileName TEXT,
 			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 			updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 			FOREIGN KEY(userId) REFERENCES users(id)
@@ -110,7 +109,7 @@ func InitDB() {
         
 	`)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 	_, err1 := db.Exec("INSERT OR IGNORE INTO categories (name) VALUES (?)", "etymology")
 	if err1 != nil {
@@ -127,6 +126,7 @@ func InitDB() {
 	// db.SetConnMaxLifetime(5 * 60 * 1000)
 
 	fmt.Printf("Database initialized\n")
+	return nil
 }
 
 func InsertDB(username, email, password, seshId string) error {

@@ -16,7 +16,7 @@ func GetCategoriesID(categories []string) []int {
 		// fmt.Printf("inserted category %v\n",i)
 		Ids = append(Ids, id)
 	}
-	fmt.Println(Ids)
+	// fmt.Println(Ids)
 	return Ids
 }
 

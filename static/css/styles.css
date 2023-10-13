@@ -171,13 +171,12 @@ button {
 
 .post-footer {
   margin-top: 1rem;
-  margin-bottom: 1rem;
 }
 
 main {
   word-wrap: break-word;
   width: 570px;
-  max-width: 80%;
+  max-width: 95%;
   margin: auto;
 }
 
@@ -197,11 +196,21 @@ a:hover {
   width: 100%;
   margin-bottom: 10px;
   background-color: rgb(26, 26, 27);
-  padding: 6px;
   border-radius: 4px;
   /* max-height: 80vh; */
   color: #fff;
   border: 1px solid rgb(52, 53, 54);
+  padding-block:.4rem ;
+}
+video{
+  width: 100%;
+  /* height: 100%; */
+  object-fit: cover;
+  border-radius: 2px;
+  margin-bottom: .5rem;
+}
+.padding{
+  padding-inline: 0.4rem;
 }
 
 .post-content {
@@ -258,6 +267,7 @@ a:hover {
 
 .dropdown .post-menu:focus + .post-menuu{
   opacity: 1;
+  cursor: pointer;
 }
 
 .dropdown{
@@ -266,6 +276,7 @@ a:hover {
 }
 
 .post-menuu{
+  pointer-events: none;
   position: absolute;
   right: 50%;
   opacity: 0;
@@ -306,7 +317,9 @@ a:hover {
 }
 
 .comments {
-  padding-right: 15px; /* Adjust this value as needed */
+  padding-right: 15px; /* Adjust this value */
+  margin-top: 1rem;
+  padding-left: .5rem;
 }
 
 .comment .content {
@@ -438,7 +451,7 @@ input[type="reset"]:focus {
 .comment-input-container {
   width: 100%;
   height: 100%;
-  margin-bottom: 0.5rem;
+  /* margin-bottom: 0.5rem; */
 }
 .comment-input {
   width: 100%;
@@ -622,15 +635,25 @@ html {
 .signupForm {
   left: 50%;
   top: 50%;
-  transform: translate(-50%, -90%);
+  transform: translate(-50%, -50%);
   max-width: 80%;
   width: 300px;
-  background-color: rgb(0, 0, 0);
+  background-color: rgb(25, 29, 45);
   position: fixed;
   z-index: 122;
   border-radius: 3%;
   padding: 1.2rem;
   box-shadow: 0px 0px 2.5px rgba(255,255,255,0.5); /* This adds a white shadow */
+
+}
+
+.post-image{
+  width: 100%;
+  height: auto;
+  max-height: 400px; 
+  object-fit: contain;
+  cursor: pointer;
+  /* background-color: green; */
 
 }
 
@@ -674,8 +697,14 @@ html {
   top: 50%;
   transform: translateY(-50%);
   left: 0;
-  color: rgb(205, 205, 205);
+  color: rgb(255, 255, 255);
   font-size: 1.5rem;
+}
+
+.or{
+  margin-top: .5rem;
+  text-align: center;
+  color: white;
 }
 
 .error-message {
@@ -685,14 +714,16 @@ html {
 }
 
 .signupForm .button {
-  background: #5e6fa3;
-  margin-top: 1rem;
+  background: #434f73;
+  margin-top: .6rem;
   width: 100%;
   color: #fff;
   padding: 0.5rem;
   border: none;
   cursor: pointer;
   border-radius: 3px;
+  display: inline-block;
+  text-align: center;
 }
 
 .signupForm .register {

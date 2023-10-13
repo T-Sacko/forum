@@ -13,6 +13,8 @@ type Post struct {
 	Content        string
 	Username       string
 	Categories     []string
+	FileName       string
+	FileType       string
 	Likes          int
 	Dislikes       int
 	Comments       []Comment
@@ -35,24 +37,36 @@ func SessionIsActive(sessionId string) (int, bool, error) {
 	return userId, true, nil
 }
 
-func SavePost(title, content string, userId int) (int, error) {
-	result, err := db.Exec("INSERT INTO posts (title, content, userId) Values (?, ?, ?)", title, content, userId)
+func SavePost(title, content, fileName string, userId int) (int, error) {
+	var result sql.Result
+	var err error
+
+	if fileName != "" {
+		result, err = db.Exec("INSERT INTO posts (title, content, userId, fileName) Values (?, ?, ?, ?)", title, content, userId, fileName)
+	} else {
+		result, err = db.Exec("INSERT INTO posts (title, content, userId) Values (?, ?, ?)", title, content, userId)
+	}
+
 	if err != nil {
 		fmt.Println("Error inserting into posts: ", err)
 		return 0, err
 	}
-	// fmt.Println("Successfully inserted into posts!!!!!!!")
+
 	postId, err := result.LastInsertId()
 	if err != nil {
-		fmt.Println("error with getting postid from lastInserId")
+		fmt.Println("error with getting postid from lastInsertId")
+		return 0, err
 	}
+
 	return int(postId), nil
 }
+
+var fileName sql.NullString
 
 func GetPostsFromDB(userID int) ([]Post, error) {
 	query := `
         SELECT 
-            posts.id, posts.title, posts.content, users.username,
+            posts.id, posts.title, posts.content, users.username, posts.fileName,
             COALESCE(GROUP_CONCAT(DISTINCT categories.name), '') AS categoryNames,
             COALESCE(SUM(CASE WHEN likes.value = 1 THEN 1 ELSE 0 END), 0) AS likes,
             COALESCE(SUM(CASE WHEN likes.value = -1 THEN 1 ELSE 0 END), 0) AS dislikes,
@@ -86,8 +100,9 @@ func GetPostsFromDB(userID int) ([]Post, error) {
 		var postID int
 		var title, content, username, categoryNames string
 		var likes, dislikes, userLikeStatus int
-		err := rows.Scan(&postID, &title, &content, &username, &categoryNames, &likes, &dislikes, &userLikeStatus)
+		err := rows.Scan(&postID, &title, &content, &username, &fileName, &categoryNames, &likes, &dislikes, &userLikeStatus)
 		if err != nil {
+			fmt.Println(err)
 			return nil, err
 		}
 
@@ -96,11 +111,20 @@ func GetPostsFromDB(userID int) ([]Post, error) {
 			categories = strings.Split(categoryNames, ",")
 		}
 
+		fileName1:= ""
+		if fileName.Valid {
+			fileName1 = fileName.String
+		} else {
+			// Handle the case where fileName is NULL (no file uploaded)
+			fileName1 = "" // Or any other appropriate value
+		}
+
 		post := Post{
 			ID:             postID,
 			Title:          title,
 			Content:        content,
 			Username:       username,
+			FileName:       fileName1,
 			Categories:     categories,
 			Likes:          likes,
 			Dislikes:       dislikes,
@@ -163,11 +187,20 @@ func FilterByCategory(userID int, category string) ([]Post, error) {
 		}
 
 		categories := strings.Split(categoryNames, ",")
+		fileName1:= ""
+		if fileName.Valid {
+			fileName1 = fileName.String
+		} else {
+			// Handle the case where fileName is NULL (no file uploaded)
+			fileName1 = "" // Or any other appropriate value
+		}
+
 		post := Post{
 			ID:             postID,
 			Title:          title,
 			Content:        content,
 			Username:       username,
+			FileName:       fileName1,
 			Categories:     categories,
 			Likes:          likes,
 			Dislikes:       dislikes,
@@ -231,11 +264,20 @@ func FilterByLiked(userID int) ([]Post, error) {
 		}
 
 		categories := strings.Split(categoryNames, ",")
+		fileName1:= ""
+		if fileName.Valid {
+			fileName1 = fileName.String
+		} else {
+			// Handle the case where fileName is NULL (no file uploaded)
+			fileName1 = "" // Or any other appropriate value
+		}
+
 		post := Post{
 			ID:             postID,
 			Title:          title,
 			Content:        content,
 			Username:       username,
+			FileName:       fileName1,
 			Categories:     categories,
 			Likes:          likes,
 			Dislikes:       dislikes,
@@ -300,11 +342,20 @@ func FilterByUserPosts(userID int) ([]Post, error) {
 		}
 
 		categories := strings.Split(categoryNames, ",")
+		fileName1:= ""
+		if fileName.Valid {
+			fileName1 = fileName.String
+		} else {
+			// Handle the case where fileName is NULL (no file uploaded)
+			fileName1 = "" // Or any other appropriate value
+		}
+
 		post := Post{
 			ID:             postID,
 			Title:          title,
 			Content:        content,
 			Username:       username,
+			FileName:       fileName1,
 			Categories:     categories,
 			Likes:          likes,
 			Dislikes:       dislikes,

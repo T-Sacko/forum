@@ -7,12 +7,13 @@ import (
 
 func SetUpRoutes(mux *http.ServeMux) {
 
-	fs := http.FileServer(http.Dir("static"))
+	fs := http.FileServer(http.Dir("./static"))
 	staticPrefix := "/static/"
 	mux.Handle(staticPrefix, http.StripPrefix(staticPrefix, fs))
+	mux.Handle("/uploads/", http.StripPrefix("/uploads/", http.FileServer(http.Dir("./uploads"))))
 
 	mux.HandleFunc("/", c.Index)
-	mux.HandleFunc("/sign-in", c.UsersHandler)
+	// mux.HandleFunc("/sign-in", c.UsersHandler)
 	mux.HandleFunc("/api/check-username", c.UsernameCheck)
 	mux.HandleFunc("/api/check-email", c.EmailCheck)
 	mux.HandleFunc("/api/create-post", c.CheckSession)
@@ -26,6 +27,7 @@ func SetUpRoutes(mux *http.ServeMux) {
 	mux.HandleFunc("/get-comments",c.GetComments)
 	mux.HandleFunc("/like-comment",c.HandleCommentLikes)
 	mux.HandleFunc("/signout",c.SignOut)
-	mux.HandleFunc("/google",c.GoogleAuth)
-
+	mux.HandleFunc("/google",c.GoogleCallback)
+	mux.HandleFunc("/auth/google",c.GoogleAuth)
+	
 }

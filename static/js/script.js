@@ -367,21 +367,56 @@ function setContent(content, seeMore) {
 
 }
 
+function toggleFullscreen(elem) {
+  if (!document.fullscreenElement) {
+      if (elem.requestFullscreen) {
+          elem.requestFullscreen();
+      } else if (elem.mozRequestFullScreen) { /* Firefox */
+          elem.mozRequestFullScreen();
+      } else if (elem.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
+          elem.webkitRequestFullscreen();
+      } else if (elem.msRequestFullscreen) { /* IE/Edge */
+          elem.msRequestFullscreen();
+      }
+  } else {
+      if (document.exitFullscreen) {
+          document.exitFullscreen();
+      } else if (document.mozCancelFullScreen) { /* Firefox */
+          document.mozCancelFullScreen();
+      } else if (document.webkitExitFullscreen) { /* Chrome, Safari and Opera */
+          document.webkitExitFullscreen();
+      } else if (document.msExitFullscreen) { /* IE/Edge */
+          document.msExitFullscreen();
+      }
+  }
+}
+
+
 posts.forEach(post => {
-  const image = post.querySelector('.image')
+  const image = post.querySelector('.post-image')
   const seeMore = post.querySelector('.see-more')
   const content = post.querySelector('.post-content')
   const postId = post.id.split('-')[1];
   const commentBtn = post.querySelector('.comment-btn')
   const likebtn = post.querySelector('.post-l')
+  const commentForm = post.querySelector('.comment-form')
   const dislikeBtn = post.querySelector('.post-d')
   setUpLike(likebtn,dislikeBtn,postId)
-  const commentForm = post.querySelector('.comment-form')
   const commentsDiv = post.querySelector('.comments')
-
+  
   setContent(content, seeMore)
 
-
+  if(image){
+    console.log('image loaded')
+    var colorThief = new ColorThief();
+    var color = colorThief.getColor(image);
+    image.style.backgroundColor = 'rgb('+color[0]+','+color[1]+','+color[2]+')';
+    image.addEventListener('click', function() {
+      toggleFullscreen(image);
+    });
+  }
+  
+  if (commentForm) {
   commentForm.addEventListener('submit', (e) => {
     e.preventDefault();
     let formData = new FormData(commentForm);
@@ -421,6 +456,7 @@ posts.forEach(post => {
         console.log("Error:", error);
     });
   })
+}
 
 
   
@@ -455,12 +491,12 @@ posts.forEach(post => {
       const likeCount = commentLikeBtn.querySelector('.comment-likes')
       const dislikeCount = commentDislikeBtn.querySelector('.comment-dislikes')
       
-      let yo = false
-      checkSession().then(data => {
+      // let yo = false
+      // checkSession().then(data => {
         
-        yo = data.status
-        console.log('yo =', yo)
-        if (yo){
+        // yo = data.status
+        // console.log('yo =', yo)
+        if (userStatus){
           commentLikeBtn.addEventListener('click', () => {
             toggle(likeIcon)
             if (likeIcon.classList.contains('liked')) {
@@ -496,7 +532,7 @@ posts.forEach(post => {
           
           })
         }
-      })
+      // })
     })
     const yOffset = -24; // 1.5rem = 24px, assuming the user's default font-size is 16px
     const y = post.getBoundingClientRect().top + window.pageYOffset + yOffset;
@@ -651,25 +687,17 @@ async function fetchData(url, options = {}){
 
 document.getElementById('loginForm').addEventListener('submit', async (event) => {
   event.preventDefault(); // Prevent the form from submitting normally
-
   const formData = new FormData(event.target); // Get form data
-  const email = formData.get('email');
-  const password = formData.get('password');
+  
 
   // Create the payload to send in the AJAX request
-  const payload = {
-    email: email,
-    password: password
-  };
+ 
 
   try {
     // Make the AJAX request to the server
     const response = await fetch('/login', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(payload)
+      body: formData
     });
 
     // Handle the response from the server

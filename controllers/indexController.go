@@ -3,7 +3,9 @@ package controllers
 import (
 	"fmt"
 	m "forum/models"
+	"html/template"
 	"net/http"
+	"strings"
 )
 
 func Index(w http.ResponseWriter, r *http.Request) {
@@ -56,7 +58,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		posts, err = m.GetPostsFromDB(user.ID)
 		if err != nil {
 			// Handle the error (e.g., show an error page)
-			fmt.Println("error with getposts")
+			fmt.Println("error with getposts", err)
 			http.Error(w, inErr, http.StatusInternalServerError)
 			return
 		}
@@ -79,7 +81,14 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		User:       user,
 		Filter:     filter,
 	}
+	fmt.Println(posts)
 
+	funcMap := template.FuncMap{
+		"isPrefix": isPrefix,
+	}
+	
+	var Tpl = template.Must(template.New("").Funcs(funcMap).ParseGlob("templates/*.html"))
+	
 	errs := Tpl.ExecuteTemplate(w, "home.html", data)
 
 	if errs != nil {
@@ -87,6 +96,10 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Failed to render template", http.StatusInternalServerError)
 		return
 	}
+}
+
+func isPrefix(mainStr, prefix string) bool {
+	return strings.HasPrefix(mainStr, prefix)
 }
 
 // func GetPostLikes(w http.ResponseWriter, r *http.Request) {
