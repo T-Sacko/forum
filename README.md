@@ -1,6 +1,6 @@
 # Forum
 
-![Placeholder Image](static/forum1.png)
+![Placeholder Image](uploads/image/forum1.png)
 
 ## Overview
 
