@@ -1,8 +1,10 @@
 # Forum
 
 ![Placeholder Image](static/forum1.png)
-![Screenshot 1](static/Screenshot 2023-10-18 194647.png)
-![Screenshot 2](static/Screenshot 2023-10-18 200250.png)
+
+<img src="static/Screenshot%202023-10-18%20194647.png" alt="Screenshot 1">
+<img src="static/Screenshot%202023-10-18%20200250.png" alt="Screenshot 2">
+<img src="static/forum1.png" alt="Screenshot 1">
 
 
 ## Overview
