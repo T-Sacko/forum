@@ -1,6 +1,9 @@
 # Forum
 
 ![Placeholder Image](static/forum1.png)
+![Screenshot 1](static/Screenshot 2023-10-18 194647.png)
+![Screenshot 2](static/Screenshot 2023-10-18 200250.png)
+
 
 ## Overview
 
